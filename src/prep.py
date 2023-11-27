@@ -119,8 +119,8 @@ hskhanzi_df = df.merge(junda_df[junda_df["Simplified"].isin(df["Simplified"])], 
 # Save files
 ##########################################################################
 
-save_csv(df,          DATA_OUT, "hsk_vocab",         ENCODING)
-save_csv(junda_df,    DATA_OUT, "junda_frequencies", ENCODING)
-save_csv(hskhanzi_df, DATA_OUT, "hsk_hanzi",         ENCODING)
-save_csv(simp_chars,  DATA_OUT, "hsk_simp_chars",    ENCODING)
-save_csv(trad_chars,  DATA_OUT, "hsk_trad_chars",    ENCODING)
+# save_csv(df,          DATA_OUT, "hsk_vocab",         ENCODING)
+# save_csv(junda_df,    DATA_OUT, "junda_frequencies", ENCODING)
+# save_csv(hskhanzi_df, DATA_OUT, "hsk_hanzi",         ENCODING)
+# save_csv(simp_chars,  DATA_OUT, "hsk_simp_chars",    ENCODING)
+# save_csv(trad_chars,  DATA_OUT, "hsk_trad_chars",    ENCODING)
