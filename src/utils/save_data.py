@@ -18,7 +18,7 @@ def save_csv(data: pd.DataFrame | list | set, path: str, name: str, enc: str, ne
     
     try:
         if isinstance(data, pd.DataFrame):
-            data.to_csv(filepath, encoding=enc)
+            data.to_csv(filepath, encoding=enc, index=False)
         
         else:
             with open(filepath, "w", encoding=enc, newline=new) as f:
