@@ -11,7 +11,7 @@ def filter_hanzi(char: str) -> bool:
         - char, str (single character)
     Returns:
         - bool, True if char in Common | Extended-A | Extended-B
-                else False
+                False otherwise
     """
     exceptions = ["—", "‘", "’", "“", "”", "…"]
     
@@ -22,8 +22,15 @@ def filter_hanzi(char: str) -> bool:
     ext_a = char >= "\u3400" and char <= "\u4DBF"
     ext_b = char >= "\u20000" and char <= "\u2A6DF"
     
-    
     return True if common or ext_a or ext_b else False
+
+
+def filter_text(text):
+    """
+    Passes text to filter_hanzi
+    Returns list of hanzi in text
+    """
+    return [zi for zi in text if filter_hanzi(zi)]
 
 
 def partition_hanzi(hsk_simp: list, hsk_trad: list, hanzi_list: list) -> tuple[list]:
@@ -33,17 +40,45 @@ def partition_hanzi(hsk_simp: list, hsk_trad: list, hanzi_list: list) -> tuple[l
     Args:
         - hsk_simp, list, simplified characters in HSK1 to HSK6
         - hsk_trad, list, traditional equivalents to hsk_simp
-        - hsk_both, list, HSK characters with no simplified version
         - hanzi_list, list, characters to partition
     Returns:
         - simp, list, simplified HSK characters in hanzi_list
         - trad, list, traditional HSK equivalents in hanzi_list
-        - both, list, characters common to simp and trad
-        - extra, list, characters not in HSK1 to HSK6
+        - neutral, list, characters common to simp and trad
+        - outliers, list, characters not in above lists
     """
-    simp   = [hanzi for hanzi in hanzi_list if hanzi in hsk_simp]
-    trad   = [hanzi for hanzi in hanzi_list if hanzi in hsk_trad]
-    both   = [hanzi for hanzi in hanzi_list if hanzi in simp and hanzi in trad]
-    extra  = [hanzi for hanzi in hanzi_list if hanzi not in simp and hanzi not in trad]
+    simp      = [zi for zi in hanzi_list if zi in hsk_simp]
+    trad      = [zi for zi in hanzi_list if zi in hsk_trad]
+    neutral   = [zi for zi in hanzi_list if zi in simp and zi in trad]
+    outliers  = [zi for zi in hanzi_list if zi not in simp and zi not in trad]
     
-    return simp, trad, both, extra
+    return simp, trad, neutral, outliers
+
+
+def identify(hsk_simp: list, hsk_trad: list, neutral: list) -> tuple[str, float]:
+    """
+    Identifies text as either simp, trad, or undefined
+    Args:
+        - hsk_simp, list, simplified characters in HSK1 to HSK6
+        - hsk_trad, list, traditional equivalents to hsk_simp
+        - neutral, list, characters common to simp and trad
+    Returns:
+        - str, text character variant
+    """
+    threshold = 0.8
+    simp_set = set(hsk_simp) - set(neutral)
+    trad_set = set(hsk_trad) - set(neutral)
+    
+    try:
+        ratio = len(simp_set) / (len(simp_set) + len(trad_set))
+        if ratio >= threshold:
+            return "simplified"
+        elif ratio <= 1 - threshold:
+            return "traditional"
+        else:
+            return "undefined"
+        
+    except ZeroDivisionError:
+        return "undefined"
+    
+    
