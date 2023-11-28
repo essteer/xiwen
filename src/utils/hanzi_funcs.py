@@ -14,9 +14,9 @@ def _filter_hanzi(char: str) -> bool:
         - bool, True if char in Common | Extended-A | Extended-B
                 False otherwise
     """
-    exceptions = ["—", "‘", "’", "“", "”", "…"]
+    symbols = ["—", "‘", "’", "“", "”", "…"]
     
-    if char in exceptions:
+    if char in symbols:
         return False
     
     common = char >= "\u4E00" and char <= "\u9FFF"
@@ -108,8 +108,30 @@ def _granular_counts(df: pd.DataFrame, variant: str) -> list:
     Returns:
         - dict, counts for characters per HSK grade
     """
-    # TODO: add code for count breakdowns
-    pass
+    if variant == "Simplified":
+        # Drop duplicate simplified character mappings
+        # (cases where 1 simplified maps to >1 traditional)
+        # Keep only first instance to avoid double-counting
+        df.drop_duplicates(subset=variant, keep="first", inplace=True)
+    
+    elif variant == "Traditional":
+        # TODO add handling for traditional cases
+        pass
+    
+    else:
+        # TODO add handling for unknown cases
+        pass
+    
+    grade_stats = {}
+    # Get counts for each grade HSK1 to HSK6
+    for i in range(1, 7):
+        grade_count  = df.loc[df["HSK Grade"] == i, "Count"].sum()
+        grade_unique = (df.loc[df["HSK Grade"] == i, "Count"] != 0).sum()
+        grade_stats[i] = grade_count, grade_unique
+    
+    print(f"granular counts: \n{grade_stats}")
+    
+    return grade_stats
 
 
 def get_counts(df: pd.DataFrame, hanzi: list|tuple[list], variant: str):
@@ -168,7 +190,7 @@ def get_counts(df: pd.DataFrame, hanzi: list|tuple[list], variant: str):
     # Fill NaN as 0 and convert counts to integers
     merged_df["Count"] = merged_df["Count"].fillna(0).astype(int)
     
-    # TODO: pass merged_df to _granular_counts() for breakdowns
+    stats = _granular_counts(merged_df, variant)
     
     return merged_df
     

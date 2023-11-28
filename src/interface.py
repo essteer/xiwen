@@ -63,5 +63,3 @@ unique_outliers = set(outliers)
 print(f"-> {num_unique - len(unique_simp):,} ({len(unique_outliers)/num_unique:.2%}) > HSK6")
 
 hsk_grade = HSK_HANZI[HSK_HANZI["Simplified"] == "爸"]["HSK Grade"].values[0]
-
-
