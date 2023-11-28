@@ -87,6 +87,8 @@ for line in tqdm(lines, desc="Processing"):
 # DataFrame of full vocab list (unigrams, bigrams, n-grams)
 cols = ["Simplified", "Traditional", "Pinyin", "HSK Grade"]
 df = pd.DataFrame.from_dict(vocab_dict, orient="index", columns=cols)
+# Drop duplicates - keep first instance
+df.drop_duplicates(subset="Traditional", keep="first", inplace=True)
 
 ##########################################################################
 # Extract Jun Da MTSU character frequencies

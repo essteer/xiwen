@@ -151,7 +151,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 上,上,shàng,1
 上午,上午,shàngwǔ,1
 午,午,wǔ/wu,1
-少,少,shǎo,1
 谁,誰,shéi,1
 什么,什麼,shénme,1
 什,什,shén/shen/shí,1
@@ -223,11 +222,9 @@ Simplified,Traditional,Pinyin,HSK Grade
 院,院,yuàn,1
 椅子,椅子,yǐzi,1
 椅,椅,yǐ/yī,1
-有,有,yǒu,1
 月,月,yuè,1
 再见,再見,zàijiàn,1
 再,再,zài,1
-在,在,zài,1
 怎么,怎麼,zěnme,1
 怎,怎,zěn,1
 怎么样,怎麼樣,zěnmeyàng,1
@@ -240,7 +237,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 住,住,zhù,1
 桌子,桌子,zhuōzi,1
 桌,桌,zhuō,1
-字,字,zì,1
 昨天,昨天,zuótiān,1
 昨,昨,zuó,1
 坐,坐,zuò,1
@@ -263,7 +259,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 唱歌,唱歌,chànggē,2
 唱,唱,chàng,2
 歌,歌,gē/ge,2
-出,出,chū,2
 穿,穿,chuān,2
 次,次,cì,2
 从,從,cóng,2
@@ -280,7 +275,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 第一,第一,dìyī,2
 第,第,dì,2
 懂,懂,dǒng,2
-对,對,duì,2
 房间,房間,fángjiān,2
 房,房,fáng/páng,2
 间,間,jiān/jian/jiàn/jiǎn,2
@@ -290,7 +284,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 服务员,服務員,fúwùyuán,2
 务,務,wu/wù/wǔ/wú/máo/mào,2
 员,員,yuán/yún/yùn,2
-高,高,gāo,2
 告诉,告訴,gàosu,2
 告,告,gào/jū/gù,2
 诉,訴,su/sù,2
@@ -369,7 +362,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 牛奶,牛奶,niúnǎi,2
 牛,牛,niú,2
 奶,奶,nǎi/nai,2
-女,女,nǚ,2
 旁边,旁邊,pángbiān,2
 旁,旁,páng/pēng/bēng/bàng,2
 边,邊,biān/bian,2
@@ -481,7 +473,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 运动,運動,yùndòng,2
 运,運,yùn,2
 动,動,dòng,2
-再,再,zài,2
 早上,早上,zǎoshang,2
 早,早,zǎo,2
 丈夫,丈夫,zhàngfu,2
@@ -512,7 +503,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 安,安,ān,3
 静,靜,jìng/jing,3
 把,把,bǎ,3
-班,班,bān,3
 搬,搬,bān,3
 办法,辦法,bànfǎ,3
 办,辦,bàn,3
@@ -600,7 +590,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 梯,梯,tī/tí,3
 电子邮件,電子郵件,diànzǐ yóujiàn,3
 邮,郵,yóu/chuí,3
-东,東,dōng,3
 冬,冬,dōng,3
 动物,動物,dòngwù,3
 物,物,wù/wu,3
@@ -621,7 +610,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 方便,方便,fāngbiàn,3
 放,放,fàng,3
 放心,放心,fàngxīn,3
-分,分,"fēn, fèn",3
 附近,附近,fùjìn,3
 附,附,fù/bù/fū,3
 复习,復習,fùxí,3
@@ -652,13 +640,11 @@ Simplified,Traditional,Pinyin,HSK Grade
 刮风,刮風,guāfēng,3
 刮,刮,guā,3
 风,風,fēng/fèng/fěng,3
-关,關,guān,3
 关系,關系,guānxi,3
 关心,關心,guānxīn,3
 关于,關於,guānyú,3
 于,於,wū/yú,3
 国家,國家,guójiā,3
-过,過,guò,3
 过去,過去,guòqù,3
 还是,還是,háishi,3
 害怕,害怕,hàipà,3
@@ -675,7 +661,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 坏,壞,huài,3
 欢迎,歡迎,huānyíng,3
 迎,迎,yíng/yìng,3
-还,還,hái,3
 环境,環境,huánjìng,3
 环,環,huán/huàn,3
 境,境,jìng,3
@@ -708,7 +693,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 健,健,jiàn,3
 康,康,kāng/kàng,3
 讲,講,jiǎng,3
-教,教,"jiāo, jiào",3
 角,角,"jiǎo, jué",3
 脚,腳,jiǎo,3
 接,接,jiē,3
@@ -750,7 +734,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 筷子,筷子,kuàizi,3
 筷,筷,kuài,3
 蓝,藍,lán,3
-老,老,lǎo,3
 离开,離開,líkāi,3
 礼物,禮物,lǐwù,3
 礼,禮,lǐ,3
@@ -777,7 +760,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 满,滿,mǎn/mèn,3
 帽子,帽子,màozi,3
 帽,帽,mào,3
-米,米,mǐ,3
 面包,面包,miànbāo,3
 明白,明白,míngbai,3
 拿,拿,ná,3
@@ -844,7 +826,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 世界,世界,shìjiè,3
 世,世,shì,3
 界,界,jiè,3
-试,試,shì,3
 瘦,瘦,shòu,3
 叔叔,叔叔,shūshu,3
 叔,叔,shū/shu,3
@@ -870,7 +851,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 体育,體育,tǐyù,3
 育,育,yù/zhòu,3
 甜,甜,tián,3
-条,條,tiáo,3
 同事,同事,tóngshì,3
 同意,同意,tóngyì,3
 头发,頭發,tóufa,3
@@ -884,19 +864,16 @@ Simplified,Traditional,Pinyin,HSK Grade
 万,萬,wàn,3
 忘记,忘記,wàngjì,3
 忘,忘,wàng,3
-为,為,wèi,3
 为了,為了,wèile,3
 位,位,wèi,3
 文化,文化,wénhuà,3
 文,文,wén,3
-西,西,xī,3
 习惯,習慣,xíguàn,3
 惯,慣,guàn,3
 洗手间,洗手間,xǐshǒujiān,3
 洗澡,洗澡,xǐzǎo,3
 澡,澡,zǎo/cāo,3
 夏,夏,xià,3
-先,先,xiān,3
 相信,相信,xiāngxìn,3
 相,相,xiāng/xiàng,3
 信,信,xìn/shēn,3
@@ -949,7 +926,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 该,該,gāi,3
 影响,影響,yǐngxiǎng,3
 响,響,xiǎng,3
-用,用,yòng,3
 游戏,游戲,yóuxì,3
 戏,戲,xì/hū/xī/huī/suō/yī,3
 有名,有名,yǒumíng,3
@@ -961,9 +937,7 @@ Simplified,Traditional,Pinyin,HSK Grade
 愿,願,yuàn/yuǎn,3
 月亮,月亮,yuèliang,3
 越,越,yuè,3
-站,站,zhàn,3
 张,張,zhāng,3
-长,長,"cháng, zhǎng",3
 着急,著急,zháojí,3
 急,急,jí,3
 照顾,照顧,zhàogu,3
@@ -973,7 +947,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 照相机,照相機,zhàoxiàngjī,3
 只,隻,"zhī, zhǐ",3
 只有,隻有,zhǐyǒu,3
-才,才,cái,3
 中间,中間,zhōngjiān,3
 中文,中文,zhōngwén,3
 终于,終於,zhōngyú,3
@@ -1068,7 +1041,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 长江,長江,chángjiāng,4
 江,江,jiāng,4
 尝,嘗,cháng,4
-场,場,chǎng,4
 超过,超過,chāoguò,4
 成功,成功,chénggōng,4
 功,功,gōng,4
@@ -1125,7 +1097,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 约,約,yuē/yāo/yào/dì,4
 大夫,大夫,dàifu,4
 戴,戴,dài,4
-当,當,dāng,4
 当时,當時,dāngshí,4
 刀,刀,dāo,4
 导游,導遊,dǎoyóu,4
@@ -1138,13 +1109,10 @@ Simplified,Traditional,Pinyin,HSK Grade
 倒,倒,"dǎo, dào",4
 道歉,道歉,dàoqiàn,4
 得意,得意,déyì,4
-得,得,de,4
 登机牌,登機牌,dēngjīpái,4
 登,登,dēng/dé,4
 牌,牌,pái,4
-等,等,děng,4
 低,低,dī,4
-底,底,dǐ,4
 地点,地點,dìdiǎn,4
 地球,地球,dìqiú,4
 地址,地址,dìzhǐ,4
@@ -1164,7 +1132,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 于,于,yú/wéi/yū/xū,4
 儿童,兒童,értóng,4
 童,童,tóng/zhōng,4
-而,而,ér,4
 发生,發生,fāshēng,4
 发展,發展,fāzhǎn,4
 展,展,zhǎn/zhan,4
@@ -1211,7 +1178,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 复,複,fù/fú,4
 复杂,複雜,fùzá,4
 杂,雜,zá,4
-富,富,fù,4
 改变,改變,gǎibiàn,4
 改,改,gǎi,4
 干杯,幹杯,gān bēi,4
@@ -1221,8 +1187,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 感觉,感覺,gǎnjué,4
 感情,感情,gǎnqíng,4
 感谢,感謝,gǎnxiè,4
-干,幹,gān,4
-刚,剛,gāng,4
 高速公路,高速公路,gāosù gōnglù,4
 速,速,sù,4
 胳膊,胳膊,gēbo,4
@@ -1305,7 +1269,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 活,活,huó/huo/guō,4
 活泼,活潑,huópo,4
 泼,潑,po/pō/bō,4
-火,火,huǒ,4
 获得,獲得,huòdé,4
 获,獲,huò,4
 积极,積極,jījí,4
@@ -1337,7 +1300,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 油,油,yóu/yòu,4
 家具,家具,jiājù,4
 具,具,jù/ju,4
-假,假,"jiǎ, jià",4
 价格,價格,jiàgé,4
 价,價,jià/qiǎ/jie,4
 坚持,堅持,jiānchí,4
@@ -1377,7 +1339,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 接受,接受,jiēshòu,4
 受,受,shòu/dào,4
 接着,接著,jiēzhe,4
-节,節,jié,4
 节约,節約,jiéyuē,4
 结果,結果,jiéguǒ,4
 解释,解釋,jiěshì,4
@@ -1447,7 +1408,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 客厅,客廳,kètīng,4
 肯定,肯定,kěndìng,4
 肯,肯,kěn,4
-空,空,"kōng, kòng",4
 空气,空氣,kōngqì,4
 恐怕,恐怕,kǒngpà,4
 恐,恐,kǒng,4
@@ -1495,7 +1455,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 零钱,零錢,língqián,4
 另外,另外,lìngwài,4
 另,另,lìng,4
-留,留,liú,4
 流利,流利,liúlì,4
 利,利,lì/li,4
 流行,流行,liúxíng,4
@@ -1505,7 +1464,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 麻烦,麻煩,máfan,4
 麻,麻,má/ma/mā,4
 马虎,馬虎,mǎhu,4
-满,滿,mǎn,4
 毛,毛,máo,4
 毛巾,毛巾,máojīn,4
 巾,巾,jīn,4
@@ -1582,7 +1540,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 克,克,kè,4
 亲戚,親戚,qīnqi,4
 戚,戚,qi/qī/cù,4
-轻,輕,qīng,4
 轻松,輕松,qīngsōng,4
 情况,情況,qíngkuàng,4
 况,況,kuàng,4
@@ -1648,7 +1605,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 十分,十分,shífēn,4
 实际,實際,shíjì,4
 实在,實在,shízài,4
-使,使,shǐ,4
 使用,使用,shǐyòng,4
 世纪,世紀,shìjì,4
 纪,紀,jì/jǐ,4
@@ -1714,7 +1670,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 讨厌,討厭,tǎoyàn,4
 厌,厭,yàn/yā/yǎn/yān/yì,4
 特点,特點,tèdiǎn,4
-提,提,tí,4
 提供,提供,tígōng,4
 供,供,gōng/gòng,4
 提前,提前,tíqián,4
@@ -1768,11 +1723,9 @@ Simplified,Traditional,Pinyin,HSK Grade
 慕,慕,mù,4
 相反,相反,xiāngfǎn,4
 相同,相同,xiāngtóng,4
-香,香,xiāng,4
 详细,詳細,xiángxì,4
 详,詳,xiáng/yáng,4
 细,細,xì,4
-响,響,xiǎng,4
 橡皮,橡皮,xiàngpí,4
 橡,橡,xiàng,4
 消息,消息,xiāoxi,4
@@ -1793,8 +1746,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 信心,信心,xìnxīn,4
 兴奋,興奮,xīngfèn,4
 奋,奮,fèn,4
-行,行,xíng,4
-醒,醒,xǐng,4
 幸福,幸福,xìngfú,4
 幸,幸,xìng/niè,4
 福,福,fú/fù,4
@@ -1839,7 +1790,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 页,頁,yè,4
 一切,一切,yíqiè,4
 切,切,qiè/qiē/qì,4
-以,以,yǐ,4
 以为,以爲,yǐwéi,4
 艺术,藝術,yìshù,4
 艺,藝,yì,4
@@ -1909,7 +1859,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 占,占,zhàn/zhān/tiē,4
 线,線,xiàn,4
 招聘,招聘,zhāopìn,4
-照,照,zhào,4
 真正,真正,zhēnzhèng,4
 整理,整理,zhěnglǐ,4
 整,整,zhěng,4
@@ -1919,7 +1868,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 正式,正式,zhèngshì,4
 式,式,shì/shi/tè,4
 证明,證明,zhèngmíng,4
-之,之,zhī,4
 支持,支持,zhīchí,4
 支,支,zhī/zhì/qí,4
 知识,知識,zhīshi,4
@@ -1937,7 +1885,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 至少,至少,zhìshǎo,4
 质量,質量,zhìliàng,4
 质,質,zhì,4
-重,重,zhòng,4
 重点,重點,zhòngdiǎn,4
 重视,重視,zhòngshì,4
 周围,周圍,zhōuwéi,4
@@ -1947,7 +1894,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 祝,祝,zhù/zhòu/chù,4
 贺,賀,hè,4
 著名,著名,zhùmíng,4
-著,著,zhe/zháo/zhù/zhuó/zhāo/chú,4
 专门,專門,zhuānmén,4
 专,專,zhuān/tuán/shuàn,4
 专业,專業,zhuānyè,4
@@ -1960,7 +1906,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 自然,自然,zìrán,4
 自信,自信,zìxìn,4
 总结,總結,zǒngjié,4
-租,租,zū,4
 最好,最好,zuìhǎo,4
 尊重,尊重,zūnzhòng,4
 尊,尊,zūn,4
@@ -2034,7 +1979,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 鞭炮,鞭炮,biānpào,5
 鞭,鞭,biān,5
 炮,炮,pào/páo/bāo,5
-便,便,"biàn, pián",5
 辩论,辯論,biànlùn,5
 辩,辯,biàn/pián/biǎn/bàn,5
 标点,標點,biāodiǎn,5
@@ -2304,7 +2248,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 独立,獨立,dúlì,5
 独特,獨特,dútè,5
 度过,度過,dùguò,5
-断,斷,duàn,5
 堆,堆,duī,5
 对比,對比,duìbǐ,5
 对待,對待,duìdài,5
@@ -2319,7 +2262,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 多亏,多虧,duōkuī,5
 多余,多余,duōyú,5
 余,余,yú/tú/xú/yù,5
-朵,朵,duǒ,5
 躲藏,躲藏,duǒcáng,5
 躲,躲,duǒ,5
 藏,藏,cáng/zàng/zāng,5
@@ -2341,7 +2283,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 罚款,罰款,fákuǎn,5
 罚,罰,fá,5
 法院,法院,fǎyuàn,5
-翻,翻,fān,5
 繁荣,繁榮,fánróng,5
 繁,繁,fán/pán/pó,5
 荣,榮,róng,5
@@ -2353,7 +2294,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 反正,反正,fǎnzhèng,5
 范围,範圍,fànwéi,5
 范,範,fàn,5
-方,方,fāng,5
 方案,方案,fāng'àn,5
 方式,方式,fāngshì,5
 妨碍,妨礙,fáng'ài,5
@@ -2362,7 +2302,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 仿佛,仿佛,fǎngfú,5
 仿,仿,fǎng/páng,5
 佛,佛,fú/bó/bì/fó,5
-非,非,fēi,5
 肥皂,肥皂,féizào,5
 皂,皂,zào,5
 废话,廢話,fèihuà,5
@@ -2433,7 +2372,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 个人,個人,gèrén,5
 个性,個性,gèxìng,5
 各自,各自,gèzì,5
-根,根,gēn,5
 根本,根本,gēnběn,5
 工厂,工廠,gōngchǎng,5
 厂,廠,chǎng,5
@@ -2563,10 +2501,8 @@ Simplified,Traditional,Pinyin,HSK Grade
 糊,糊,hu/hú/hū/hù,5
 涂,塗,tú/dù,5
 花生,花生,huāshēng,5
-划,劃,"huà, huá",5
 华裔,華裔,huáyì,5
 裔,裔,yì,5
-滑,滑,huá,5
 化学,化學,huàxué,5
 话题,話題,huàtí,5
 怀念,懷念,huáiniàn,5
@@ -2583,7 +2519,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 灰尘,灰塵,huīchén,5
 尘,塵,chén,5
 灰心,灰心,huī xīn,5
-挥,揮,huī,5
 恢复,恢複,huīfù,5
 恢,恢,huī,5
 汇率,彙率,huìlǜ,5
@@ -2756,7 +2691,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 可见,可見,kějiàn,5
 可靠,可靠,kěkào,5
 可怕,可怕,kěpà,5
-克,克,kè,5
 克服,克服,kèfú,5
 刻苦,刻苦,kèkǔ,5
 客观,客觀,kèguān,5
@@ -2824,7 +2758,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 粮食,糧食,liángshi,5
 粮,糧,liáng,5
 食,食,shí/shi/sì/yì,5
-亮,亮,liàng,5
 了不起,了不起,liǎobuqǐ,5
 列车,列車,lièchē,5
 临时,臨時,línshí,5
@@ -2934,7 +2867,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 嗯,嗯,ēn,5
 年代,年代,niándài,5
 年纪,年紀,niánjì,5
-念,念,niàn,5
 宁可,甯可,nìngkě,5
 宁,甯,nìng/níng,5
 牛仔裤,牛仔褲,niúzǎikù,5
@@ -2963,20 +2895,17 @@ Simplified,Traditional,Pinyin,HSK Grade
 配合,配合,pèihé,5
 盆,盆,pén,5
 碰,碰,pèng,5
-批,批,pī,5
 批准,批准,pīzhǔn,5
 披,披,pī,5
 疲劳,疲勞,píláo,5
 疲,疲,pí,5
 匹,匹,pǐ,5
-片,片,"piàn, piān",5
 片面,片面,piànmiàn,5
 飘,飄,piāo,5
 拼音,拼音,pīnyīn,5
 拼,拼,pīn/bìng,5
 频道,頻道,píndào,5
 频,頻,pín/bīn,5
-平,平,píng,5
 平安,平安,píng'ān,5
 平常,平常,píngcháng,5
 平等,平等,píngděng,5
@@ -3005,7 +2934,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 谦虚,謙虛,qiānxū,5
 谦,謙,qiān/zhàn,5
 虚,虛,xū,5
-签,簽,qiān,5
 前途,前途,qiántú,5
 浅,淺,qiǎn,5
 欠,欠,qiàn,5
@@ -3019,7 +2947,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 瞧,瞧,qiáo,5
 巧妙,巧妙,qiǎomiào,5
 妙,妙,miào/miǎo,5
-切,切,"qiē, qiè",5
 亲爱,親愛,qīn'ài,5
 亲切,親切,qīnqiè,5
 亲自,親自,qīnzì,5
@@ -3180,7 +3107,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 套,套,tào/tǎo,5
 手续,手續,shǒuxù,5
 手指,手指,shǒuzhǐ,5
-首,首,shǒu,5
 寿命,壽命,shòumìng,5
 寿,壽,shòu,5
 受伤,受傷,shòu shāng,5
@@ -3194,7 +3120,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 熟练,熟練,shúliàn,5
 属于,屬于,shǔyú,5
 鼠标,鼠標,shǔ biāo,5
-数,數,"shù, shǔ",5
 数据,數據,shùjù,5
 数码,數碼,shùmǎ,5
 摔倒,摔倒,shuāidǎo,5
@@ -3228,7 +3153,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 损,損,sǔn,5
 缩短,縮短,suōduǎn,5
 缩,縮,suō/sù,5
-所,所,suǒ,5
 锁,鎖,suǒ,5
 台阶,台階,táijiē,5
 太极拳,太極拳,tàijíquán,5
@@ -3244,7 +3168,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 淘气,淘氣,táoqì,5
 淘,淘,táo,5
 讨价还价,討價還價,tǎo jià huán jià,5
-套,套,tào,5
 特色,特色,tèsè,5
 特殊,特殊,tèshū,5
 殊,殊,shū,5
@@ -3345,7 +3268,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 文明,文明,wénmíng,5
 文学,文學,wénxué,5
 文字,文字,wénzì,5
-闻,聞,wén,5
 吻,吻,wěn,5
 稳定,穩定,wěndìng,5
 稳,穩,wěn,5
@@ -3369,7 +3291,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 吸取,吸取,xīqǔ,5
 吸收,吸收,xīshōu,5
 戏剧,戲劇,xìjù,5
-系,系,"xì, jì",5
 系统,系統,xìtǒng,5
 细节,細節,xìjié,5
 瞎,瞎,xiā,5
@@ -3484,7 +3405,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 要不,要不,yàobù,5
 业务,業務,yèwù,5
 业余,業余,yèyú,5
-夜,夜,yè,5
 一辈子,一輩子,yíbèizi,5
 辈,輩,bèi,5
 一旦,一旦,yídàn,5
@@ -3513,7 +3433,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 因而,因而,yīn'ér,5
 因素,因素,yīnsù,5
 素,素,sù,5
-银,銀,yín,5
 印刷,印刷,yìnshuā,5
 英俊,英俊,yīngjùn,5
 英,英,yīng/yāng,5
@@ -3582,7 +3501,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 糟糕,糟糕,zāogāo,5
 糟,糟,zāo,5
 造成,造成,zàochéng,5
-则,則,zé,5
 责备,責備,zébèi,5
 摘,摘,zhāi,5
 窄,窄,zhǎi,5
@@ -3590,7 +3508,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 粘,粘,zhān/nián,5
 展开,展開,zhǎn kāi,5
 展览,展覽,zhǎnlǎn,5
-占,占,zhàn,5
 战争,戰爭,zhànzhēng,5
 长辈,長輩,zhǎngbèi,5
 涨,漲,"zhǎng, zhàng",5
@@ -3620,7 +3537,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 整齐,整齊,zhěngqí,5
 齐,齊,qí/jī/jì/zī/zhāi/jiǎn,5
 整体,整體,zhěngtǐ,5
-正,正,zhèng,5
 证件,證件,zhèngjiàn,5
 证据,證據,zhèngjù,5
 政府,政府,zhèngfǔ,5
@@ -3629,11 +3545,9 @@ Simplified,Traditional,Pinyin,HSK Grade
 政治,政治,zhèngzhì,5
 治,治,zhì/chí,5
 挣,掙,"zhèng, zhēng",5
-支,支,zhī,5
 支票,支票,zhīpiào,5
 执照,執照,zhízhào,5
 执,執,zhí,5
-直,直,zhí,5
 指导,指導,zhǐdǎo,5
 指挥,指揮,zhǐhuī,5
 至今,至今,zhì jīn,5
@@ -3682,7 +3596,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 专心,專心,zhuānxīn,5
 转变,轉變,zhuǎnbiàn,5
 转告,轉告,zhuǎngào,5
-装,裝,zhuāng,5
 装饰,裝飾,zhuāngshì,5
 饰,飾,shì/chì,5
 装修,裝修,zhuāngxiū,5
@@ -3756,7 +3669,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 凹凸,凹凸,āotū,6
 凹,凹,āo/wā,6
 凸,凸,tū,6
-熬,熬,áo,6
 奥秘,奧秘,àomì,6
 奥,奧,ào,6
 巴不得,巴不得,bābùdé,6
@@ -4107,8 +4019,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 诺,諾,nuò,6
 城堡,城堡,chéngbǎo,6
 堡,堡,bǎo/bǔ/pù,6
-乘,乘,chéng,6
-盛,盛,"chéng, shèng",6
 惩罚,懲罰,chéngfá,6
 惩,懲,chéng,6
 澄清,澄清,chéngqīng,6
@@ -4150,7 +4060,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 出神,出神,chū shén,6
 出息,出息,chūxi,6
 初步,初步,chūbù,6
-除,除,chú,6
 处分,處分,chǔfèn,6
 处境,處境,chǔjìng,6
 处置,處置,chǔzhì,6
@@ -4201,7 +4110,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 次序,次序,cìxù,6
 伺候,伺候,cìhou,6
 伺,伺,cì/sì,6
-刺,刺,cì,6
 从容,從容,cóngróng,6
 丛,叢,cóng,6
 凑合,湊合,còuhe,6
@@ -4371,7 +4279,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 赌,賭,dǔ,6
 杜绝,杜絕,dùjué,6
 杜,杜,dù/dǔ/tú,6
-端,端,duān,6
 端午节,端午節,duānwǔ jié,6
 端正,端正,duānzhèng,6
 短促,短促,duǎncù,6
@@ -5148,7 +5055,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 剧烈,劇烈,jùliè,6
 据悉,據悉,jùxī,6
 聚精会神,聚精會神,jù jīng huì shén,6
-卷,卷,juǎn,6
 决策,決策,juécè,6
 觉悟,覺悟,juéwù,6
 觉醒,覺醒,juéxǐng,6
@@ -5411,7 +5317,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 埋没,埋沒,máimò,6
 埋葬,埋葬,máizàng,6
 葬,葬,zàng,6
-迈,邁,mài,6
 脉搏,脈搏,màibó,6
 埋怨,埋怨,mányuàn,6
 蔓延,蔓延,mànyán,6
@@ -5591,7 +5496,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 烹饪,烹饪,pēngrèn,6
 烹,烹,pēng,6
 饪,饪,rèn,6
-捧,捧,pěng,6
 批发,批發,pīfā,6
 批判,批判,pīpàn,6
 劈,劈,pī,6
@@ -5640,7 +5544,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 屏,屏,píng/bǐng/bìng/bīng,6
 屏障,屏障,píngzhàng,6
 坡,坡,pō,6
-泼,潑,pō,6
 颇,頗,pō,6
 迫不及待,迫不及待,pòbùjídài,6
 迫害,迫害,pòhài,6
@@ -5810,7 +5713,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 确切,確切,quèqiè,6
 确信,確信,quèxìn,6
 群众,群衆,qúnzhòng,6
-染,染,rǎn,6
 嚷,嚷,rǎng,6
 让步,讓步,ràng bù,6
 饶恕,饒恕,ráoshù,6
@@ -5979,7 +5881,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 实事求是,實事求是,shí shì qiú shì,6
 实行,實行,shíxíng,6
 实质,實質,shízhì,6
-拾,拾,shí,6
 使命,使命,shǐmìng,6
 示范,示範,shìfàn,6
 示威,示威,shìwēi,6
@@ -6025,7 +5926,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 舒畅,舒暢,shūchàng,6
 疏忽,疏忽,shūhu,6
 疏远,疏遠,shūyuǎn,6
-束,束,shù,6
 束缚,束縛,shùfù,6
 缚,縛,fù,6
 树立,樹立,shùlì,6
@@ -6275,7 +6175,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 未免,未免,wèimiǎn,6
 畏惧,畏懼,wèijù,6
 畏,畏,wèi/wēi/wěi,6
-喂,喂,"wèi, wéi",6
 蔚蓝,蔚藍,wèilán,6
 蔚,蔚,wèi/yù,6
 慰问,慰問,wèiwèn,6
@@ -6402,7 +6301,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 向往,向往,xiàngwǎng,6
 巷,巷,xiàng,6
 相声,相聲,xiàngsheng,6
-削,削,xuē,6
 消除,消除,xiāochú,6
 消毒,消毒,xiāo dú,6
 消防,消防,xiāofáng,6
@@ -6425,7 +6323,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 泄露,泄露,xièlòu,6
 泄,泄,xiè/yì,6
 泄气,泄氣,xièqì,6
-屑,屑,xiè,6
 谢绝,謝絕,xièjué,6
 心得,心得,xīndé,6
 心甘情愿,心甘情願,xīngānqíngyuàn,6
@@ -6631,7 +6528,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 毅力,毅力,yìlì,6
 毅,毅,yì,6
 毅然,毅然,yìrán,6
-翼,翼,yì,6
 阴谋,陰謀,yīnmóu,6
 音响,音響,yīnxiǎng,6
 引导,引導,yǐndǎo,6
@@ -6696,7 +6592,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 宙,宙,zhòu,6
 羽绒服,羽絨服,yǔróngfú,6
 绒,絨,róng,6
-玉,玉,yù,6
 预料,預料,yùliào,6
 预期,預期,yùqī,6
 预算,預算,yùsuàn,6
@@ -6813,7 +6708,6 @@ Simplified,Traditional,Pinyin,HSK Grade
 折腾,折騰,zhēteng,6
 遮挡,遮擋,zhēdǎng,6
 遮,遮,zhē,6
-折,折,zhé,6
 折磨,折磨,zhémo,6
 侦探,偵探,zhēntàn,6
 侦,偵,zhēn/zhēng,6
