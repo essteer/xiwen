@@ -104,10 +104,10 @@ with open(FREQ_PATH, "r", encoding=ENCODING) as f:
         
         codepoint = ord(data[1])
         
-        junda_freqs.append([data[1], int(data[0]), int(data[2]), float(data[3]), codepoint])     
+        junda_freqs.append([data[1], codepoint, int(data[0]), int(data[2]), float(data[3])])     
 
 # DataFrame of Jun Da character frequencies
-cols = ["Simplified", "JD Rank (2004)", "JD Frequency", "JD Percentile", "Unicode"]
+cols = ["Simplified", "Unicode (Simp.)", "JD Rank", "JD Frequency", "JD Percentile"]
 junda_df = pd.DataFrame(junda_freqs, columns=cols)        
 
 ##########################################################################
@@ -118,11 +118,27 @@ junda_df = pd.DataFrame(junda_freqs, columns=cols)
 hskhanzi_df = df.merge(junda_df[junda_df["Simplified"].isin(df["Simplified"])], on="Simplified")
 
 ##########################################################################
+# Get unicode for traditional characters
+##########################################################################
+
+trad_hanzi = hskhanzi_df["Traditional"].tolist()
+# Create a DataFrame with the traditional characters and their Unicode code points
+trad_unicode_df = pd.DataFrame({
+    "Traditional": trad_hanzi,
+    "Unicode (Trad.)": [ord(hanzi) for hanzi in trad_hanzi]
+})
+
+merged_df = pd.merge(hskhanzi_df, trad_unicode_df, on="Traditional")
+# Reorder columns
+cols = ["Simplified", "Unicode (Simp.)", "Traditional", "Unicode (Trad.)", "Pinyin", "HSK Grade", "JD Rank", "JD Frequency", "JD Percentile"]
+merged_df = merged_df[cols]
+
+##########################################################################
 # Save files
 ##########################################################################
 
 # save_csv(df,          DATA_OUT, "hsk_vocab",         ENCODING)
 # save_csv(junda_df,    DATA_OUT, "junda_frequencies", ENCODING)
-# save_csv(hskhanzi_df, DATA_OUT, "hsk_hanzi",         ENCODING)
+# save_csv(merged_df, DATA_OUT, "hsk_hanzi",         ENCODING)
 # save_csv(simp_chars,  DATA_OUT, "hsk_simp_chars",    ENCODING)
 # save_csv(trad_chars,  DATA_OUT, "hsk_trad_chars",    ENCODING)
