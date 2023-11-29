@@ -4,6 +4,8 @@
 # Ambiguous mappings of simplified to traditional characters
 ##########################################################################
 """
+Source: https://en.wikipedia.org/wiki/Ambiguities_in_Chinese_character_simplification
+
 Special cases:
 寧⇄宁, 宁⇄㝉:
 
@@ -17,6 +19,7 @@ Special cases:
 
 乾⇄乾干, 干⇄乾干幹:
 """
+
 # Mappings of 1 simplified to 3 traditional characters
 map_1s_3t = {
     "系": ["系", "係", "繫"], 

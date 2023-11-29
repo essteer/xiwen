@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# DATA_IN = "../data/input/"
-# PINYIN_PATH = DATA_IN + "hanzi_pinyin_characters.tsv.txt"
-
 def map_pinyin(filepath: str, enc: str) -> dict:
     """
     Returns a dictionary mapping Chinese characters
@@ -51,16 +48,3 @@ def get_pinyin(hanzi: list[str], hanzi_pinyin_dict: dict[str: str]) -> list[str]
             print(f"{zi} not found in pinyin dict")
         
     return pinyin_list
-    
-    
-##########################################################################
-# split_pinyin unit tests
-##########################################################################
-
-# trad = ["茶"]
-# pi = "chá"
-# print(split_pinyin(trad, pi))
-
-# trads = ["出", "租", "車"]
-# pin = "chūzūchē"
-# print(split_pinyin(trads, pin))
