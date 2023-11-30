@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import numpy as np
 import pandas as pd
 import sys
 
@@ -140,16 +141,16 @@ def _granular_counts(df: pd.DataFrame, hanzi_all: list, variant: str) -> list:
     grade_stats = {}
     
     # Get stats for full text including non-HSK characters (outliers)
-    num_total_hanzi = len(hanzi_all)
     num_total_unique_hanzi = len(set(hanzi_all))
+    num_total_hanzi = len(hanzi_all)
     # Reserve key "0" for full figures
-    grade_stats[0] = num_total_hanzi, num_total_unique_hanzi
+    grade_stats[0] = num_total_unique_hanzi, num_total_hanzi
     
     # Get counts for each grade HSK1 to HSK6 and store in grade_stats
     for i in range(1, 7):
-        grade_count  = df.loc[df["HSK Grade"] == i, "Count"].sum()
         grade_unique = (df.loc[df["HSK Grade"] == i, "Count"] != 0).sum()
-        grade_stats[i] = grade_count, grade_unique
+        grade_count  = df.loc[df["HSK Grade"] == i, "Count"].sum()
+        grade_stats[i] = [grade_unique, grade_count]
         
     return grade_stats
 
@@ -217,11 +218,101 @@ def _get_counts(df: pd.DataFrame, hanzi_all: list, hanzi_sub: list|tuple[list], 
     return counts, merged_df
 
 
+def _cumulative_counts(raw_counts: list[list[int]], grades: int) -> list[list[int]]:
+    """
+    Computes grade-level and cumulative statistics for hanzi occurrences
+    
+    Args:
+        - raw_counts, list, hanzi counts by grade
+        - grades, int, number of HSK grades being checked against
+    Returns:
+        - cumulative_counts, list, cumulative hanzi counts by grade
+    """
+    # Cumulative figures = HSK1 figures for HSK1
+    cumulative_counts = [[raw_counts[0][0], raw_counts[0][1]], [raw_counts[1][0], raw_counts[1][1]]]
+    # Iterate through remaining levels to get iterative figures
+    for i in range(2, grades + 1):
+        grade_unique = raw_counts[i][0]
+        cumul_unique = grade_unique + cumulative_counts[i-1][0]
+        
+        grade_hanzi = raw_counts[i][1]
+        cumul_hanzi = grade_hanzi + cumulative_counts[i-1][1]
+        
+        cumulative_counts.append([cumul_unique, cumul_hanzi])
+    
+    return cumulative_counts
+
+
+def _compute_stats(raw_counts: list[list[int]], cumulative_counts: list[list[int]], grades: int) -> list[list]:
+    """
+    Computes grade-level and cumulative statistics for hanzi occurrences
+    
+    Args:
+        - raw_counts, list, hanzi counts by grade
+        - cumulative_counts, list, cumulative hanzi counts by grade
+        - grades, int, number of HSK grades being checked against
+    Returns:
+        - statistics, list, aggregate and cumulative grade-based hanzi counts
+            with percentages
+    """
+    statistics = []
+    # [grade, grade_unique, %, cum_unique, %, grade_count, %, cum_count, %]
+    for i in range(1, grades + 1):
+        
+        grade = str(i)
+        
+        grade_unique = raw_counts[i][0]
+        grade_unique_percent = np.int32((grade_unique / raw_counts[0][0]) * 100)
+        
+        cumulative_unique = cumulative_counts[i][0]
+        cumulative_unique_percent = np.int32((cumulative_unique / cumulative_counts[0][0]) * 100)
+        
+        grade_count = raw_counts[i][1]
+        grade_count_percent = np.int32((grade_count / raw_counts[0][1]) * 100)
+        
+        cumulative_count = cumulative_counts[i][1]
+        cumulative_count_percent = np.int32((cumulative_count / cumulative_counts[0][1]) * 100)
+        
+        statistics.append([
+            grade, 
+            grade_unique, grade_unique_percent, 
+            cumulative_unique, cumulative_unique_percent, 
+            grade_count, grade_count_percent, 
+            cumulative_count, cumulative_count_percent
+        ])
+    
+    # Handle outliers from beyond HSK6
+    grade = f"{grades + 1}+"
+    # Number of outliers is total minus HSK6 cumulative total
+    grade_unique = raw_counts[0][0] - statistics[5][3]
+    grade_unique_percent = np.int32((grade_unique / raw_counts[0][0]) * 100)
+    cumulative_unique = raw_counts[0][0] 
+    cumulative_unique_percent = np.int32((cumulative_unique / cumulative_counts[0][0]) * 100)
+    # Number of outliers is total minus HSK6 cumulative total
+    grade_count = raw_counts[0][1] - statistics[5][7]
+    grade_count_percent = np.int32((grade_count / raw_counts[0][1]) * 100)
+    cumulative_count = cumulative_counts[0][1]
+    cumulative_count_percent = np.int32((cumulative_count / cumulative_counts[0][1]) * 100)
+    
+    statistics.append([
+            grade, 
+            grade_unique, grade_unique_percent, 
+            cumulative_unique, cumulative_unique_percent, 
+            grade_count, grade_count_percent, 
+            cumulative_count, cumulative_count_percent
+        ])
+    
+    return statistics
+
+
 def get_stats(df: pd.DataFrame, hanzi_all: list, hanzi_sub: list|tuple[list], variant: str):
     """
-    Passes params to _get_counts() for hanzi counts and
+    Passes params to _get_counts() for grade_counts and
         merged_df with counts applied
-    Computes cumulative counts per grade and total
+    Passes grade_counts to _cumulative_counts() for cumulative_counts
+    Passes grade_counts and cumulative_counts to _compute_stats()
+        for statistical breakdown
+    Returns Pandas DataFrame of statistics and of original df with counts applied
     
     Args:
         - df, Pandas DataFrame, all unique characters in HSK1 to HSK6
@@ -231,43 +322,25 @@ def get_stats(df: pd.DataFrame, hanzi_all: list, hanzi_sub: list|tuple[list], va
             tuple of simplified and traditional lists if variant unknown
         - variant, str, the variant of the character set (Simplified|Traditional|Unknown)
     Returns:
-        - stats, dict, aggregate and cumulative grade-based character counts
+        - stats_df, Pandas DataFrame, aggregate and cumulative grade-based character counts
         - hanzi_df, Pandas DataFrame, df with counts applied by _get_counts()
     """
-    
+    HSK_GRADES = 6
     # Get count breakdown of hanzi content
-    counts, hanzi_df = _get_counts(df, hanzi_all, hanzi_sub, variant)
-    
-    # No need to process manually - for planning only
-    # all_hanzi,  all_unique  = counts[0][0], counts[0][1]
-    # hsk1_hanzi, hsk1_unique = counts[1][0], counts[1][1]
-    # hsk2_hanzi, hsk2_unique = counts[2][0], counts[2][1]
-    # hsk3_hanzi, hsk3_unique = counts[3][0], counts[3][1]
-    # hsk4_hanzi, hsk4_unique = counts[4][0], counts[4][1]
-    # hsk5_hanzi, hsk5_unique = counts[5][0], counts[5][1]
-    # hsk6_hanzi, hsk6_unique = counts[6][0], counts[6][1]
-    
-    # Cumulative figures = HSK1 figures for HSK1
-    cumulative_stats = [(counts[1][0], counts[1][1])]
-    # Iterate through remaining levels to get iterative figures
-    for i in range(2, 7):
-        grade_hanzi = counts[i][0]
-        grade_unique = counts[i][1]
-        cumulative_hanzi = grade_hanzi + cumulative_stats[i-2][0]
-        cumulative_unique = grade_unique + cumulative_stats[i-2][1]
-        cumulative_stats.append((cumulative_hanzi, cumulative_unique))
-    
+    grade_counts, hanzi_df = _get_counts(df, hanzi_all, hanzi_sub, variant)
+    # Get cumulative counts ascending from HSK1 to HSK6
+    cumul_counts = _cumulative_counts(grade_counts, HSK_GRADES)
+    # Compute stats for grade counts and cumulative counts
+    stats = _compute_stats(grade_counts, cumul_counts, HSK_GRADES)
     # Create columns for output DataFrame
     cols = [
         "HSK Grade", 
-        "No. Hanzi (Unique)", 
-        "% of Total", 
-        "Cumulative No. Hanzi (Unique)", 
-        "% of Total", 
-        "No. Hanzi (Count)", 
-        "% of Total", 
-        "Cunulative No. Hanzi (Count)", 
-        "% of Total"
+        "No. Hanzi (Unique)", "% of Total", 
+        "Cumulative No. Hanzi (Unique)", "% of Total", 
+        "No. Hanzi (Count)", "% of Total", 
+        "Cumulative No. Hanzi (Count)", "% of Total"
     ]
+    # Create stats DataFrame
+    stats_df = pd.DataFrame(stats, columns=cols)
     
-    return cumulative_stats, hanzi_df
+    return stats_df, hanzi_df
