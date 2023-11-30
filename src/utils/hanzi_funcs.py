@@ -336,9 +336,9 @@ def get_stats(df: pd.DataFrame, hanzi_all: list, hanzi_sub: list|tuple[list], va
     cols = [
         "HSK Grade", 
         "No. Hanzi (Unique)", "% of Total", 
-        "Cumulative No. Hanzi (Unique)", "% of Total", 
+        "Cumul. No. Hanzi (Unique)", "% of Total", 
         "No. Hanzi (Count)", "% of Total", 
-        "Cumulative No. Hanzi (Count)", "% of Total"
+        "Cumul. No. Hanzi (Count)", "% of Total"
     ]
     # Create stats DataFrame
     stats_df = pd.DataFrame(stats, columns=cols)

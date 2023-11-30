@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
-from tqdm import tqdm
 from utils.hanzi_funcs import filter_text, partition_hanzi, identify, get_stats
 from utils.save_data import save_csv
 
@@ -25,41 +24,77 @@ DDJ = TEST_FILES + "daodejing.txt"
 # Process data
 ##########################################################################
 
-with open(BJZD, "r", encoding=ENCODING) as f:
-    text = f.read()
-# Extract hanzi from text (with duplicates)
-hanzi_list = filter_text(text)
-# Divide into groups (with duplicates)
-simp, trad, neutral, outliers = partition_hanzi(HSK_SIMP, HSK_TRAD, hanzi_list)
+def process_data(location: str, hsk_simp: list, hsk_trad: list, enc: str="utf-8") -> tuple[list]:
+    """
+    Searches for and extracts Chinese characters (hanzi) from a text file
+    according to whether they are simplified or traditional characters
+    within the HSK1 to HSK6 vocabulary range, or other characters of either variant
+    
+    Args:
+        - location, str, filepath of the text file
+        - enc, str, encoding to use
+    Returns:
+        NOTE: all lists below include duplicates
+        - hanzi_list, list, full list of hanzi found
+        - simplified, list, full list of simplified hanzi found belonging to HSK1 to HSK6
+        - traditional, list, full list of traditional hanzi found equivalent to HSK1 to HSK6
+            simplified hanzi
+        - neutral, list, subset of hanzi common to both simplified and traditional
+        - outliers, list, all hanzi found that don't belong to the above lists
+    """
+    with open(location, "r", encoding=enc) as f:
+        text = f.read()
+    # Extract hanzi from text (with duplicates)
+    hanzi_list = filter_text(text)
+    # Divide into groups (with duplicates)
+    simplified, traditional, neutral, outliers = partition_hanzi(hsk_simp, hsk_trad, hanzi_list)
+    
+    return hanzi_list, simplified, traditional, neutral, outliers
+
 
 ##########################################################################
 # Analyse content
 ##########################################################################
 
-# Query character variant
-variant = identify(simp, trad, neutral)
-# Create mapping for analysis
-variants = {
-    "Simplified": simp, 
-    "Traditional": trad, 
-    "Unknown": (simp, trad)
-}
-# Use copy of HSK_HANZI DataFrame for analysis
-hanzi_df = HSK_HANZI.copy()
-# Get statistical breakdown of hanzi content
-stats, hanzi_df = get_stats(hanzi_df, hanzi_list, variants[variant], variant)
+def analyse_content(df: pd.DataFrame, hl: list, simplified: list, traditional: list, neutral: list) -> tuple[str|pd.DataFrame]:
+    """
+    Receives the output of process_data
+    Gets the character variant and statistical breakdowns
+        - number of unique characters and number of total characters
+            by grade, and cumulative figures for the entire content
+    Args:
+        - df, Pandas DataFrame, HSK character list
+        - hl, list, all hanzi in the entire content
+        - simplified, list, simplified HSK hanzi in hl
+        - traditional, list, traditional HSK hanzi in hl
+        - neutral, list, hanzi common to simplified and traditional lists
+    Returns:
+        - variant, str, hanzi variant of the content
+        - stats_dataframe, Pandas DataFrame, stats for the content
+        - hanzi_dataframe, Pandas DataFrame, df with counts added
+    """
+    # Query character variant
+    variant = identify(simplified, traditional, neutral)
+    # Create mapping for analysis
+    variants = {
+        "Simplified": simplified, 
+        "Traditional": traditional, 
+        "Unknown": (simplified, traditional)
+    }
+    # Use copy of HSK_HANZI DataFrame for analysis
+    hanzi_df = df.copy()
+    # Get statistical breakdown of hanzi content
+    stats_dataframe, hanzi_dataframe = get_stats(hanzi_df, hl, variants[variant], variant)
+    
+    return variant, stats_dataframe, hanzi_dataframe
 
-print(stats)
 
-# print(f"{num_hanzi:,} Chinese character{'s' if num_hanzi != 1 else ''} found,\nof which:")
-# print(f"-> {len(simp):,} ({len(simp)/num_hanzi:.2%}) ∈ [HSK1, HSK6]")
-# print(f"-> {len(neutral):,} ({len(neutral)/num_hanzi:.2%}) common to simp. and trad.")
+##########################################################################
+# Interface
+##########################################################################
 
-# print(f"{num_unique:,} unique characters,\nof which:")
-# unique_simp = set(simp)
-# print(f"-> {len(unique_simp):,} ({len(unique_simp)/num_unique:.2%}) ∈ [HSK1, HSK6]")
-# unique_outliers = set(outliers)
+content = DDJ  # BJZD
+# Process data for current file
+hanzi_list, simp, trad, neut, outl = process_data(content, HSK_SIMP, HSK_TRAD, ENCODING)
 
-# print(f"-> {num_unique - len(unique_simp):,} ({len(unique_outliers)/num_unique:.2%}) > HSK6")
-
-hsk_grade = HSK_HANZI[HSK_HANZI["Simplified"] == "爸"]["HSK Grade"].values[0]
+variant, stats_df, hanzi_df = analyse_content(HSK_HANZI, hanzi_list, simp, trad, neut)
