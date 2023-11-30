@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
+import pprint
+import random
+import time
+import tkinter as tk
 from utils.hanzi_funcs import filter_text, partition_hanzi, identify, get_stats
 from utils.save_data import save_csv
 
@@ -90,11 +94,72 @@ def analyse_content(df: pd.DataFrame, hl: list, simplified: list, traditional: l
 
 
 ##########################################################################
+# Landing screen
+##########################################################################
+
+print("Welcome to Xiwen 析文\n")
+time.sleep(1)
+print("Xiwen scans for Chinese text in either traditional 繁體 or simplified 简体 form...\n")
+
+print("...to compare against HSK grades 1 to 6.\n")
+
+print("Load a file (.txt for now)...\n")
+print("...and Xiwen will output a grade-by-grade breakdown of the hanzi in the text.\n")
+
+print("Export the hanzi you need for further use - including hanzi not in the HSK.\n")
+time.sleep(3)
+
+##########################################################################
 # Interface
 ##########################################################################
 
-content = DDJ  # BJZD
-# Process data for current file
-hanzi_list, simp, trad, neut, outl = process_data(content, HSK_SIMP, HSK_TRAD, ENCODING)
+while True:
+    
+    # Main menu - get user command
+    print("Select an option:\n-> 'D' = demo\n-> 'T' = scan .txt\n-> 'U' = scan URL (coming soon)\n-> 'Q' = quit\n")
+    command = input().upper()
+    
+    if command not in ["D", "T", "U", "Q"]:
+        # Repeat options
+        continue
+    
+    elif command == "Q":
+        # Quit
+        break
+    
+    else:
+        if command == "D":
+            # Demo random choice of beijingzhedie.txt or daodejing.txt
+            content = random.choice([BJZD, DDJ])
+            # Get hanzi lists
+            hanzi_list, simp, trad, neut, outl = process_data(content, HSK_SIMP, HSK_TRAD, ENCODING)
+            # Get hanzi stats
+            variant, stats_df, hanzi_df = analyse_content(HSK_HANZI, hanzi_list, simp, trad, neut)
+            
+            print(f"Loaded {variant.upper()} demo:\n")
+            
+            print(stats_df.to_markdown(index=False), "\n")
+            
+            print("-> '7+' under 'HSK Grade' captures any hanzi found beyond HSK6.\n")
+            print("-> 'Unique' columns capture the number of unique hanzi in the text per grade.\n")
+            print("-> 'Count' columns capture the total number of hanzi per grade, duplicates included.")
+            print("---> So, '今天天氣很好' = 5 unique hanzi, 6 total hanzi.\n")
+            print("-> '% of Total' gives the % of the figure on the left relative to all hanzi found in the text..\n")
+            print("-> 'Cumul No.' gives the running totals per grade.")
+            print("---> So, the first 'Cumul. No.' column at the HSK3 row gives the sum of unique characters found that belong to HSK1, HSK2, and HSK3.\n")
+            
+            continue
+    
+        elif command == "T":
+            # Get text from file
+            continue
+        
+        elif command == "U":
+            # Get text from user-provided URL
+            print("Not yet! URL scanning coming soon.\n")
+            continue
+    
+    
+    hanzi_list, simp, trad, neut, outl = process_data(content, HSK_SIMP, HSK_TRAD, ENCODING)
 
-variant, stats_df, hanzi_df = analyse_content(HSK_HANZI, hanzi_list, simp, trad, neut)
+    variant, stats_df, hanzi_df = analyse_content(HSK_HANZI, hanzi_list, simp, trad, neut)
