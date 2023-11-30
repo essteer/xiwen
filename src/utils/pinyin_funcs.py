@@ -48,3 +48,4 @@ def get_pinyin(hanzi: list[str], hanzi_pinyin_dict: dict[str: str]) -> list[str]
             print(f"{zi} not found in pinyin dict")
         
     return pinyin_list
+
