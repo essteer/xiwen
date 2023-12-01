@@ -9,6 +9,7 @@ from utils.save_data import save_csv
 ##########################################################################
 
 ENCODING = "utf-8"
+ENCODING_HANZI = "utf_8_sig"
 DATA_IN = "./data/input/"
 DATA_OUT = "./data/output/"
 HSK_PATH = DATA_IN + "HSK 2013 Pleco.txt"
@@ -137,8 +138,8 @@ merged_df = merged_df[cols]
 # Save files
 ##########################################################################
 
-# save_csv(df,          DATA_OUT, "hsk_vocab",         ENCODING)
-# save_csv(junda_df,    DATA_OUT, "junda_frequencies", ENCODING)
-# save_csv(merged_df, DATA_OUT, "hsk_hanzi",         ENCODING)
-# save_csv(simp_chars,  DATA_OUT, "hsk_simp_chars",    ENCODING)
-# save_csv(trad_chars,  DATA_OUT, "hsk_trad_chars",    ENCODING)
+save_csv(df,          DATA_OUT, "hsk_vocab",         ENCODING_HANZI)
+save_csv(junda_df,    DATA_OUT, "junda_frequencies", ENCODING_HANZI)
+save_csv(merged_df,   DATA_OUT, "hsk_hanzi",         ENCODING_HANZI)
+save_csv(simp_chars,  DATA_OUT, "hsk_simp_chars",    ENCODING_HANZI)
+save_csv(trad_chars,  DATA_OUT, "hsk_trad_chars",    ENCODING_HANZI)
