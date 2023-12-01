@@ -335,10 +335,10 @@ def get_stats(df: pd.DataFrame, hanzi_all: list, hanzi_sub: list|tuple[list], va
     # Create columns for output DataFrame
     cols = [
         "HSK\nGrade", 
-        "No. Hanzi\n(Unique)", "% of\nTotal", 
-        "Cumul.\nNo.", "% of\nTotal", 
-        "No. Hanzi\n(Count)", "% of\nTotal", 
-        "Cumul.\nNo.", "% of\nTotal"
+        "No.\nHanzi\n(Unique)", "% of\nTotal\nUnique", 
+        "Cumul.\nUnique", "% of\nCumul.\nUnique", 
+        "No.\nHanzi\n(Count)", "% of\nTotal", 
+        "Cumul.\nCount", "% of\nCumul\nCount"
     ]
     # Create stats DataFrame
     stats_df = pd.DataFrame(stats, columns=cols)
