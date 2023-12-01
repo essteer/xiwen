@@ -78,7 +78,7 @@ Simplified character set demo:
 "[Folding Beijing](https://web.archive.org/web/20160822161228/http://jessica-hjf.blog.163.com/blog/static/278128102015240444791/)" 《北京折叠》, Hao Jingfang 郝景芳, 2012
 
 Traditional character set demo:
-"Tao Te Ching" 《大的經》, Lao Tzu 老子， 400BC
+"Tao Te Ching" 《大的經》, Lao Tzu 老子, 400BC
 
 ## Planned upgrades
 
