@@ -44,7 +44,7 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## Usage
+## Operation
 
 Run `src/interface.py` to launch, and follow the instructions as prompted: select a file on your device (.txt only for now) to process, or enter `D` for a demo as prompted at the main menu.
 
@@ -52,7 +52,7 @@ Run `src/interface.py` to launch, and follow the instructions as prompted: selec
 
 The datasets needed to run Xiwen are included in the `data` folder. They're set up and ready to go out of the box, but you can run your own character lists through `prep.py` if needed.
 
-`src/interface.py` is the interactive component. It receives your input and makes calls to functions in `src/utils/hanzi_funcs.py` to:
+`src/interface.py` is the interactive component. It receives your input and makes calls to functions in `src/utils/data_funcs.py`. Those functions then make call to `src/utils/hanzi_funcs.py` to:
 
 - break down text into individual hanzi (`filter_text()`)
 - sort hanzi as HSK-level simplified or traditional hanzi, or outliers (`partition_hanzi()`)
@@ -66,10 +66,10 @@ Character sets can then be exported to .csv.
 This repo makes use of datasets of HSK vocabulary and character frequency lists in the public domain as indicated below - my thanks to those involved in their creation and distribution.
 
 Character frequency list:
-"CharFreq-Modern.csv", Da, Jun. 2004, Chinese text computing, [http://lingua.mtsu.edu/chinese-computing](http://lingua.mtsu.edu/chinese-computing)
+"CharFreq-Modern.csv", Da, Jun. 2004, [Chinese text computing](http://lingua.mtsu.edu/chinese-computing)
 
 Hanyu Shuiping Kaoshi (HSK) vocabulary list:
-"HSK 2013 Pleco.txt", alanmd, 2013, Pleco forums, [https://www.plecoforums.com/threads/new-hsk-levels-1-6.2950/](https://www.plecoforums.com/threads/new-hsk-levels-1-6.2950/)
+"HSK 2013 Pleco.txt", alanmd, 2013, [Pleco forums](https://www.plecoforums.com/threads/new-hsk-levels-1-6.2950/)
 
 Multiple character mappings:
 "[Ambiguious character mappings](https://en.wikipedia.org/wiki/Ambiguities_in_Chinese_character_simplification)", Wikipedia
