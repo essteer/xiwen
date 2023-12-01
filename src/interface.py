@@ -1,20 +1,23 @@
 # -*- coding: utf-8 -*-
+import csv
+import os
 import pandas as pd
-import pprint
 import random
-import time
 import tkinter as tk
-from utils.hanzi_funcs import filter_text, partition_hanzi, identify, get_stats
-from utils.save_data import save_csv
+from tkinter import filedialog
+from utils.data_funcs import process_data, analyse_data
 
 ##########################################################################
 # Prepare files
 ##########################################################################
 
 ENCODING = "utf-8"
+ENCODING_HANZI = "utf_8_sig"
 DATA_IN = "./data/input/"
 DATA_OUT = "./data/output/"
 TEST_FILES = "./data/test_files/"
+# Initialise Tkinter
+ROOT = tk.Tk()
 # Load HSK Hanzi database (unigrams only)
 HSK_HANZI = pd.read_csv(DATA_OUT + "hsk_hanzi.csv")
 HSK_SIMP = list(HSK_HANZI["Simplified"])
@@ -25,89 +28,88 @@ BJZD = TEST_FILES + "beijingzhedie.txt"
 DDJ = TEST_FILES + "daodejing.txt"
 
 ##########################################################################
-# Process data
+# Dialog and file handling
 ##########################################################################
 
-def process_data(location: str, hsk_simp: list, hsk_trad: list, enc: str="utf-8") -> tuple[list]:
+def get_file_path():
     """
-    Searches for and extracts Chinese characters (hanzi) from a text file
-    according to whether they are simplified or traditional characters
-    within the HSK1 to HSK6 vocabulary range, or other characters of either variant
-    
+    Opens a Tkinter dialog to select a file
+    If file selected, updates global selected_file_path
+    """
+    # Open file dialog to select file
+    file_path = filedialog.askopenfilename(title="Select Text File")
+    # Check if a file was selected
+    if file_path:
+        # Update global selected_file_path
+        global selected_file_path
+        selected_file_path = file_path
+
+
+def is_valid_file(filename: str) -> bool:
+    """
+    Checks whether a selected file is compatible
     Args:
-        - location, str, filepath of the text file
-        - enc, str, encoding to use
+        - filename, str, the path of the selected file
     Returns:
-        NOTE: all lists below include duplicates
-        - hanzi_list, list, full list of hanzi found
-        - simplified, list, full list of simplified hanzi found belonging to HSK1 to HSK6
-        - traditional, list, full list of traditional hanzi found equivalent to HSK1 to HSK6
-            simplified hanzi
-        - neutral, list, subset of hanzi common to both simplified and traditional
-        - outliers, list, all hanzi found that don't belong to the above lists
+        - bool, True if valid else False
     """
-    with open(location, "r", encoding=enc) as f:
-        text = f.read()
-    # Extract hanzi from text (with duplicates)
-    hanzi_list = filter_text(text)
-    # Divide into groups (with duplicates)
-    simplified, traditional, neutral, outliers = partition_hanzi(hsk_simp, hsk_trad, hanzi_list)
-    
-    return hanzi_list, simplified, traditional, neutral, outliers
+    extension = os.path.splitext(filename)[1].lower()
+    if extension in (".txt"):
+        return True
+    else:
+        return False
 
 
-##########################################################################
-# Analyse content
-##########################################################################
-
-def analyse_content(df: pd.DataFrame, hl: list, simplified: list, traditional: list, neutral: list) -> tuple[str|pd.DataFrame]:
+def export_to_csv(data: pd.DataFrame|list, file_path=None):
     """
-    Receives the output of process_data
-    Gets the character variant and statistical breakdowns
-        - number of unique characters and number of total characters
-            by grade, and cumulative figures for the entire content
+    Opens a Tkinter dialog to select a file save location
+    If location selected, saves Pandas DataFrame or list to .csv
     Args:
-        - df, Pandas DataFrame, HSK character list
-        - hl, list, all hanzi in the entire content
-        - simplified, list, simplified HSK hanzi in hl
-        - traditional, list, traditional HSK hanzi in hl
-        - neutral, list, hanzi common to simplified and traditional lists
-    Returns:
-        - variant, str, hanzi variant of the content
-        - stats_dataframe, Pandas DataFrame, stats for the content
-        - hanzi_dataframe, Pandas DataFrame, df with counts added
+        - data, Pandas DataFrame | list, data to be saved
     """
-    # Query character variant
-    variant = identify(simplified, traditional, neutral)
-    # Create mapping for analysis
-    variants = {
-        "Simplified": simplified, 
-        "Traditional": traditional, 
-        "Unknown": (simplified, traditional)
-    }
-    # Use copy of HSK_HANZI DataFrame for analysis
-    hanzi_df = df.copy()
-    # Get statistical breakdown of hanzi content
-    stats_dataframe, hanzi_dataframe = get_stats(hanzi_df, hl, variants[variant], variant)
+    global ENCODING, ENCODING_HANZI
     
-    return variant, stats_dataframe, hanzi_dataframe
+    filename = filedialog.asksaveasfilename(title="Save CSV File", defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
+
+    if filename:
+        # Pandas DataFrames
+        if isinstance(data, pd.DataFrame):
+            data.to_csv(filename, index=False)
+            
+        # Lists
+        elif isinstance(data, list):
+            # Open file in write mode with UTF-8 encoding
+            with open(filename, "w", newline="", encoding=ENCODING) as csvfile:
+                # Write the CSV data to the file
+                writer = csv.writer(csvfile)
+                for row in data:
+                    writer.writerow(row)
+            
+        # Coerce .csv to utf-8 encoding for hanzi display
+        df = pd.read_csv(filename, encoding=ENCODING)   
+        df.to_csv(filename, encoding=ENCODING_HANZI, index=False)
+        
+        print(f"\nExported to {filename}\n")
+
+
+def handle_quit(self):
+    """
+    Closes Tkinter window on quit
+    """
+    self.destroy()
+    exit()
 
 
 ##########################################################################
 # Landing screen
 ##########################################################################
 
-print("Welcome to Xiwen 析文\n")
-time.sleep(1)
-print("Xiwen scans for Chinese text in either traditional 繁體 or simplified 简体 form...\n")
-
-print("...to compare against HSK grades 1 to 6.\n")
-
-print("Load a file (.txt for now)...\n")
-print("...and Xiwen will output a grade-by-grade breakdown of the hanzi in the text.\n")
-
-print("Export the hanzi you need for further use - including hanzi not in the HSK.\n")
-time.sleep(3)
+print("\nWelcome to Xiwen 析文\n")
+print("Xiwen scans text for traditional 繁體 and simplified 简体")
+print("Chinese characters (hanzi) to compare against HSK grades 1 to 6.\n")
+print("Load a file (.txt for now) and Xiwen will output a grade-by-grade") 
+print("breakdown of the hanzi in the text.\n")
+print("Export hanzi for further use - including hanzi not in the HSK.\n")
 
 ##########################################################################
 # Interface
@@ -116,50 +118,183 @@ time.sleep(3)
 while True:
     
     # Main menu - get user command
-    print("Select an option:\n-> 'D' = demo\n-> 'T' = scan .txt\n-> 'U' = scan URL (coming soon)\n-> 'Q' = quit\n")
+    print("Select an option:\n-> 'D' = demo\n-> 'S' = scan .txt\n-> 'U' = scan URL (coming soon)\n-> 'Q' = quit\n")
     command = input().upper()
-    
-    if command not in ["D", "T", "U", "Q"]:
+    # Invalid command
+    if command not in ["D", "S", "U", "Q"]:
         # Repeat options
         continue
-    
+    # Quit command
     elif command == "Q":
-        # Quit
+        # Quit programme
         break
-    
+    # Valid "D", "S" or "U" command
     else:
+        # "D" = Demo command
         if command == "D":
             # Demo random choice of beijingzhedie.txt or daodejing.txt
             content = random.choice([BJZD, DDJ])
             # Get hanzi lists
-            hanzi_list, simp, trad, neut, outl = process_data(content, HSK_SIMP, HSK_TRAD, ENCODING)
+            hanzi_list, simp, trad, neut, outl = process_data(content, HSK_SIMP, HSK_TRAD)
             # Get hanzi stats
-            variant, stats_df, hanzi_df = analyse_content(HSK_HANZI, hanzi_list, simp, trad, neut)
-            
-            print(f"Loaded {variant.upper()} demo:\n")
-            
+            variant, stats_df, hanzi_df = analyse_data(HSK_HANZI, hanzi_list, simp, trad, neut)
+            # Print stats to CLI
             print(stats_df.to_markdown(index=False), "\n")
-            
-            print("-> '7+' under 'HSK Grade' captures any hanzi found beyond HSK6.\n")
-            print("-> 'Unique' columns capture the number of unique hanzi in the text per grade.\n")
-            print("-> 'Count' columns capture the total number of hanzi per grade, duplicates included.")
-            print("---> So, '今天天氣很好' = 5 unique hanzi, 6 total hanzi.\n")
-            print("-> '% of Total' gives the % of the figure on the left relative to all hanzi found in the text..\n")
-            print("-> 'Cumul No.' gives the running totals per grade.")
-            print("---> So, the first 'Cumul. No.' column at the HSK3 row gives the sum of unique characters found that belong to HSK1, HSK2, and HSK3.\n")
-            
-            continue
-    
-        elif command == "T":
-            # Get text from file
+            print(f"Loaded {variant} character demo:\n")
+            print("-> '7+' under 'HSK Grade' captures any hanzi found beyond HSK6.")
+            print("-> 'Unique' columns capture the number of unique hanzi in the text per grade.")
+            print("-> 'Count' columns capture the total number of hanzi per grade, duplicates included ('今天天氣很好' = 5 unique hanzi, 6 total hanzi).")
+            print("-> '% of Total' gives the % of the figure on the left relative to all hanzi found in the text.")
+            print("-> 'Cumul No.' columns give the running totals per grade (the first 'Cumul. No.' column at the HSK3 row gives the sum of unique characters found that belong to HSK1, HSK2, and HSK3).\n")
+            print("This demo does not support file exports - select 'S'")
+            print("at the main menu to select a file from your device")
+            print("or try with the demo files in src/data/test_files.\n")
+            # Continue to main screen loop
             continue
         
+        # "S" = Scan command
+        elif command == "S":
+            # Initialise file path
+            selected_file_path = None
+            # Open dialog to get path of user-selected file
+            get_file_path()            
+            # Return to main screen if no file chosen
+            if selected_file_path:
+                print(f"in if selected_file_path - {selected_file_path}\n")
+                # Confirm whether valid file type chosen
+                valid_file = is_valid_file(selected_file_path)
+                if not valid_file:
+                    # Return to main screen if file invalid
+                    print("Invalid file: please select a .txt file\n")
+                
+                else:
+                    # Get hanzi lists
+                    hanzi_list, simp, trad, neut, outl = process_data(selected_file_path, HSK_SIMP, HSK_TRAD)
+                    # Get hanzi stats
+                    variant, stats_df, hanzi_df = analyse_data(HSK_HANZI, hanzi_list, simp, trad, neut)
+                    # Print stats to CLI
+                    print(stats_df.to_markdown(index=False), "\n")
+                    print(f"{variant.title()} character set detected\n")
+                    
+                    while True:
+                        # Flag to break out of nested menus
+                        return_to_main = False
+                        print("Select an option:\n-> 'E' = see export options\n-> 'X' = exit to main screen\n")
+                        command = input().upper()
+                        
+                        if command not in ["E", "X"]:
+                            # Repeat options
+                            continue
+                        
+                        elif command == "X":
+                            # Exit to main screen
+                            break
+                        
+                        elif command == "E":
+                            while True:
+                                exit_to_main = False
+                                # Give export options
+                                print("Select an option to export to .csv:\n-> 'A' = export all detected HSK hanzi (excludes outliers)\n-> 'C' = export custom HSK hanzi selection\n-> 'F' = export full HSK hanzi list\n-> 'O' = export detected outliers (non-HSK hanzi)\n-> 'S' = export stats\n-> 'X' = exit to main screen")
+                                command = input().upper()
+                                
+                                if command not in ["A", "C", "F", "O", "S", "X"]:
+                                    # Repeat options
+                                    continue
+                                
+                                elif command == "X":
+                                    # Set flag to break out of parent loop to main screen
+                                    exit_to_main = True
+                                    break
+                                
+                                elif command == "F":
+                                    # Export all unique HSK hanzi
+                                    export_to_csv(hanzi_df)
+                                
+                                elif command == "A":
+                                    # Export all unique HSK hanzi in text - filter hanzi_df with hanzi_list
+                                    hanzi_set = list(set(hanzi_list))
+                                                                        
+                                    if variant == "Simplified":
+                                        filtered_df = hanzi_df[hanzi_df["Simplified"].isin(hanzi_set)]
+                                    else:
+                                        # If traditional or unknown character variant, export based on traditional
+                                        filtered_df = hanzi_df[hanzi_df["Traditional"].isin(hanzi_set)]
+                                    
+                                    export_to_csv(filtered_df)
+                                                                            
+                                elif command == "S":
+                                    # Export stats - save stats_df
+                                    export_to_csv(stats_df)
+                                
+                                elif command == "O":
+                                    # Export outliers - save outl
+                                    outliers = list(set(outl))
+                                    export_to_csv(outliers)
+                                
+                                elif command == "C":
+                                    print("\nCustom export:\n")
+                                    print("Enter the HSK grade(s) to export in any order")
+                                    print("-> e.g., to export HSK2 and HSK5, enter '25' or '52'")
+                                    
+                                    while True:
+                                        selection = input("Enter HSK Grades or X to exit: ")
+                                        
+                                        if selection.upper() == "X":
+                                            break
+                                        
+                                        try:
+                                            assert selection.isdecimal()
+                                            selection = list(set(selection))
+                                            assert all('1' <= char <= '6' for char in selection)
+                                            sorted_selection = sorted([int(char) for char in selection])
+                                            # Export all unique HSK hanzi in text - filter hanzi_df with hanzi_list
+                                            hanzi_set = list(set(hanzi_list))
+                                            
+                                            if variant == "Simplified":
+                                                filtered_df = hanzi_df[hanzi_df["Simplified"].isin(hanzi_set)]
+                                            else:
+                                                # If traditional or unknown character variant, export based on traditional
+                                                filtered_df = hanzi_df[hanzi_df["Traditional"].isin(hanzi_set)]
+                                            
+                                            # Filter based on grade selection
+                                            filtered_grades_df = filtered_df[filtered_df["HSK Grade"].isin(sorted_selection)]
+                                            
+                                            print(filtered_grades_df)
+                                            print("\nSelection displayed above.")
+                                            
+                                            # Confirm selection before export
+                                            while True:
+                                                print("Proceed to export? Enter Y/N: ")
+                                                command = input().upper()
+                                                
+                                                if command not in ["Y", "N"]:
+                                                    continue
+                                                
+                                                elif command == "Y":
+                                                    export_to_csv(filtered_grades_df)
+                                                    break
+                                                
+                                                elif command == "N":
+                                                    break
+                                                    
+                                        except AssertionError:
+                                            print("\nEnter digits from 1 to 6 only\n")
+                                
+                        if exit_to_main:
+                            # exit to main screen
+                            break
+            
+            # Continue to main screen loop - no file chosen at "S"
+            continue
+        
+        # "U" = URL command
         elif command == "U":
             # Get text from user-provided URL
-            print("Not yet! URL scanning coming soon.\n")
+            print("Not yet! URL support coming soon.\n")
+            # Continue to main screen loop
             continue
-    
-    
-    hanzi_list, simp, trad, neut, outl = process_data(content, HSK_SIMP, HSK_TRAD, ENCODING)
 
-    variant, stats_df, hanzi_df = analyse_content(HSK_HANZI, hanzi_list, simp, trad, neut)
+
+# Exit Tkinter
+handle_quit(ROOT)
+ROOT.mainloop()
