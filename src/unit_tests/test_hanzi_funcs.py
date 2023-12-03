@@ -19,7 +19,7 @@ DATA_OUT = os.path.abspath("../data/output/")
 TEST_FILES = os.path.abspath("../data/test_files") + "/"
 
 # Combine script directory with relative path to the file
-filepath = os.path.join(DATA_OUT, "hsk_hanzi.csv")
+filepath = os.path.join(DATA_OUT, "hsk30_hanzi.csv")
 # Load HSK Hanzi database (unigrams only)
 HSK_HANZI = pd.read_csv(filepath)
 HSK_SIMP = list(HSK_HANZI["Simplified"])
@@ -31,9 +31,9 @@ HSK_TRAD = list(HSK_HANZI["Traditional"])
 
 TEST_CASES = {
     # Simplified only
-    "beijingzhedie.txt":    ["Simplified", 18896, 1751, 18525, 13289, 371], 
+    "beijingzhedie.txt":    ["Simplified", 18896, 1751, 18647, 13477, 249], 
     # Traditional only
-    "daodejing.txt":        ["Traditional", 5686, 810, 4294, 5329, 342], 
+    "taoteching.txt":        ["Traditional", 5686, 810, 4390, 5466, 206], 
     # Latin alphabet (no hanzi)
     "iliad.txt":            ["Unknown", 0, 0, 0, 0, 0],
     # Unknown - 50:50 simplified : traditional 
@@ -101,7 +101,7 @@ for test_case in TEST_CASES.keys():
     hanzi_list = filter_text(text)
     # Divide into groups (with duplicates)
     simp, trad, neutral, outliers = partition_hanzi(HSK_SIMP, HSK_TRAD, hanzi_list)
-    
+
     try:
         assert len(simp) == TEST_CASES[test_case][3]
         print(f"PASS: {test_case:<20} len(simp) == {TEST_CASES[test_case][3]:,}")

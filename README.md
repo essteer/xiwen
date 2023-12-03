@@ -1,6 +1,6 @@
 # Xiwen 析文
 
-Xiwen scans text for Chinese characters (hanzi), and:
+Xiwen is a CLI tool that scans text for Chinese characters (hanzi), and:
 
 - identifies the character variant (simplified or traditional)
 - analyses the content by HSK grade
@@ -20,9 +20,36 @@ Instructors can use it to assess the suitability of reading materials for their 
 
 HSK (Hanyu Shuiping Kaoshi 汉语水平考试) is a series of examinations designed to test Chinese language proficiency in simplified Chinese.
 
-The first six levels cover approximately 2,660 of the most frequently used hanzi, and around 5,000 vocabulary items (typically consisting of either one or two characters).
+In their latest form HSK consists of nine levels, and covers 3,000 simplified hanzi and 11,092 vocabulary items. The advanced levels (seven to nine) share 1,200 hanzi that are tested together.
 
-Xiwen maps the HSK hanzi to traditional Chinese equivalents, for use on either character variant.
+To approximate a traditional hanzi version of the HSK, Xiwen maps the HSK hanzi to traditional Chinese equivalents. In most cases this is a one-to-one conversion, but in several cases there are two or more traditional hanzi that reflect distinct meanings of the single simplified character.
+
+For example:
+
+- "发": ["發", "髮"]
+- "了": ["了", "瞭"]
+- "面": ["面", "麵"]
+
+Or even:
+
+- "只": ["只", "衹", "隻"]
+- "台": ["台", "檯", "臺", "颱"]
+
+A list of these "polymaps" - not all of which relate to hanzi in the HSK - can be found on the Wikipedia article [Ambiguious character mappings](https://en.wikipedia.org/wiki/Ambiguities_in_Chinese_character_simplification).
+
+This approach isn't perfect: obscure definitions implied by a distinct traditional hanzi may be far less frequent than the common conversion of a simplified hanzi.
+
+The table below lists the number of simplified hanzi per grade, and the number of mappings to traditional equivalents.
+
+| HSK Grade | No. Simplified Hanzi | Running Total | No. Traditional Hanzi Equivalents | Running Total |
+| --------- | -------------------- | ------------- | --------------------------------- | ------------- |
+| [1]       | 300                  | 300           | 313                               | 313           |
+| [2]       | 300                  | 600           | 314                               | 627           |
+| [3]       | 300                  | 900           | 312                               | 939           |
+| [4]       | 300                  | 1200          | 316                               | 1255          |
+| [5]       | 300                  | 1500          | 310                               | 1565          |
+| [6]       | 300                  | 1800          | 310                               | 1875          |
+| [7-9]     | 1200                 | 3000          | 1214                              | 3089          |
 
 ## Installation
 
@@ -46,7 +73,7 @@ pip install -r requirements.txt
 
 ## Operation
 
-Run `src/interface.py` to launch, and follow the instructions as prompted: select a file on your device (.txt only for now) to process, or enter `D` for a demo as prompted at the main menu.
+Run `src/interface.py` from the virtual environment to launch, and follow the instructions as prompted: select a file on your device (.txt only for now) to process, or enter `D` for a demo as prompted at the main menu.
 
 `src/prep.py` makes use of datasets in `data/input` to pair simplified and traditional character sets with their pinyin, HSK grades, and character frequencies as identified in the MTSU dataset.
 
@@ -63,13 +90,13 @@ Character sets can then be exported to .csv.
 
 ## Sources
 
-This repo makes use of datasets of HSK vocabulary and character frequency lists in the public domain as indicated below - my thanks to those involved in their creation and distribution.
+This repo makes use of datasets of HSK vocabulary and character frequency lists in the public domain as indicated below - credit goes to those involved in their creation and distribution.
+
+Hanyu Shuiping Kaoshi (HSK) 3.0 character list:
+"hsk30-chars.csv", [hsk30](https://github.com/ivankra/hsk30), ivankra, GitHub
 
 Character frequency list:
-"CharFreq-Modern.csv", Da, Jun. 2004, [Chinese text computing](http://lingua.mtsu.edu/chinese-computing)
-
-Hanyu Shuiping Kaoshi (HSK) vocabulary list:
-"HSK 2013 Pleco.txt", alanmd, 2013, [Pleco forums](https://www.plecoforums.com/threads/new-hsk-levels-1-6.2950/)
+"CharFreq-Modern.csv", Da, Jun. 2004, [Chinese text computing](http://lingua.mtsu.edu/chinese-computing), Middle Tennessee State University
 
 Multiple character mappings:
 "[Ambiguious character mappings](https://en.wikipedia.org/wiki/Ambiguities_in_Chinese_character_simplification)", Wikipedia
@@ -84,4 +111,3 @@ Traditional character set demo:
 
 - File handling for .csv and .pdf file imports.
 - URL handling to import text direct from webpages.
-- Expansion to cover the new HSK7-9 band introduced in 2021/2022.
