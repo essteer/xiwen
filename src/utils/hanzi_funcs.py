@@ -44,7 +44,7 @@ def partition_hanzi(hsk_simp: list, hsk_trad: list, hanzi_list: list) -> tuple[l
     or outliers (both simplified and traditional) not in the HSK lists
     
     Args:
-        - hsk_simp, list, simplified characters in HSK1 to HSK6
+        - hsk_simp, list, simplified characters in HSK1 to HSK7-9
         - hsk_trad, list, traditional equivalents to hsk_simp
         - hanzi_list, list, characters to partition
     Returns:
@@ -66,7 +66,7 @@ def identify(hsk_simp: list, hsk_trad: list, neutral: list) -> tuple[str, float]
     Identifies text as either simplified or traditional Chinese, 
         or unknown if the variant is uncertain
     Args:
-        - hsk_simp, list, simplified characters in HSK1 to HSK6
+        - hsk_simp, list, simplified characters in HSK1 to HSK7-9
         - hsk_trad, list, traditional equivalents to hsk_simp
         - neutral, list, characters common to simp and trad
     Returns:
@@ -111,7 +111,7 @@ def _granular_counts(df: pd.DataFrame, hanzi_all: list, variant: str) -> list:
     Breaks down counts according to HSK grades for
     Pandas DataFrame passed by get_counts()
     Args:
-        - df, Pandas DataFrame, all unique hanzi in HSK1 to HSK6
+        - df, Pandas DataFrame, all unique hanzi in HSK1 to HSK7-9
             with counts column
         - hanzi_all, list, all hanzi (with duplicates) found in text being analysed
         - variant, str, the variant of the character set (Simplified|Traditional|Unknown)
@@ -146,8 +146,8 @@ def _granular_counts(df: pd.DataFrame, hanzi_all: list, variant: str) -> list:
     # Reserve key "0" for full figures
     grade_stats[0] = num_total_unique_hanzi, num_total_hanzi
     
-    # Get counts for each grade HSK1 to HSK6 and store in grade_stats
-    for i in range(1, 7):
+    # Get counts for each grade HSK1 to HSK7-9 and store in grade_stats
+    for i in range(1, 8):
         grade_unique = (df.loc[df["HSK Grade"] == i, "Count"] != 0).sum()
         grade_count  = df.loc[df["HSK Grade"] == i, "Count"].sum()
         grade_stats[i] = [grade_unique, grade_count]
@@ -281,15 +281,15 @@ def _compute_stats(raw_counts: list[list[int]], cumulative_counts: list[list[int
             cumulative_count, cumulative_count_percent
         ])
     
-    # Handle outliers from beyond HSK6
-    grade = f"{grades + 1}+"
-    # Number of outliers is total minus HSK6 cumulative total
-    grade_unique = raw_counts[0][0] - statistics[5][3]
+    # Handle outliers from beyond HSK7-9
+    grade = "10+"
+    # Number of outliers is total minus HSK7-9 cumulative total
+    grade_unique = raw_counts[0][0] - statistics[6][3]
     grade_unique_percent = np.int32((grade_unique / raw_counts[0][0]) * 100)
     cumulative_unique = raw_counts[0][0] 
     cumulative_unique_percent = np.int32((cumulative_unique / cumulative_counts[0][0]) * 100)
-    # Number of outliers is total minus HSK6 cumulative total
-    grade_count = raw_counts[0][1] - statistics[5][7]
+    # Number of outliers is total minus HSK7-9 cumulative total
+    grade_count = raw_counts[0][1] - statistics[6][7]
     grade_count_percent = np.int32((grade_count / raw_counts[0][1]) * 100)
     cumulative_count = cumulative_counts[0][1]
     cumulative_count_percent = np.int32((cumulative_count / cumulative_counts[0][1]) * 100)
@@ -325,10 +325,10 @@ def get_stats(df: pd.DataFrame, hanzi_all: list, hanzi_sub: list|tuple[list], va
         - stats_df, Pandas DataFrame, aggregate and cumulative grade-based character counts
         - hanzi_df, Pandas DataFrame, df with counts applied by _get_counts()
     """
-    HSK_GRADES = 6
+    HSK_GRADES = 7
     # Get count breakdown of hanzi content
     grade_counts, hanzi_df = _get_counts(df, hanzi_all, hanzi_sub, variant)
-    # Get cumulative counts ascending from HSK1 to HSK6
+    # Get cumulative counts ascending from HSK1 to HSK7-9
     cumul_counts = _cumulative_counts(grade_counts, HSK_GRADES)
     # Compute stats for grade counts and cumulative counts
     stats = _compute_stats(grade_counts, cumul_counts, HSK_GRADES)
@@ -342,5 +342,18 @@ def get_stats(df: pd.DataFrame, hanzi_all: list, hanzi_sub: list|tuple[list], va
     ]
     # Create stats DataFrame
     stats_df = pd.DataFrame(stats, columns=cols)
+    
+    # Format HSK Grade column for export
+    stats_df["HSK\nGrade"] = stats_df["HSK\nGrade"].astype(str)
+    hanzi_df["HSK Grade"] = hanzi_df["HSK Grade"].astype(str)
+    
+    for i in range(1, 7):
+        stats_df["HSK\nGrade"] = stats_df["HSK\nGrade"].replace(f"{i}", f"[{i}]")
+        hanzi_df["HSK Grade"] = hanzi_df["HSK Grade"].replace(f"{i}", f"[{i}]")
+    
+    stats_df["HSK\nGrade"] = stats_df["HSK\nGrade"].replace("7", "[7-9]")
+    hanzi_df["HSK Grade"] = hanzi_df["HSK Grade"].replace("7", "[7-9]")
+    stats_df["HSK\nGrade"] = stats_df["HSK\nGrade"].replace("10+", "[10+]")
+    hanzi_df["HSK Grade"] = hanzi_df["HSK Grade"].replace("10+", "[10+]")
     
     return stats_df, hanzi_df
