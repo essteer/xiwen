@@ -19,13 +19,16 @@ TEST_FILES = "./data/test_files/"
 # Initialise Tkinter
 ROOT = tk.Tk()
 # Load HSK Hanzi database (unigrams only)
-HSK_HANZI = pd.read_csv(DATA_OUT + "hsk_hanzi.csv")
+HSK_HANZI = pd.read_csv(DATA_OUT + "hsk30_hanzi.csv")
+# Replace HSK7-9 with 7 and convert grades to ints for iteration
+HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].replace("7-9", 7)
+HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].astype(int)
 HSK_SIMP = list(HSK_HANZI["Simplified"])
 HSK_TRAD = list(HSK_HANZI["Traditional"])
 # Test case (simplified hanzi)
 BJZD = TEST_FILES + "beijingzhedie.txt"
 # Test case (traditional hanzi)
-DDJ = TEST_FILES + "daodejing.txt"
+TTC = TEST_FILES + "taoteching.txt"
 
 ##########################################################################
 # Dialog and file handling
@@ -106,7 +109,7 @@ def handle_quit(self):
 
 print("\nWelcome to Xiwen 析文\n")
 print("Xiwen scans text for traditional 繁體 and simplified 简体")
-print("Chinese characters (hanzi) to compare against HSK grades 1 to 6.\n")
+print("Chinese characters (hanzi) to compare against HSK grades 1 to 9.\n")
 print("Load a file (.txt for now) and Xiwen will output a grade-by-grade") 
 print("breakdown of the hanzi in the text.\n")
 print("Export hanzi for further use - including hanzi not in the HSK.\n")
@@ -132,16 +135,16 @@ while True:
     else:
         # "D" = Demo command
         if command == "D":
-            # Demo random choice of beijingzhedie.txt or daodejing.txt
-            content = random.choice([BJZD, DDJ])
+            # Demo random choice of beijingzhedie.txt or taoteching.txt
+            content = random.choice([BJZD, TTC])
             # Get hanzi lists
             hanzi_list, simp, trad, neut, outl = process_data(content, HSK_SIMP, HSK_TRAD)
             # Get hanzi stats
             variant, stats_df, hanzi_df = analyse_data(HSK_HANZI, hanzi_list, simp, trad, neut)
             # Print stats to CLI
             print(stats_df.to_markdown(index=False), "\n")
-            print(f"Loaded {variant} character demo:\n")
-            print("-> '7+' under 'HSK Grade' captures any hanzi found beyond HSK6.")
+            print(f"Loaded {variant.lower()} character demo:\n")
+            print("-> '10+' under 'HSK Grade' captures any hanzi found beyond the HSK7-9 band.")
             print("-> 'Unique' columns capture the number of unique hanzi in the text per grade.")
             print("-> 'Count' columns capture the total number of hanzi per grade, duplicates included ('今天天氣很好' = 5 unique hanzi, 6 total hanzi).")
             print("-> '% of Total' gives the % of the figure on the left relative to all hanzi found in the text.")
@@ -244,10 +247,16 @@ while True:
                                         
                                         try:
                                             assert selection.isdecimal()
+                                            # Grades 7, 8, 9 share the same hanzi
+                                            selection = selection.replace("8", "7").replace("9", "7")
                                             selection = list(set(selection))
-                                            assert all('1' <= char <= '6' for char in selection)
+                                            assert all('1' <= char <= '7' for char in selection)
                                             sorted_selection = sorted([int(char) for char in selection])
-                                            # Export all unique HSK hanzi in text - filter hanzi_df with hanzi_list
+                                            
+                                            custom_grades = [f"[{i}]" for i in sorted_selection]
+                                            custom_grades = list(set(["[7-9]" if x == "[7]" else x for x in custom_grades]))
+                                            
+                                            # Export unique HSK hanzi in text - filter hanzi_df with custom_grades
                                             hanzi_set = list(set(hanzi_list))
                                             
                                             if variant == "Simplified":
@@ -257,7 +266,7 @@ while True:
                                                 filtered_df = hanzi_df[hanzi_df["Traditional"].isin(hanzi_set)]
                                             
                                             # Filter based on grade selection
-                                            filtered_grades_df = filtered_df[filtered_df["HSK Grade"].isin(sorted_selection)]
+                                            filtered_grades_df = filtered_df[filtered_df["HSK Grade"].isin(custom_grades)]
                                             
                                             print(filtered_grades_df)
                                             print("\nSelection displayed above.")
@@ -278,7 +287,7 @@ while True:
                                                     break
                                                     
                                         except AssertionError:
-                                            print("\nEnter digits from 1 to 6 only\n")
+                                            print("\nEnter digits from 1 to 9 only\n")
                                 
                         if exit_to_main:
                             # exit to main screen

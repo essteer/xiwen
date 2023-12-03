@@ -12,7 +12,7 @@ ENCODING = "utf-8"
 ENCODING_HANZI = "utf_8_sig"
 DATA_IN = "./data/input/"
 DATA_OUT = "./data/output/"
-HSK_PATH = DATA_IN + "HSK 2013 Pleco.txt"
+HSK_PATH = DATA_IN + "hsk30-chars-ext.csv"
 FREQ_PATH = DATA_IN + "CharFreq-Modern-utf8.csv"
 PINYIN_PATH = DATA_IN + "hanzi_pinyin_characters.tsv.txt"
 
@@ -25,90 +25,51 @@ vocab_dict = {}
 simp_chars, trad_chars = set(), set()
 
 ##########################################################################
-# Extract HSK dataset to DataFrame
+# Pinyin dataset
 ##########################################################################
-
-with open(HSK_PATH, "r", encoding=ENCODING) as f:
-    lines = f.readlines()
 
 # Get mapping of characters to accented pinyin
 pinyin_map = map_pinyin(PINYIN_PATH, ENCODING)
 
-for line in tqdm(lines, desc="Processing"):
-# for line in lines:
-    
-    if "Level" in line:
-        grade += 1
-        continue
-    try:
-        # Split hanzi from pinyin
-        chars, pinyin = line.split(maxsplit=1)
-        pinyin = pinyin.strip().lower()
-        # Split simplified and traditional
-        simp, trad = chars.split("[")
-        trad = trad.rstrip("]")
-        
-        # Add n-gram to vocab dict
-        vocab_dict[counter] = simp, trad, pinyin, grade
-        
-        # Add unigrams directly
-        if len(list(simp)) == 1 and len(list(trad)) == 1:
-            simp_chars.add(simp)
-            trad_chars.add(trad)
-        
-        else:
-            assert len(simp) > 1 and len(simp) == len(trad)
-            # Check for new component hanzi
-            simp = list(simp)
-            trad = list(trad)
-            
-            # Process pinyin
-            pinyin = get_pinyin(trad, pinyin_map)
-            
-            for i in range(len(simp)):
-                # Add new simp and trad hanzi
-                if simp[i] not in simp_chars or trad[i] not in trad_chars:
-                    counter += 1
-                    
-                    try:
-                        vocab_dict[counter] = simp[i], trad[i], pinyin[i], grade
-                        simp_chars.add(simp[i])
-                        trad_chars.add(trad[i])
-                    except IndexError:
-                        print(f"pinyin list for {simp[i]}: {pinyin}")
-                        break
-                
-        counter += 1
-        
-    except ValueError:
-        # Skip blank lines
-        continue
+##########################################################################
+# Extract HSK dataset to DataFrame
+##########################################################################
 
+# Read ./data/hsk30-chars-ext.csv
+df = pd.read_csv(HSK_PATH)
+# Extract character columns and HSK grades
+df = df[["Hanzi", "Traditional", "Level"]]
+# Rename columns
+df = df.rename(columns={"Hanzi": "Simplified", "Traditional": "Traditional", "Level": "HSK Grade"})
+# Get pinyin based on traditional characters
+trad_hanzi = df["Traditional"].tolist()
+# pinyin_df = pd.DataFrame("Pinyin": get_pinyin(trad_hanzi, pinyin_map))
+df["Pinyin"] = pd.DataFrame({"Pinyin": get_pinyin(trad_hanzi, pinyin_map)})
 
-# DataFrame of full vocab list (unigrams, bigrams, n-grams)
-cols = ["Simplified", "Traditional", "Pinyin", "HSK Grade"]
-df = pd.DataFrame.from_dict(vocab_dict, orient="index", columns=cols)
-# Drop duplicates - keep first instance
-df.drop_duplicates(subset="Traditional", keep="first", inplace=True)
+##########################################################################
+# Add unicode for simplified and traditional hanzi
+##########################################################################
+
+df["Unicode (Simp.)"] = [ord(hanzi) for hanzi in df["Simplified"]]
+df["Unicode (Trad.)"] = [ord(hanzi) for hanzi in df["Traditional"]]
+# Reorder columns
+cols = ["Simplified", "Unicode (Simp.)", "Traditional", "Unicode (Trad.)", "Pinyin", "HSK Grade"]
+df = df[cols]
 
 ##########################################################################
 # Extract Jun Da MTSU character frequencies
 ##########################################################################
 
 junda_freqs = []
-
+# Read ./data/input/CharFreq-Modern-utf8.csv
 with open(FREQ_PATH, "r", encoding=ENCODING) as f:
     lines = f.readlines()
     for line in tqdm(lines[6:], desc="Processing"):
-        
         data = line.split(",")
-        
-        codepoint = ord(data[1])
-        
-        junda_freqs.append([data[1], codepoint, int(data[0]), int(data[2]), float(data[3])])     
+        junda_freqs.append([data[1], int(data[0]), int(data[2]), float(data[3])])     
 
 # DataFrame of Jun Da character frequencies
-cols = ["Simplified", "Unicode (Simp.)", "JD Rank", "JD Frequency", "JD Percentile"]
+cols = ["Simplified", "JD Rank", "JD Frequency", "JD Percentile"]
 junda_df = pd.DataFrame(junda_freqs, columns=cols)        
 
 ##########################################################################
@@ -116,30 +77,11 @@ junda_df = pd.DataFrame(junda_freqs, columns=cols)
 ##########################################################################
 
 # DataFrame of unique unigrams
-hskhanzi_df = df.merge(junda_df[junda_df["Simplified"].isin(df["Simplified"])], on="Simplified")
-
-##########################################################################
-# Get unicode for traditional characters
-##########################################################################
-
-trad_hanzi = hskhanzi_df["Traditional"].tolist()
-# Create a DataFrame with the traditional characters and their Unicode code points
-trad_unicode_df = pd.DataFrame({
-    "Traditional": trad_hanzi,
-    "Unicode (Trad.)": [ord(hanzi) for hanzi in trad_hanzi]
-})
-
-merged_df = pd.merge(hskhanzi_df, trad_unicode_df, on="Traditional")
-# Reorder columns
-cols = ["Simplified", "Unicode (Simp.)", "Traditional", "Unicode (Trad.)", "Pinyin", "HSK Grade", "JD Rank", "JD Frequency", "JD Percentile"]
-merged_df = merged_df[cols]
+hsk_hanzi_df = df.merge(junda_df[junda_df["Simplified"].isin(df["Simplified"])], on="Simplified")
 
 ##########################################################################
 # Save files
 ##########################################################################
 
-save_csv(df,          DATA_OUT, "hsk_vocab",         ENCODING_HANZI)
-save_csv(junda_df,    DATA_OUT, "junda_frequencies", ENCODING_HANZI)
-save_csv(merged_df,   DATA_OUT, "hsk_hanzi",         ENCODING_HANZI)
-save_csv(simp_chars,  DATA_OUT, "hsk_simp_chars",    ENCODING_HANZI)
-save_csv(trad_chars,  DATA_OUT, "hsk_trad_chars",    ENCODING_HANZI)
+save_csv(junda_df, DATA_OUT, "junda_frequencies", ENCODING_HANZI)
+save_csv(hsk_hanzi_df, DATA_OUT, "hsk30_hanzi", ENCODING_HANZI)
