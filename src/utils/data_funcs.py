@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
+from pypdf import PdfReader
 from utils.hanzi_funcs import filter_text, partition_hanzi, identify, get_stats
 
 ##########################################################################
@@ -13,6 +14,26 @@ ENCODING_HANZI = "utf_8_sig"
 ##########################################################################
 # Process data
 ##########################################################################
+
+def _extract_from_pdf(pdf_path):
+    """
+    Extracts text from a PDF
+    Args:
+        - pdf_path, str, filepath of the PDF
+    Returns:
+        - text, str, text extracted from the PDF
+    """
+    text = ""
+    
+    with open(pdf_path, "rb") as f:
+        
+        reader = PdfReader(f)
+        
+        for page in reader.pages:
+            text += page.extract_text()
+
+    return text
+
 
 def process_data(location: str, hsk_simp: list, hsk_trad: list) -> tuple[list]:
     """
@@ -34,8 +55,13 @@ def process_data(location: str, hsk_simp: list, hsk_trad: list) -> tuple[list]:
     """
     global ENCODING
     
-    with open(location, "r", encoding=ENCODING) as f:
-        text = f.read()
+    # Send PDFs to _extract_from_pdf
+    if location[-3:] == "pdf":
+        text = _extract_from_pdf(location)
+    
+    else:
+        with open(location, "r", encoding=ENCODING) as f:
+            text = f.read()
     # Extract hanzi from text (with duplicates)
     hanzi_list = filter_text(text)
     # Divide into groups (with duplicates)

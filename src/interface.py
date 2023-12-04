@@ -57,7 +57,7 @@ def is_valid_file(filename: str) -> bool:
         - bool, True if valid else False
     """
     extension = os.path.splitext(filename)[1].lower()
-    if extension in (".txt"):
+    if extension in (".pdf", ".csv", ".tsv", ".txt"):
         return True
     else:
         return False
@@ -110,7 +110,7 @@ def handle_quit(self):
 print("\nWelcome to Xiwen 析文\n")
 print("Xiwen scans text for traditional 繁體 and simplified 简体")
 print("Chinese characters (hanzi) to compare against HSK grades 1 to 9.\n")
-print("Load a file (.txt for now) and Xiwen will output a grade-by-grade") 
+print("Load a file and Xiwen will output a grade-by-grade") 
 print("breakdown of the hanzi in the text.\n")
 print("Export hanzi for further use - including hanzi not in the HSK.\n")
 
@@ -121,7 +121,7 @@ print("Export hanzi for further use - including hanzi not in the HSK.\n")
 while True:
     
     # Main menu - get user command
-    print("Select an option:\n-> 'D' = demo\n-> 'S' = scan .txt\n-> 'U' = scan URL (coming soon)\n-> 'Q' = quit\n")
+    print("Select an option:\n-> 'D' = demo\n-> 'S' = scan from device [.csv, .pdf, .tsv, .txt]\n-> 'U' = scan URL (coming soon)\n-> 'Q' = quit\n")
     command = input().upper()
     # Invalid command
     if command not in ["D", "S", "U", "Q"]:
@@ -135,6 +135,7 @@ while True:
     else:
         # "D" = Demo command
         if command == "D":
+            print("\nLoading demo...\n")
             # Demo random choice of beijingzhedie.txt or taoteching.txt
             content = random.choice([BJZD, TTC])
             # Get hanzi lists
@@ -163,21 +164,32 @@ while True:
             get_file_path()            
             # Return to main screen if no file chosen
             if selected_file_path:
-                print(f"in if selected_file_path - {selected_file_path}\n")
                 # Confirm whether valid file type chosen
                 valid_file = is_valid_file(selected_file_path)
                 if not valid_file:
                     # Return to main screen if file invalid
-                    print("Invalid file: please select a .txt file\n")
+                    print("Invalid file: please select from [.csv, .pdf, .tsv, .txt]\n")
                 
                 else:
-                    # Get hanzi lists
-                    hanzi_list, simp, trad, neut, outl = process_data(selected_file_path, HSK_SIMP, HSK_TRAD)
-                    # Get hanzi stats
-                    variant, stats_df, hanzi_df = analyse_data(HSK_HANZI, hanzi_list, simp, trad, neut)
+                    print("\nScanning document...\n")
+                    # Read file and extract text
+                    try:
+                        # Get hanzi lists
+                        hanzi_list, simp, trad, neut, outl = process_data(selected_file_path, HSK_SIMP, HSK_TRAD)
+                        # Get hanzi stats
+                        variant, stats_df, hanzi_df = analyse_data(HSK_HANZI, hanzi_list, simp, trad, neut)
+                    except ZeroDivisionError:
+                        print("\nNo hanzi found: either none are present, or there is an issue with this format.\n")
+                        break
+                    
                     # Print stats to CLI
                     print(stats_df.to_markdown(index=False), "\n")
-                    print(f"{variant.title()} character set detected\n")
+                    
+                    if variant == "unknown":
+                        print("Character set undefined - simplified and traditional hanzi present\n")
+                        print("Stats above for reference only")
+                    else:
+                        print(f"{variant.title()} character set detected\n")
                     
                     while True:
                         # Flag to break out of nested menus

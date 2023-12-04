@@ -6,7 +6,7 @@ Xiwen is a CLI tool that scans text for Chinese characters (hanzi), and:
 - analyses the content by HSK grade
 - exports character sets for further use
 
-The analysis describes the percentage of the content covered by each HSK grade(see below), and character lists can be exported for any combination of those levels, or more advanced hanzi not included in the grades.
+The analysis describes the percentage of the content covered by each HSK grade (see below), and character lists can be exported for any combination of those levels, or more advanced hanzi not included in the grades.
 
 Data exports provide the hanzi by HSK grade in traditional and simplified Chinese, their pinyin, count within the text, and character frequency.
 
@@ -35,7 +35,7 @@ Or even:
 - "只": ["只", "衹", "隻"]
 - "台": ["台", "檯", "臺", "颱"]
 
-A list of these "polymaps" - not all of which relate to hanzi in the HSK - can be found on the Wikipedia article [Ambiguious character mappings](https://en.wikipedia.org/wiki/Ambiguities_in_Chinese_character_simplification).
+A list of these "polymaps" - not all of which relate to hanzi in the HSK - can be found in the Wikipedia article [Ambiguious character mappings](https://en.wikipedia.org/wiki/Ambiguities_in_Chinese_character_simplification).
 
 This approach isn't perfect: obscure definitions implied by a distinct traditional hanzi may be far less frequent than the common conversion of a simplified hanzi.
 
@@ -73,7 +73,7 @@ pip install -r requirements.txt
 
 ## Operation
 
-Run `src/interface.py` from the virtual environment to launch, and follow the instructions as prompted: select a file on your device (.txt only for now) to process, or enter `D` for a demo as prompted at the main menu.
+Run `src/interface.py` from the virtual environment to launch, and follow the instructions as prompted: select a file on your device (.csv, .pdf, .tsv or .txt) to process, or enter `D` for a demo as prompted at the main menu.
 
 `src/prep.py` makes use of datasets in `data/input` to pair simplified and traditional character sets with their pinyin, HSK grades, and character frequencies as identified in the MTSU dataset.
 
@@ -109,5 +109,4 @@ Traditional character set demo:
 
 ## Planned upgrades
 
-- File handling for .csv and .pdf file imports.
 - URL handling to import text direct from webpages.
