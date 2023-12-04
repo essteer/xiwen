@@ -6,6 +6,7 @@ import random
 import tkinter as tk
 from tkinter import filedialog
 from utils.data_funcs import process_data, analyse_data
+from utils.pinyin_funcs import map_pinyin, get_pinyin
 
 ##########################################################################
 # Prepare files
@@ -29,6 +30,8 @@ HSK_TRAD = list(HSK_HANZI["Traditional"])
 BJZD = TEST_FILES + "beijingzhedie.txt"
 # Test case (traditional hanzi)
 TTC = TEST_FILES + "taoteching.txt"
+# Pinyin for outliers
+PINYIN_PATH = DATA_IN + "hanzi_pinyin_characters.tsv.txt"
 
 ##########################################################################
 # Dialog and file handling
@@ -242,9 +245,22 @@ while True:
                                     export_to_csv(stats_df)
                                 
                                 elif command == "O":
-                                    # Export outliers - save outl
+                                    # Get mapping of characters to accented pinyin
+                                    pinyin_map = map_pinyin(PINYIN_PATH, ENCODING)
+                                    # Get list of unique outlier hanzi
                                     outliers = list(set(outl))
-                                    export_to_csv(outliers)
+                                    # Get pinyin for outlier hanzi
+                                    outliers_pinyin = get_pinyin(outliers, pinyin_map)
+                                    # Create DataFrame of outlier hanzi, unicode, and pinyin
+                                    outliers_df = pd.DataFrame({
+                                        "Hanzi": outliers, 
+                                        "Unicode": [ord(hanzi) for hanzi in outliers],
+                                        "Pinyin": outliers_pinyin
+                                    })
+                                    # Sort DataFrame on Unicode value
+                                    outliers_df = outliers_df.sort_values(by="Unicode")
+                                    # Export outliers
+                                    export_to_csv(outliers_df)
                                 
                                 elif command == "C":
                                     print("\nCustom export:\n")
