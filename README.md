@@ -20,7 +20,7 @@ Instructors can use it to assess the suitability of reading materials for their 
 
 HSK (Hanyu Shuiping Kaoshi 汉语水平考试) is a series of examinations designed to test Chinese language proficiency in simplified Chinese.
 
-In their latest form HSK consists of nine levels, and covers 3,000 simplified hanzi and 11,092 vocabulary items. The advanced levels (seven to nine) share 1,200 hanzi that are tested together.
+In its latest form the HSK consists of nine levels, and covers 3,000 simplified hanzi and 11,092 vocabulary items. The advanced levels (seven to nine) share 1,200 hanzi that are tested together.
 
 To approximate a traditional hanzi version of the HSK, Xiwen maps the HSK hanzi to traditional Chinese equivalents. In most cases this is a one-to-one conversion, but in several cases there are two or more traditional hanzi that reflect distinct meanings of the single simplified character.
 
@@ -73,13 +73,13 @@ pip install -r requirements.txt
 
 ## Operation
 
-Run `src/interface.py` from the virtual environment to launch, and follow the instructions as prompted: select a file on your device (.csv, .pdf, .tsv or .txt) to process, or enter `D` for a demo as prompted at the main menu.
+Run `src/interface.py` from the virtual environment to launch, and follow the instructions as prompted: select a file on your device to process (.csv, .pdf, .tsv or .txt), or enter `D` for a demo as prompted at the main menu.
 
 `src/prep.py` makes use of datasets in `data/input` to pair simplified and traditional character sets with their pinyin, HSK grades, and character frequencies as identified in the MTSU dataset.
 
 The datasets needed to run Xiwen are included in the `data` folder. They're set up and ready to go out of the box, but you can run your own character lists through `prep.py` if needed.
 
-`src/interface.py` is the interactive component. It receives your input and makes calls to functions in `src/utils/data_funcs.py`. Those functions then make call to `src/utils/hanzi_funcs.py` to:
+`src/interface.py` is the interactive component. It receives your input and makes calls to functions in `src/utils/data_funcs.py`, `src/utils/dialog_funcs.py`, and `src/utils/extract_loop.py`. Those files handle file dialogs and data input, then make calls to `src/utils/hanzi_funcs.py` to:
 
 - break down text into individual hanzi (`filter_text()`)
 - sort hanzi as HSK-level simplified or traditional hanzi, or outliers (`partition_hanzi()`)
