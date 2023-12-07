@@ -81,7 +81,7 @@ def process_data(target: str, hsk_simp: list, hsk_trad: list, html: bool=False) 
 
 
 ##########################################################################
-# Analyse data
+# Analyse data - called from interface.py and extract_loop.py
 ##########################################################################
 
 def analyse_data(df: pd.DataFrame, hl: list, simplified: list, traditional: list, neutral: list) -> tuple[str|pd.DataFrame]:
