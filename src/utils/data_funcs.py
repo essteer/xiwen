@@ -12,7 +12,7 @@ ENCODING = "utf-8"
 ENCODING_HANZI = "utf_8_sig"
 
 ##########################################################################
-# Process data
+# Process data - called from extract_loop.py and interface.py
 ##########################################################################
 
 def _extract_from_pdf(pdf_path):
@@ -35,33 +35,43 @@ def _extract_from_pdf(pdf_path):
     return text
 
 
-def process_data(location: str, hsk_simp: list, hsk_trad: list) -> tuple[list]:
+def process_data(target: str, hsk_simp: list, hsk_trad: list, html: bool=False) -> tuple[list]:
     """
     Searches for and extracts Chinese characters (hanzi) from a text file
     according to whether they are simplified or traditional characters
     within the HSK1 to HSK6 vocabulary range, or other characters of either variant
     
     Args:
-        - location, str, filepath of the text file
-        - enc, str, encoding to use
+        - html, bool, flag True if html else False
+        - target, str:
+            - if html=False: path to file on device
+            - if html=True: HTML extracted from URL
+        - hsk_simp, list, all simplified hanzi from HSK1 to HSK9
+        - hsk_trad, list, all traditional hanzi equivalents to hsk_simp
     Returns:
         NOTE: all lists below include duplicates
         - hanzi_list, list, full list of hanzi found
-        - simplified, list, full list of simplified hanzi found belonging to HSK1 to HSK6
-        - traditional, list, full list of traditional hanzi found equivalent to HSK1 to HSK6
+        - simplified, list, full list of simplified hanzi found belonging to HSK1 to HSK9
+        - traditional, list, full list of traditional hanzi found equivalent to HSK1 to HSK9
             simplified hanzi
         - neutral, list, subset of hanzi common to both simplified and traditional
         - outliers, list, all hanzi found that don't belong to the above lists
     """
     global ENCODING
     
-    # Send PDFs to _extract_from_pdf
-    if location[-3:] == "pdf":
-        text = _extract_from_pdf(location)
+    if not html:
+        # Send PDFs to _extract_from_pdf
+        if target[-3:] == "pdf":
+            text = _extract_from_pdf(target)
+        
+        else:
+            with open(target, "r", encoding=ENCODING) as f:
+                text = f.read()
     
+    # if url=True, target is HTML
     else:
-        with open(location, "r", encoding=ENCODING) as f:
-            text = f.read()
+        text = target
+    
     # Extract hanzi from text (with duplicates)
     hanzi_list = filter_text(text)
     # Divide into groups (with duplicates)

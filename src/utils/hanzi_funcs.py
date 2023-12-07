@@ -16,9 +16,14 @@ def _filter_hanzi(char: str) -> bool:
         - bool, True if char in Common | Extended-A | Extended-B
                 False otherwise
     """
-    symbols = ["。", "—", "‘", "’", "“", "”", "…"]
+    symbols = ["–", "—", "‘", "’", "“", "”", "…", "⊼", "⁆", "∕", "。"]
+    # Unrecognised hanzi with no matching pinyin
+    exceptions = ["㤙"]
     
-    if char in symbols:
+    if ord(char) in range(8206, 8287):
+        return False
+    
+    if char in symbols or char in exceptions:
         return False
     
     common = char >= "\u4E00" and char <= "\u9FFF"

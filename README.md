@@ -1,6 +1,6 @@
 # Xiwen 析文
 
-Xiwen is a CLI tool that scans text for Chinese characters (hanzi), and:
+Xiwen is a CLI tool that scans files and HTML for Chinese characters (hanzi), and:
 
 - identifies the character variant (simplified or traditional)
 - analyses the content by HSK grade
@@ -73,7 +73,11 @@ pip install -r requirements.txt
 
 ## Operation
 
-Run `src/interface.py` from the virtual environment to launch, and follow the instructions as prompted: select a file on your device to process (.csv, .pdf, .tsv or .txt), or enter `D` for a demo as prompted at the main menu.
+Run `src/interface.py` from the virtual environment to launch, and follow the instructions as prompted:
+
+- enter `D` for a demo
+- enter `S` to select a file on your device to process (.csv, .pdf, .tsv or .txt), or
+- enter `U` to scan a URL.
 
 `src/prep.py` makes use of datasets in `data/input` to pair simplified and traditional character sets with their pinyin, HSK grades, and character frequencies as identified in the MTSU dataset.
 
@@ -106,7 +110,3 @@ Simplified character set demo:
 
 Traditional character set demo:
 "Tao Te Ching" 《大的經》, Lao Tzu 老子, 400BC
-
-## Planned upgrades
-
-- URL handling to import text direct from webpages.

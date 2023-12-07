@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+##########################################################################
+# Pinyin functions - called from extract_loop.py
+##########################################################################
+
 def map_pinyin(filepath: str, enc: str) -> dict:
     """
     Returns a dictionary mapping Chinese characters
@@ -36,16 +40,21 @@ def get_pinyin(hanzi: list[str], hanzi_pinyin_dict: dict[str: str]) -> list[str]
         - hanzi, list of character strings
         - hanzi_pinyin_dict, dict mapping hanzi to pinyin
     Returns:
+        - matched_hanzi, sublist of hanzi for which pinyin
+            matches were found in hanzi_pinyin_dict
         - pinyin_list, list of pinyin mapped from each hanzi
     """
     pinyin_list = []
+    # Return an updated list to ignore hanzi without pinyin
+    matched_hanzi = []
     
     for zi in hanzi:
         try:
             pinyin_list.append(hanzi_pinyin_dict[zi])
+            matched_hanzi.append(zi)
             
         except KeyError:
             print(f"{zi} not found in pinyin dict")
         
-    return pinyin_list
+    return matched_hanzi, pinyin_list
 

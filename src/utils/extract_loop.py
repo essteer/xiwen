@@ -27,19 +27,23 @@ PINYIN_PATH = DATA_IN + "hanzi_pinyin_characters.tsv.txt"
 # Text extraction loop - called from interface.py
 ##########################################################################
 
-def extract_hanzi(file_path: str):
+def extract_hanzi(target: str, html: bool=False):
     """
     Menu loops to handle:
         - viewing stats for a scanned file or URL
         - exporting content to csv
     Args:
-        - file_path, str, location of file on device
+        - html, bool, flag True if url else False
+        - target, str:
+            - if url=False: path to file on device
+            - if url=True: HTML extracted from URL
     Returns:
         - None
     """
     global ENCODING, ENCODING_HANZI, HSK_HANZI, HSK_SIMP, HSK_TRAD, PINYIN_PATH
-    # Get hanzi lists
-    hanzi_list, simp, trad, neut, outl = process_data(file_path, HSK_SIMP, HSK_TRAD)
+    
+    # Get hanzi lists from file
+    hanzi_list, simp, trad, neut, outl = process_data(target, HSK_SIMP, HSK_TRAD, html=html)
     # Get hanzi stats
     variant, stats_df, hanzi_df = analyse_data(HSK_HANZI, hanzi_list, simp, trad, neut)
             
@@ -107,11 +111,11 @@ def extract_hanzi(file_path: str):
                     # Get list of unique outlier hanzi
                     outliers = list(set(outl))
                     # Get pinyin for outlier hanzi
-                    outliers_pinyin = get_pinyin(outliers, pinyin_map)
+                    recognised_outliers, outliers_pinyin = get_pinyin(outliers, pinyin_map)
                     # Create DataFrame of outlier hanzi, unicode, and pinyin
                     outliers_df = pd.DataFrame({
-                        "Hanzi": outliers, 
-                        "Unicode": [ord(hanzi) for hanzi in outliers],
+                        "Hanzi": recognised_outliers, 
+                        "Unicode": [ord(hanzi) for hanzi in recognised_outliers],
                         "Pinyin": outliers_pinyin
                     })
                     # Sort DataFrame on Unicode value
