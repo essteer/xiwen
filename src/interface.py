@@ -4,6 +4,7 @@ import random
 import tkinter as tk
 from utils.data_funcs import process_data, analyse_data
 from utils.dialog_funcs import get_file_path, is_valid_file
+from utils.extract_html import extractor
 from utils.extract_loop import extract_hanzi
 
 ##########################################################################
@@ -48,7 +49,7 @@ def handle_quit(self):
 print("\nWelcome to Xiwen 析文\n")
 print("Xiwen scans text for traditional 繁體 and simplified 简体")
 print("Chinese characters (hanzi) to compare against HSK grades 1 to 9.\n")
-print("Load a file and Xiwen will output a grade-by-grade") 
+print("Load a file or choose a URL, and Xiwen will output a grade-by-grade") 
 print("breakdown of the hanzi in the text.\n")
 print("Export hanzi for further use - including hanzi not in the HSK.\n")
 
@@ -58,7 +59,7 @@ print("Export hanzi for further use - including hanzi not in the HSK.\n")
 
 while True:
     # Main menu - get user command
-    print("Select an option:\n-> 'D' = demo\n-> 'S' = scan from device [.csv, .pdf, .tsv, .txt]\n-> 'U' = scan URL (coming soon)\n-> 'Q' = quit\n")
+    print("Select an option:\n-> 'D' = demo\n-> 'S' = scan from device [.csv, .pdf, .tsv, .txt]\n-> 'U' = scan URL\n-> 'Q' = quit\n")
     command = input().upper()
     # Invalid command
     if command not in ["D", "S", "U", "Q"]:
@@ -114,7 +115,7 @@ while True:
                         extract_hanzi(selected_file_path)
                     
                     except ZeroDivisionError:
-                        print("\nNo hanzi found: either none are present, or there is an issue with this format.\n")
+                        print("\nNo hanzi found: either none are present, or there's an issue with this format.\n")
                         break
                     except Exception as e:
                         print("\nAn error occurred: \n{e}\n")
@@ -126,8 +127,34 @@ while True:
         # "U" = URL command
         elif command == "U":
             # Get text from user-provided URL
-            print("Not yet! URL support coming soon.\n")
-            # Continue to main screen loop
+            selected_url = None
+            # Add user input dialog for URL
+            selected_url = str(input("Enter target URL: "))
+                        
+            if selected_url:
+                print("\nScanning for HTML...\n")
+                # Send HTML to parser for text extraction
+                try:
+                    raw_html = extractor(selected_url)
+                    assert raw_html != False
+                
+                except AssertionError:
+                    print(f"Could not extract from '{selected_url}'\n")
+                
+                except Exception as e:
+                    print(f"An error occurred: \n{e}\n")
+                
+                # Read HTML and extract text
+                try:
+                    extract_hanzi(str(raw_html), html=True)
+                
+                except ZeroDivisionError:
+                    print(f"\nNo hanzi found: either none are present, or there's an issue reading '{selected_url}'.\n")
+                
+                except Exception as e:
+                    print(f"An error occurred: \n{e}\n")
+            
+            # Continue to main screen loop - no valid URL selected
             continue
 
 
