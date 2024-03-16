@@ -55,22 +55,22 @@ The table below lists the number of simplified hanzi per grade, and the number o
 
 ## Installation
 
-Linux/macOS:
+`Linux` | `macOS`
 
-```python
-git clone git@github.com:essteer/xiwen.git
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+```console
+$ git clone git@github.com:essteer/xiwen.git
+$ python -m venv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
 ```
 
-Windows:
+`Windows`
 
-```python
-git clone git@github.com:essteer/xiwen.git
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
+```console
+$ git clone git@github.com:essteer/xiwen.git
+$ python -m venv venv
+$ venv\Scripts\activate
+$ pip install -r requirements.txt
 ```
 
 ## Operation
