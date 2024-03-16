@@ -1,5 +1,7 @@
 # Xiwen 析文
 
+![GitHub last commit](https://img.shields.io/github/last-commit/essteer/xiwen?color=green) ![GitHub License](https://img.shields.io/github/license/essteer/xiwen?color=blue) ![GitHub top language](https://img.shields.io/github/languages/top/essteer/xiwen?color=red)
+
 Xiwen is a CLI tool that scans files and HTML for Chinese characters (hanzi), and:
 
 - identifies the character variant (simplified or traditional)
