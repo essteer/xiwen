@@ -1,0 +1,33 @@
+[project]
+name = "Xiwen"
+dynamic = ["version"]
+description = "CLI tool for Chinese character analysis and text processing"
+authors = [{ name = "Elliott Steer", email = "essteer@pm.me" }]
+dependencies = [
+    "beautifulsoup4>=4.12.2",
+    "numpy>=1.26.2",
+    "pandas>=2.2.1",
+    "pypdf>=3.17.1",
+    "requests>=2.31.0",
+    "tqdm>=4.66.1",
+]
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+readme = "README.md"
+keywords = ["CLI", "Chinese", "text"]
+classifiers = [
+    "Operating System :: OS Independent",
+    "Natural Language :: English",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+[project.urls]
+documentation = "https://github.com/essteer/xiwen/blob/main/README.md"
+repository = "https://github.com/essteer/xiwen"
+issues = "https://github.com/essteer/xiwen/issues"
