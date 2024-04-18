@@ -43,8 +43,8 @@ This approach isn't perfect: obscure definitions implied by a distinct tradition
 
 The table below lists the number of simplified hanzi per grade, and the number of mappings to traditional equivalents.
 
-| HSK Grade | No. Simplified Hanzi | Running Total | No. Traditional Hanzi Equivalents | Running Total |
-| --------- | -------------------- | ------------- | --------------------------------- | ------------- |
+| HSK Grade | Simp. Hanzi | Running Total | Trad. Hanzi Equivalents | Running Total |
+| :-------: | :------------------: | :-----------: | :-------------------------------: | :-----------: |
 | [1]       | 300                  | 300           | 313                               | 313           |
 | [2]       | 300                  | 600           | 314                               | 627           |
 | [3]       | 300                  | 900           | 312                               | 939           |
