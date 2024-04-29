@@ -44,18 +44,19 @@ This approach isn't perfect: obscure definitions implied by a distinct tradition
 The table below lists the number of simplified hanzi per grade, and the number of mappings to traditional equivalents.
 
 | HSK Grade | Simp. Hanzi | Running Total | Trad. Hanzi Equivalents | Running Total |
-| :-------: | :------------------: | :-----------: | :-------------------------------: | :-----------: |
-| [1]       | 300                  | 300           | 313                               | 313           |
-| [2]       | 300                  | 600           | 314                               | 627           |
-| [3]       | 300                  | 900           | 312                               | 939           |
-| [4]       | 300                  | 1200          | 316                               | 1255          |
-| [5]       | 300                  | 1500          | 310                               | 1565          |
-| [6]       | 300                  | 1800          | 310                               | 1875          |
-| [7-9]     | 1200                 | 3000          | 1214                              | 3089          |
+| :-------: | :---------: | :-----------: | :---------------------: | :-----------: |
+|    [1]    |     300     |      300      |           313           |      313      |
+|    [2]    |     300     |      600      |           314           |      627      |
+|    [3]    |     300     |      900      |           312           |      939      |
+|    [4]    |     300     |     1200      |           316           |     1255      |
+|    [5]    |     300     |     1500      |           310           |     1565      |
+|    [6]    |     300     |     1800      |           310           |     1875      |
+|   [7-9]   |    1200     |     3000      |          1214           |     3089      |
 
 ## Installation
 
-`Linux` | `macOS`
+![](https://img.shields.io/badge/Linux-FCC624.svg?style=flat&logo=Linux&logoColor=black)
+![](https://img.shields.io/badge/macOS-000000.svg?style=flat&logo=Apple&logoColor=white)
 
 ```console
 $ git clone git@github.com:essteer/xiwen.git
@@ -64,7 +65,7 @@ $ source venv/bin/activate
 $ pip install -r requirements.txt
 ```
 
-`Windows`
+![](https://img.shields.io/badge/Windows-0078D4.svg?style=flat&logo=Windows&logoColor=white)
 
 ```console
 $ git clone git@github.com:essteer/xiwen.git
