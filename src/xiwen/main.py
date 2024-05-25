@@ -1,16 +1,13 @@
 import pandas as pd
 import random
 import tkinter as tk
+from src.config import DATA_OUT, TEST_FILES
 from utils.data import process_data, analyse_data
 from utils.dialog import get_file_path, is_valid_file
 from utils.extract_html import extractor
 from utils.extract_loop import extract_hanzi
 
-##########################################################################
-# Prepare files
-##########################################################################
 
-DATA_OUT = "./data/output/"
 # Load HSK Hanzi database (unigrams only)
 HSK_HANZI = pd.read_csv(DATA_OUT + "hsk30_hanzi.csv")
 # Replace HSK7-9 with 7 and convert grades to ints for iteration
@@ -18,42 +15,32 @@ HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].replace("7-9", 7)
 HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].astype(int)
 HSK_SIMP = list(HSK_HANZI["Simplified"])
 HSK_TRAD = list(HSK_HANZI["Traditional"])
-TEST_FILES = "./data/test_files/"
 # Test case (simplified hanzi)
 BJZD = TEST_FILES + "beijingzhedie.txt"
 # Test case (traditional hanzi)
 TTC = TEST_FILES + "taoteching.txt"
 
-##########################################################################
-# Dialog handling - see dialog_funcs.py for main functions
-##########################################################################
 
 # Initialise Tkinter
 ROOT = tk.Tk()
 
 
 def handle_quit(self):
-    """
-    Closes Tkinter window on quit
-    """
+    """Closes Tkinter window on quit"""
     self.destroy()
     exit()
 
 
-##########################################################################
-# Landing screen
-##########################################################################
+welcome_message = """
+Welcome to Xiwen 析文
+Xiwen scans text for traditional 繁體 and simplified 简体
+Chinese characters (hanzi) to compare against HSK grades 1 to 9.
+Load a file or choose a URL, and Xiwen will output a grade-by-grade
+breakdown of the hanzi in the text.
+Export hanzi for further use - including hanzi not in the HSK.
+"""
+print(welcome_message)
 
-print("\nWelcome to Xiwen 析文\n")
-print("Xiwen scans text for traditional 繁體 and simplified 简体")
-print("Chinese characters (hanzi) to compare against HSK grades 1 to 9.\n")
-print("Load a file or choose a URL, and Xiwen will output a grade-by-grade")
-print("breakdown of the hanzi in the text.\n")
-print("Export hanzi for further use - including hanzi not in the HSK.\n")
-
-##########################################################################
-# Interface
-##########################################################################
 
 while True:
     # Main menu - get user command

@@ -4,9 +4,6 @@ import requests
 import time
 from bs4 import BeautifulSoup
 
-##########################################################################
-# Prepare logs and requests
-##########################################################################
 
 logging.basicConfig(
     filename="./logs/error.log",
@@ -14,7 +11,6 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s: %(message)s",
 )
 
-ENCODING = "utf-8"
 # Response codes
 GOOD_RESPONSES = [200]
 RETRY_RESPONSES = [429]
@@ -123,9 +119,6 @@ def extractor(url: str) -> str | bool:
         - html, str, HTML extracted from url, or
         - False, bool, if HTML extract fails
     """
-    global header, REFERERS, REFERER_PROBS, USER_AGENTS, USER_AGENT_PROBS
-    global GOOD_RESPONSES, RETRY_RESPONSES, BAD_RESPONSES
-
     # Assign weighted random referer and user-agent to header
     referer = _weighted_random_selection(REFERERS, REFERER_PROBS)
     user_agent = _weighted_random_selection(USER_AGENTS, USER_AGENT_PROBS)

@@ -2,17 +2,7 @@ import csv
 import os
 import pandas as pd
 from tkinter import filedialog
-
-##########################################################################
-# Prepare files
-##########################################################################
-
-ENCODING = "utf-8"
-ENCODING_HANZI = "utf_8_sig"
-
-##########################################################################
-# Dialog and file handling - called from interface.py
-##########################################################################
+from src.config import ENCODING, ENCODING_HANZI
 
 
 def get_file_path():
@@ -45,11 +35,6 @@ def is_valid_file(filename: str) -> bool:
         return False
 
 
-##########################################################################
-# Dialog and file handling - called from extract_loop.py
-##########################################################################
-
-
 def export_to_csv(data: pd.DataFrame | list, file_path=None):
     """
     Opens a Tkinter dialog to select a file save location
@@ -57,8 +42,6 @@ def export_to_csv(data: pd.DataFrame | list, file_path=None):
     Args:
         - data, Pandas DataFrame | list, data to be saved
     """
-    global ENCODING, ENCODING_HANZI
-
     filename = filedialog.asksaveasfilename(
         title="Save CSV File",
         defaultextension=".csv",

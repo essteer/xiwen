@@ -1,17 +1,10 @@
 import pandas as pd
+from src.config import DATA_OUT, ENCODING, PINYIN_PATH
 from utils.data import process_data, analyse_data
 from utils.dialog import export_to_csv
 from utils.pinyin import map_pinyin, get_pinyin
 
-##########################################################################
-# Prepare files
-##########################################################################
 
-ENCODING = "utf-8"
-ENCODING_HANZI = "utf_8_sig"
-DATA_IN = "./data/input/"
-DATA_OUT = "./data/output/"
-TEST_FILES = "./data/test_files/"
 # Load HSK Hanzi database (unigrams only)
 HSK_HANZI = pd.read_csv(DATA_OUT + "hsk30_hanzi.csv")
 # Replace HSK7-9 with 7 and convert grades to ints for iteration
@@ -19,12 +12,6 @@ HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].replace("7-9", 7)
 HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].astype(int)
 HSK_SIMP = list(HSK_HANZI["Simplified"])
 HSK_TRAD = list(HSK_HANZI["Traditional"])
-# Pinyin for outliers
-PINYIN_PATH = DATA_IN + "hanzi_pinyin_characters.tsv.txt"
-
-##########################################################################
-# Text extraction loop - called from interface.py
-##########################################################################
 
 
 def extract_hanzi(target: str, html: bool = False):
@@ -40,8 +27,6 @@ def extract_hanzi(target: str, html: bool = False):
     Returns:
         - None
     """
-    global ENCODING, ENCODING_HANZI, HSK_HANZI, HSK_SIMP, HSK_TRAD, PINYIN_PATH
-
     # Get hanzi lists from file
     hanzi_list, simp, trad, neut, outl = process_data(
         target, HSK_SIMP, HSK_TRAD, html=html

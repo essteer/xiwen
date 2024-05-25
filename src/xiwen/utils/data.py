@@ -1,18 +1,7 @@
 import pandas as pd
 from pypdf import PdfReader
+from src.config import ENCODING
 from utils.hanzi import filter_text, partition_hanzi, identify, get_stats
-
-##########################################################################
-# Set encoding
-##########################################################################
-
-ENCODING = "utf-8"
-# Encoding used to force .csv files to adopt utf-8 from Pandas DataFrame
-ENCODING_HANZI = "utf_8_sig"
-
-##########################################################################
-# Process data - called from extract_loop.py and interface.py
-##########################################################################
 
 
 def _extract_from_pdf(pdf_path):
@@ -58,8 +47,6 @@ def process_data(
         - neutral, list, subset of hanzi common to both simplified and traditional
         - outliers, list, all hanzi found that don't belong to the above lists
     """
-    global ENCODING
-
     if not html:
         # Send PDFs to _extract_from_pdf
         if target[-3:] == "pdf":
@@ -81,11 +68,6 @@ def process_data(
     )
 
     return hanzi_list, simplified, traditional, neutral, outliers
-
-
-##########################################################################
-# Analyse data - called from interface.py and extract_loop.py
-##########################################################################
 
 
 def analyse_data(

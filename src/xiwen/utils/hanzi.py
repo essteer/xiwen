@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import sys
+from src.config import HSK_GRADES
 
 
 def _filter_hanzi(char: str) -> bool:
@@ -362,7 +363,6 @@ def get_stats(
         - stats_df, Pandas DataFrame, aggregate and cumulative grade-based character counts
         - hanzi_df, Pandas DataFrame, df with counts applied by _get_counts()
     """
-    HSK_GRADES = 7
     # Get count breakdown of hanzi content
     grade_counts, hanzi_df = _get_counts(df, hanzi_all, hanzi_sub, variant)
     # Get cumulative counts ascending from HSK1 to HSK7-9

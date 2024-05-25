@@ -1,19 +1,16 @@
 import pandas as pd
 from tqdm import tqdm
+from src.config import (
+    ENCODING,
+    ENCODING_HANZI,
+    DATA_OUT,
+    FREQ_PATH,
+    HSK_PATH,
+    PINYIN_PATH,
+)
 from src.xiwen.utils.pinyin import map_pinyin, get_pinyin
 from utils.save_data import save_csv
 
-##########################################################################
-# Prepare files
-##########################################################################
-
-ENCODING = "utf-8"
-ENCODING_HANZI = "utf_8_sig"
-DATA_IN = "./data/input/"
-DATA_OUT = "./data/output/"
-HSK_PATH = DATA_IN + "hsk30-chars-ext.csv"
-FREQ_PATH = DATA_IN + "CharFreq-Modern-utf8.csv"
-PINYIN_PATH = DATA_IN + "hanzi_pinyin_characters.tsv.txt"
 
 ##########################################################################
 # Initialise variables
