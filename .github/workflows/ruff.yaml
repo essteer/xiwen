@@ -1,0 +1,19 @@
+name: Ruff
+on:
+  # Trigger workflow on main branch push or pull request 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  ruff:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: chartboost/ruff-action@v1
+        with:
+          # Ruff version - sync with .pre-commit-config.yaml
+          version: 0.4.5
+          args: check --fix --exit-non-zero-on-fix --show-fixes

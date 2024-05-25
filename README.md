@@ -1,6 +1,7 @@
 # Xiwen 析文
 
-![GitHub last commit](https://img.shields.io/github/last-commit/essteer/xiwen?color=green) ![GitHub License](https://img.shields.io/github/license/essteer/xiwen?color=blue) ![GitHub top language](https://img.shields.io/github/languages/top/essteer/xiwen?color=red)
+[![Python - Version](https://img.shields.io/badge/Python-3.9_|_3.10_|_3.11_|_3.12-3776AB.svg?style=flat&logo=Python&logoColor=white)](https://pypi.org/project/masquer/)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 Xiwen is a CLI tool that scans files and HTML for Chinese characters (hanzi), and:
 
