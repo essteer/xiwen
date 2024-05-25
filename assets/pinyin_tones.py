@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 PINYIN_TONES = {
     "a1": "\u0101",
     "a2": "\xe1",
