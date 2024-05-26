@@ -1,24 +1,36 @@
-import pandas as pd
-import random
 import tkinter as tk
-from .config import DATA_OUT, TEST_FILES
-from utils.data import process_data, analyse_data
-from utils.dialog import get_file_path, is_valid_file
-from utils.extract_html import extractor
-from utils.extract_loop import extract_hanzi
+from .config import WELCOME_MESSAGE, MENU_OPTIONS
+from utils.commands import cmd_demo, cmd_scan, cmd_url
 
 
-# Load HSK Hanzi database (unigrams only)
-HSK_HANZI = pd.read_csv(DATA_OUT + "hsk30_hanzi.csv")
-# Replace HSK7-9 with 7 and convert grades to ints for iteration
-HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].replace("7-9", 7)
-HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].astype(int)
-HSK_SIMP = list(HSK_HANZI["Simplified"])
-HSK_TRAD = list(HSK_HANZI["Traditional"])
-# Test case (simplified hanzi)
-BJZD = TEST_FILES + "beijingzhedie.txt"
-# Test case (traditional hanzi)
-TTC = TEST_FILES + "taoteching.txt"
+def xiwen():
+    """
+    Xiwen main menu loop
+    """
+    print(WELCOME_MESSAGE)
+
+    while True:
+        # Main menu - get user command
+        print(MENU_OPTIONS)
+        command = input().upper()
+
+        if command not in ["D", "S", "U", "Q"]:
+            continue  # Invalid command - repeat options
+
+        elif command == "Q":  # Quit command
+            break
+
+        elif command == "D":  # Demo command
+            cmd_demo()
+            continue
+
+        elif command == "S":  # Scan command
+            cmd_scan()
+            continue
+
+        elif command == "U":  # URL command
+            cmd_url()
+            continue
 
 
 # Initialise Tkinter
@@ -31,112 +43,8 @@ def handle_quit(self):
     exit()
 
 
-welcome_message = """
-Welcome to Xiwen 析文
-Xiwen scans text for traditional 繁體 and simplified 简体
-Chinese characters (hanzi) to compare against HSK grades 1 to 9.
-Load a file or choose a URL, and Xiwen will output a grade-by-grade
-breakdown of the hanzi in the text.
-Export hanzi for further use - including hanzi not in the HSK.
-"""
-print(welcome_message)
-
-
-while True:
-    # Main menu - get user command
-    print(
-        "Select an option:\n-> 'd' = demo\n-> 's' = scan from device [.csv, .pdf, .tsv, .txt]\n-> 'u' = scan URL\n-> 'q' = quit\n"
-    )
-    command = input().upper()
-
-    if command not in ["D", "S", "U", "Q"]:
-        continue  # Invalid command - repeat options
-
-    elif command == "Q":  # Quit command
-        break
-
-    elif command == "D":  # Demo command
-        # Demo random choice of beijingzhedie.txt or taoteching.txt
-        content = random.choice([BJZD, TTC])
-        # Get hanzi lists
-        hanzi_list, simp, trad, neut, outl = process_data(content, HSK_SIMP, HSK_TRAD)
-        # Get hanzi stats
-        variant, stats_df, hanzi_df = analyse_data(
-            HSK_HANZI, hanzi_list, simp, trad, neut
-        )
-        # Print stats to CLI
-        print(stats_df.to_markdown(index=False), "\n")
-        print(f"Loaded {variant.lower()} character demo:")
-        print("-> '10+' under 'HSK Grade' captures hanzi beyond the HSK7-9 band.")
-        print(
-            "-> 'Unique' columns capture the number of unique hanzi in the text per grade."
-        )
-        print(
-            "-> 'Count' columns capture the total number of hanzi per grade, duplicates included ('今天天氣很好' = 5 unique hanzi, 6 total hanzi)."
-        )
-        print(
-            "-> '% of Total' gives the % of the left-hand value relative to all hanzi in the text."
-        )
-        print(
-            "-> 'Cumul No.' columns give the running totals per grade (the first 'Cumul. No.' column at the HSK3 row gives the sum of unique characters found that belong to HSK1, HSK2, and HSK3).\n"
-        )
-        print("This demo does not support file exports - select 's'")
-        print("at the main menu to select a file from your device.")
-        continue  # Continue to main screen loop
-
-    elif command == "S":  # Scan command
-        # Initialise file path
-        selected_file_path = None
-        # Open dialog to get path of user-selected file
-        selected_file_path = get_file_path()
-        # Return to main screen if no file chosen
-        if selected_file_path:
-            # Confirm whether valid file type chosen
-            valid_file = is_valid_file(selected_file_path)
-            if not valid_file:
-                # Return to main screen if file invalid
-                print("Invalid file: please select from [.csv, .pdf, .tsv, .txt]\n")
-            else:
-                print("Scanning document...")
-                # Read file and extract text
-                try:
-                    extract_hanzi(selected_file_path)
-                except ZeroDivisionError:
-                    print(
-                        "No hanzi found: either none are present, or there's an issue with this format."
-                    )
-                    break
-                except Exception as e:
-                    print(f"An error occurred: {e}")
-                    break
-        continue  # Continue to main screen loop
-
-    elif command == "U":  # URL command
-        # Get text from user-provided URL
-        selected_url = None
-        # Add user input dialog for URL
-        selected_url = str(input("Enter target URL: "))
-        if selected_url:
-            print("Scanning for HTML...")
-            # Send HTML to parser for text extraction
-            try:
-                raw_html = extractor(selected_url)
-                if raw_html:
-                    # Read HTML and extract text
-                    try:
-                        extract_hanzi(str(raw_html), html=True)
-                    except ZeroDivisionError:
-                        print(
-                            f"No hanzi found: either none are present, or there's an issue reading '{selected_url}'."
-                        )
-                    except Exception as e:
-                        print(f"An error occurred: {e}")
-            except AssertionError:
-                print(f"Could not extract from '{selected_url}'")
-            except Exception as e:
-                print(f"An error occurred: {e}")
-        continue  # Continue to main screen loop - no valid URL selected
-
+# Run program
+xiwen()
 
 # Exit Tkinter
 handle_quit(ROOT)

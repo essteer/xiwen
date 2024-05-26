@@ -20,11 +20,17 @@ BAD_RESPONSES = [400, 401, 403, 404, 500, 502, 504]
 def extractor(url: str) -> str | bool:
     """
     Extracts HTML from a user-provided URL
-    Args:
-        - url, str, URL provided by user
-    Returns:
-        - html, str, HTML extracted from url, or
-        - False, bool, if HTML extract fails
+
+    Parameters
+    ----------
+    url : str
+        URL provided by user
+
+    Returns
+    -------
+    html : str | bool
+        HTML extracted from url, or
+        False if HTML extract fails
     """
     # Get randomised user-agent and referer data
     header = masq(ua=True, rf=True, hd=True)

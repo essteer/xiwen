@@ -16,6 +16,8 @@ identify==2.5.36
     # via pre-commit
 idna==3.7
     # via requests
+masquer==1.1.0
+    # via xiwen (pyproject.toml)
 nodeenv==1.8.0
     # via pre-commit
 numpy==1.26.4
@@ -48,8 +50,6 @@ soupsieve==2.5
     # via beautifulsoup4
 tqdm==4.66.2
     # via xiwen (pyproject.toml)
-typing-extensions==4.12.0
-    # via pypdf
 tzdata==2024.1
     # via pandas
 urllib3==2.2.1

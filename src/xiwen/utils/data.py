@@ -7,16 +7,21 @@ from xiwen.config import ENCODING
 def _extract_from_pdf(pdf_path):
     """
     Extracts text from a PDF
-    Args:
-        - pdf_path, str, filepath of the PDF
-    Returns:
-        - text, str, text extracted from the PDF
+
+    Parameters
+    ----------
+    pdf_path : str
+        PDF filepath
+
+    Returns
+    -------
+    text : str
+        text extracted from PDF
     """
     text = ""
 
     with open(pdf_path, "rb") as f:
         reader = PdfReader(f)
-
         for page in reader.pages:
             text += page.extract_text()
 
@@ -31,34 +36,50 @@ def process_data(
     according to whether they are simplified or traditional characters
     within the HSK1 to HSK6 vocabulary range, or other characters of either variant
 
-    Args:
-        - html, bool, flag True if html else False
-        - target, str:
-            - if html=False: path to file on device
-            - if html=True: HTML extracted from URL
-        - hsk_simp, list, all simplified hanzi from HSK1 to HSK9
-        - hsk_trad, list, all traditional hanzi equivalents to hsk_simp
-    Returns:
-        NOTE: all lists below include duplicates
-        - hanzi_list, list, full list of hanzi found
-        - simplified, list, full list of simplified hanzi found belonging to HSK1 to HSK9
-        - traditional, list, full list of traditional hanzi found equivalent to HSK1 to HSK9
-            simplified hanzi
-        - neutral, list, subset of hanzi common to both simplified and traditional
-        - outliers, list, all hanzi found that don't belong to the above lists
+    Parameters
+    ----------
+    html : bool
+        flag True if html else False
+
+    target : str
+        if html=False: path to file on device
+        if html=True: HTML extracted from URL
+
+    hsk_simp : list
+        all simplified hanzi from HSK1 to HSK9
+
+    hsk_trad : list
+        all traditional hanzi equivalents to hsk_simp
+
+    Returns
+    -------  NOTE: all lists below include duplicates
+
+    hanzi_list : list
+        full list of hanzi found
+
+    simplified : list
+        full list of simplified hanzi found belonging to HSK1 to HSK9
+
+    traditional : list
+        full list of traditional hanzi found equivalent to HSK1 to HSK9 simplified hanzi
+
+    neutral : list
+        subset of hanzi common to both simplified and traditional
+
+    outliers : list
+        all hanzi found that don't belong to the above lists
     """
-    if not html:
+    if html:  # url=True, target is HTML
+        text = target
+
+    elif not html:
         # Send PDFs to _extract_from_pdf
         if target[-3:] == "pdf":
             text = _extract_from_pdf(target)
-
+        # Directly extract from other file types
         else:
             with open(target, "r", encoding=ENCODING) as f:
                 text = f.read()
-
-    # if url=True, target is HTML
-    else:
-        text = target
 
     # Extract hanzi from text (with duplicates)
     hanzi_list = filter_text(text)
@@ -78,16 +99,33 @@ def analyse_data(
     Gets the character variant and statistical breakdowns
         - number of unique characters and number of total characters
             by grade, and cumulative figures for the entire content
-    Args:
-        - df, Pandas DataFrame, HSK character list
-        - hl, list, all hanzi in the entire content
-        - simplified, list, simplified HSK hanzi in hl
-        - traditional, list, traditional HSK hanzi in hl
-        - neutral, list, hanzi common to simplified and traditional lists
-    Returns:
-        - variant, str, hanzi variant of the content
-        - stats_dataframe, Pandas DataFrame, stats for the content
-        - hanzi_dataframe, Pandas DataFrame, df with counts added
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        HSK character list
+
+    hl : list
+        all hanzi in the entire content
+    simplified : list
+        simplified HSK hanzi in hl
+
+    traditional : list
+        traditional HSK hanzi in hl
+
+    neutral : list
+        hanzi common to simplified and traditional lists
+
+    Returns
+    -------
+    variant : str
+        hanzi variant of the content
+
+    stats_dataframe : pd.DataFrame
+        stats for the content
+
+    hanzi_dataframe : pd.DataFrame
+        df with counts added
     """
     # Query character variant
     variant = identify(simplified, traditional, neutral)

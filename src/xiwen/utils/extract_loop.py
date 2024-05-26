@@ -2,11 +2,11 @@ import pandas as pd
 from utils.data import process_data, analyse_data
 from utils.dialog import export_to_csv
 from utils.pinyin import map_pinyin, get_pinyin
-from xiwen.config import DATA_OUT, ENCODING, PINYIN_PATH
+from xiwen.config import ASSETS_DIR, ENCODING, PINYIN_PATH
 
 
 # Load HSK Hanzi database (unigrams only)
-HSK_HANZI = pd.read_csv(DATA_OUT + "hsk30_hanzi.csv")
+HSK_HANZI = pd.read_csv(ASSETS_DIR + "hsk30_hanzi.csv")
 # Replace HSK7-9 with 7 and convert grades to ints for iteration
 HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].replace("7-9", 7)
 HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].astype(int)
@@ -14,18 +14,20 @@ HSK_SIMP = list(HSK_HANZI["Simplified"])
 HSK_TRAD = list(HSK_HANZI["Traditional"])
 
 
-def extract_hanzi(target: str, html: bool = False):
+def extract_hanzi(target: str, html: bool = False) -> None:
     """
     Menu loops to handle:
         - viewing stats for a scanned file or URL
         - exporting content to csv
-    Args:
-        - html, bool, flag True if url else False
-        - target, str:
-            - if url=False: path to file on device
-            - if url=True: HTML extracted from URL
-    Returns:
-        - None
+
+    Parameters
+    ----------
+    html : bool
+        True if url else False
+
+    target : str
+        if url=False: path to file on device
+        if url=True: HTML extracted from URL
     """
     # Get hanzi lists from file
     hanzi_list, simp, trad, neut, outl = process_data(
@@ -35,13 +37,13 @@ def extract_hanzi(target: str, html: bool = False):
     variant, stats_df, hanzi_df = analyse_data(HSK_HANZI, hanzi_list, simp, trad, neut)
 
     # Print stats to CLI
-    print(stats_df.to_markdown(index=False), "\n")
+    print(stats_df.to_markdown(index=False))
 
     if variant == "unknown":
-        print("Character set undefined - simplified and traditional hanzi present\n")
+        print("Character set undefined - simplified and traditional hanzi present")
         print("Stats above for reference only")
     else:
-        print(f"{variant.title()} character set detected\n")
+        print(f"{variant.title()} character set detected")
 
     while True:
         # Flag to break out of nested menus
@@ -119,7 +121,7 @@ def extract_hanzi(target: str, html: bool = False):
                     export_to_csv(outliers_df)
 
                 elif command == "C":
-                    print("\nCustom export:\n")
+                    print("Custom export:")
                     print("Enter the HSK grade(s) to export in any order")
                     print("-> e.g., to export HSK2 and HSK5, enter '25' or '52'")
 
@@ -166,7 +168,7 @@ def extract_hanzi(target: str, html: bool = False):
                             ]
 
                             print(filtered_grades_df)
-                            print("\nSelection displayed above.")
+                            print("Selection displayed above.")
 
                             # Confirm selection before export
                             while True:
@@ -184,8 +186,7 @@ def extract_hanzi(target: str, html: bool = False):
                                     break
 
                         except AssertionError:
-                            print("\nEnter digits from 1 to 9 only\n")
+                            print("Enter digits from 1 to 9 only")
 
         if exit_to_main:
-            # exit extract_text() to main screen
-            break
+            break  # exit extract_text() to main screen

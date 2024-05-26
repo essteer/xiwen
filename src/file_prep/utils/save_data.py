@@ -8,12 +8,23 @@ def save_csv(
 ) -> str:
     """
     Saves Pandas DataFrames and Python iterables
-    Args:
-        data - the content to be saved
-        path - str, location of intended directory
-        name - str, filename
-        enc - str, encoding (e.g. utf-8)
-        new - str, newlines (e.g. \n)
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        the content to be saved
+
+    path : str
+        location of intended directory
+
+    name : str
+        filename
+
+    enc : str
+        encoding (e.g. utf-8)
+
+    new : str
+        newlines (e.g. \n)
     """
     filename = name + ".csv"
     filepath = os.path.join(path, filename)

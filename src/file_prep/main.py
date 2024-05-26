@@ -1,9 +1,9 @@
 import pandas as pd
 from tqdm import tqdm
 from xiwen.config import (
+    ASSETS_DIR,
     ENCODING,
     ENCODING_HANZI,
-    DATA_OUT,
     FREQ_PATH,
     HSK_PATH,
     PINYIN_PATH,
@@ -12,17 +12,9 @@ from src.xiwen.utils.pinyin import map_pinyin, get_pinyin
 from utils.save_data import save_csv
 
 
-##########################################################################
-# Initialise variables
-##########################################################################
-
 grade, counter = 0, 0
 vocab_dict = {}
 simp_chars, trad_chars = set(), set()
-
-##########################################################################
-# Pinyin dataset
-##########################################################################
 
 # Get mapping of characters to accented pinyin
 pinyin_map = map_pinyin(PINYIN_PATH, ENCODING)
@@ -31,7 +23,7 @@ pinyin_map = map_pinyin(PINYIN_PATH, ENCODING)
 # Extract HSK dataset to DataFrame
 ##########################################################################
 
-# Read ./data/hsk30-chars-ext.csv
+# Read hsk30-chars-ext.csv
 df = pd.read_csv(HSK_PATH)
 # Extract character columns and HSK grades
 df = df[["Hanzi", "Traditional", "Level"]]
@@ -66,7 +58,7 @@ df = df[cols]
 ##########################################################################
 
 junda_freqs = []
-# Read ./data/input/CharFreq-Modern-utf8.csv
+# Read CharFreq-Modern-utf8.csv
 with open(FREQ_PATH, "r", encoding=ENCODING) as f:
     lines = f.readlines()
     for line in tqdm(lines[6:], desc="Processing"):
@@ -90,5 +82,5 @@ hsk_hanzi_df = df.merge(
 # Save files
 ##########################################################################
 
-save_csv(junda_df, DATA_OUT, "junda_frequencies", ENCODING_HANZI)
-save_csv(hsk_hanzi_df, DATA_OUT, "hsk30_hanzi", ENCODING_HANZI)
+save_csv(junda_df, ASSETS_DIR, "junda_frequencies", ENCODING_HANZI)
+save_csv(hsk_hanzi_df, ASSETS_DIR, "hsk30_hanzi", ENCODING_HANZI)

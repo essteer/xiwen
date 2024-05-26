@@ -1,7 +1,6 @@
 def map_pinyin(filepath: str, enc: str) -> dict:
     """
-    Returns a dictionary mapping Chinese characters
-    to pinyin
+    Returns a dictionary mapping Chinese characters to pinyin
     """
     hanzi_pinyin_dict = {}
 
@@ -25,17 +24,26 @@ def special_cases(hanzi: str):
         return False
 
 
-def get_pinyin(hanzi: list[str], hanzi_pinyin_dict: dict[str:str]) -> list[str]:
+def get_pinyin(hanzi: list[str], hanzi_pinyin_dict: dict[str:str]) -> tuple[list[str]]:
     """
     Takes traditional characters from n-grams
     Gets the accented pinyin for each character
-    Args:
-        - hanzi, list of character strings
-        - hanzi_pinyin_dict, dict mapping hanzi to pinyin
-    Returns:
-        - matched_hanzi, sublist of hanzi for which pinyin
-            matches were found in hanzi_pinyin_dict
-        - pinyin_list, list of pinyin mapped from each hanzi
+
+    Parameters
+    ----------
+    hanzi : list
+        character strings
+
+    hanzi_pinyin_dict : dict
+        map of hanzi to pinyin
+
+    Returns
+    -------
+    matched_hanzi : list
+        hanzi for which pinyin matches were found in hanzi_pinyin_dict
+
+    pinyin_list : list
+        pinyin mapped from each hanzi
     """
     pinyin_list = []
     # Return an updated list to ignore hanzi without pinyin

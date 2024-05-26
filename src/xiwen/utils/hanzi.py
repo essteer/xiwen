@@ -11,11 +11,17 @@ def _filter_hanzi(char: str) -> bool:
         - Common        ["\u4e00", "\u9fff"]
         - Extended-A    ["\u3400", "\u4dbf"]
         - Extended-B    ["\u20000", "\u2a6dF"]
-    Args:
-        - char, str (single character)
-    Returns:
-        - bool, True if char in Common | Extended-A | Extended-B
-                False otherwise
+
+    Parameters
+    ----------
+    char : str
+        a single character
+
+    Returns
+    -------
+    bool
+        True if char in Common | Extended-A | Extended-B
+        False otherwise
     """
     symbols = ["–", "—", "‘", "’", "“", "”", "…", "⊼", "⁆", "∕", "。"]
     # Unrecognised hanzi with no matching pinyin
@@ -49,15 +55,30 @@ def partition_hanzi(hsk_simp: list, hsk_trad: list, hanzi_list: list) -> tuple[l
     neutral characters found in both the HSK simplified and traditional lists,
     or outliers (both simplified and traditional) not in the HSK lists
 
-    Args:
-        - hsk_simp, list, simplified characters in HSK1 to HSK7-9
-        - hsk_trad, list, traditional equivalents to hsk_simp
-        - hanzi_list, list, characters to partition
-    Returns:
-        - simp, list, simplified HSK characters in hanzi_list
-        - trad, list, traditional HSK equivalents in hanzi_list
-        - neutral, list, characters common to simp and trad
-        - outliers, list, characters not in above lists
+    Parameters
+    ----------
+    hsk_simp : list
+        simplified characters in HSK1 to HSK7-9
+
+    hsk_trad : list
+        traditional equivalents to hsk_simp
+
+    hanzi_list : list
+        characters to partition
+
+    Returns
+    -------
+    simp : list
+        simplified HSK characters in hanzi_list
+
+    trad : list
+        traditional HSK equivalents in hanzi_list
+
+    neutral : list
+        characters common to simp and trad
+
+    outliers : list
+        characters not in above lists
     """
     simp = [zi for zi in hanzi_list if zi in hsk_simp]
     trad = [zi for zi in hanzi_list if zi in hsk_trad]
@@ -67,16 +88,26 @@ def partition_hanzi(hsk_simp: list, hsk_trad: list, hanzi_list: list) -> tuple[l
     return simp, trad, neutral, outliers
 
 
-def identify(hsk_simp: list, hsk_trad: list, neutral: list) -> tuple[str, float]:
+def identify(hsk_simp: list, hsk_trad: list, neutral: list) -> str:
     """
     Identifies text as either simplified or traditional Chinese,
         or unknown if the variant is uncertain
-    Args:
-        - hsk_simp, list, simplified characters in HSK1 to HSK7-9
-        - hsk_trad, list, traditional equivalents to hsk_simp
-        - neutral, list, characters common to simp and trad
-    Returns:
-        - str, text character variant
+
+    Parameters
+    ----------
+    hsk_simp : list
+        simplified characters in HSK1 to HSK7-9
+
+    hsk_trad : list
+        traditional equivalents to hsk_simp
+
+    neutral : list
+        characters common to simp and trad
+
+    Returns
+    -------
+    str
+        text character variant
     """
     # Threshold beyond which to decide that text belongs to one variant
     epsilon = sys.float_info.epsilon
@@ -101,10 +132,16 @@ def _counts(hanzi: list) -> dict:
     """
     Counts occurrences of each character in hanzi
     in list passed by get_counts()
-    Args:
-        - hanzi, list, characters to count
-    Returns:
-        - counts, dict, counts of each character
+
+    Parameters
+    ----------
+    hanzi : list
+        characters to count
+
+    Returns
+    -------
+    counts : dict
+        counts of each character
     """
     counts = {}
     for zi in hanzi:
@@ -116,13 +153,22 @@ def _granular_counts(df: pd.DataFrame, hanzi_all: list, variant: str) -> list:
     """
     Breaks down counts according to HSK grades for
     Pandas DataFrame passed by get_counts()
-    Args:
-        - df, Pandas DataFrame, all unique hanzi in HSK1 to HSK7-9
-            with counts column
-        - hanzi_all, list, all hanzi (with duplicates) found in text being analysed
-        - variant, str, the variant of the character set (Simplified|Traditional|Unknown)
-    Returns:
-        - dict, counts for hanzi per HSK grade
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        all unique hanzi in HSK1 to HSK7-9 with counts column
+
+    hanzi_all : list
+        all hanzi (with duplicates) found in text being analysed
+
+    variant : str
+        variant of the character set (Simplified|Traditional|Unknown)
+
+    Returns
+    -------
+    grade_stats : dict
+        counts for hanzi per HSK grade
     """
     if variant in ("Simplified", "Traditional"):
         """
@@ -168,16 +214,28 @@ def _get_counts(
     Passes hanzi_sub to _counts to count occurrences of each Chinese character
     Passes updated df and hanzi_all to _granular_counts for grade-by-grade breakdown
 
-    Args:
-        - df, Pandas DataFrame, all unique characters in HSK1 to HSK6
-        - hanzi_all, list, all characters (with duplicates) found in text being analysed
-        - hanzi_sub, list | tuple, the character subset(s) to be analysed
+    Parameters
+    ----------
+    df : pd.DataFrame
+        all unique characters in HSK1 to HSK6
+
+    hanzi_all : list
+        all characters (with duplicates) found in text being analysed
+
+    hanzi_sub : list | tuple
+        character subset(s) to be analysed
             single list if variant defined as either simplified or traditional
             tuple of simplified and traditional lists if variant unknown
-        - variant, str, the variant of the character set (Simplified|Traditional|Unknown)
-    Returns:
-        - counts, dict, aggregate and grade-based character counts
-        - merged_df, Pandas DataFrame, df with counts applied
+    variant : str
+        variant of the character set (Simplified|Traditional|Unknown)
+
+    Returns
+    -------
+    counts : dict
+        aggregate and grade-based character counts
+
+    merged_df : pd.DataFrame
+        df with counts applied
     """
     # hanzi_sub = single list if variant defined (Simplified|Traditional)
     if isinstance(hanzi_sub, list):
@@ -234,11 +292,18 @@ def _cumulative_counts(raw_counts: list[list[int]], grades: int) -> list[list[in
     """
     Computes grade-level and cumulative statistics for hanzi occurrences
 
-    Args:
-        - raw_counts, list, hanzi counts by grade
-        - grades, int, number of HSK grades being checked against
-    Returns:
-        - cumulative_counts, list, cumulative hanzi counts by grade
+    Parameters
+    ----------
+    raw_counts : list
+        hanzi counts by grade
+
+    grades : int
+        number of HSK grades being checked against
+
+    Returns
+    -------
+    cumulative_counts : list
+        cumulative hanzi counts by grade
     """
     # Cumulative figures = HSK1 figures for HSK1
     cumulative_counts = [
@@ -264,13 +329,21 @@ def _compute_stats(
     """
     Computes grade-level and cumulative statistics for hanzi occurrences
 
-    Args:
-        - raw_counts, list, hanzi counts by grade
-        - cumulative_counts, list, cumulative hanzi counts by grade
-        - grades, int, number of HSK grades being checked against
-    Returns:
-        - statistics, list, aggregate and cumulative grade-based hanzi counts
-            with percentages
+    Parameters
+    ----------
+    raw_counts : list
+        hanzi counts by grade
+
+    cumulative_counts : list
+        cumulative hanzi counts by grade
+
+    grades : int
+        number of HSK grades being checked against
+
+    Returns
+    -------
+    statistics : list
+        aggregate and cumulative grade-based hanzi counts with percentages
     """
     statistics = []
     # [grade, grade_unique, %, cum_unique, %, grade_count, %, cum_count, %]
@@ -345,23 +418,34 @@ def get_stats(
     df: pd.DataFrame, hanzi_all: list, hanzi_sub: list | tuple[list], variant: str
 ):
     """
-    Passes params to _get_counts() for grade_counts and
-        merged_df with counts applied
+    Passes params to _get_counts() for grade_counts and merged_df with counts applied
     Passes grade_counts to _cumulative_counts() for cumulative_counts
-    Passes grade_counts and cumulative_counts to _compute_stats()
-        for statistical breakdown
+    Passes grade_counts and cumulative_counts to _compute_stats() for statistical breakdown
     Returns Pandas DataFrame of statistics and of original df with counts applied
 
-    Args:
-        - df, Pandas DataFrame, all unique characters in HSK1 to HSK6
-        - hanzi_all, list, all characters (with duplicates) found in text being analysed
-        - hanzi_sub, list | tuple, the character subset(s) to be analysed
+    Parameters
+    ----------
+    df : pd.DataFrame
+        all unique characters in HSK1 to HSK6
+
+    hanzi_all : list
+        all characters (with duplicates) found in text being analysed
+
+    hanzi_sub : list | tuple
+        character subset(s) to be analysed
             single list if variant defined as either simplified or traditional
             tuple of simplified and traditional lists if variant unknown
-        - variant, str, the variant of the character set (Simplified|Traditional|Unknown)
-    Returns:
-        - stats_df, Pandas DataFrame, aggregate and cumulative grade-based character counts
-        - hanzi_df, Pandas DataFrame, df with counts applied by _get_counts()
+
+    variant : str
+        variant of the character set (Simplified|Traditional|Unknown)
+
+    Returns
+    -------
+    stats_df : pd.DataFrame
+        aggregate and cumulative grade-based character counts
+
+    hanzi_df : pd.DataFrame
+        df with counts applied by _get_counts()
     """
     # Get count breakdown of hanzi content
     grade_counts, hanzi_df = _get_counts(df, hanzi_all, hanzi_sub, variant)

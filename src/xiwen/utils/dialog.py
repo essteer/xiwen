@@ -23,10 +23,11 @@ def get_file_path():
 def is_valid_file(filename: str) -> bool:
     """
     Checks whether a selected file is compatible
-    Args:
-        - filename, str, the path of the selected file
-    Returns:
-        - bool, True if valid else False
+
+    Parameters
+    ----------
+    filename : str
+        path of the selected file
     """
     extension = os.path.splitext(filename)[1].lower()
     if extension in (".pdf", ".csv", ".tsv", ".txt"):
@@ -39,8 +40,11 @@ def export_to_csv(data: pd.DataFrame | list, file_path=None):
     """
     Opens a Tkinter dialog to select a file save location
     If location selected, saves Pandas DataFrame or list to .csv
-    Args:
-        - data, Pandas DataFrame | list, data to be saved
+
+    Parameters
+    ----------
+    data, Pandas DataFrame | list
+        data to be saved
     """
     filename = filedialog.asksaveasfilename(
         title="Save CSV File",

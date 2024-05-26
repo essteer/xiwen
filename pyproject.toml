@@ -5,6 +5,7 @@ description = "CLI tool for Chinese character analysis and text processing"
 authors = [{ name = "Elliott Steer", email = "essteer@pm.me" }]
 dependencies = [
     "beautifulsoup4>=4.12.2",
+    "masquer>=1.1.0",
     "numpy>=1.26.2",
     "pandas>=2.2.1",
     "pre-commit==3.7.0",
