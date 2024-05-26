@@ -1,7 +1,7 @@
 import pandas as pd
 from pypdf import PdfReader
-from src.config import ENCODING
 from utils.hanzi import filter_text, partition_hanzi, identify, get_stats
+from xiwen.config import ENCODING
 
 
 def _extract_from_pdf(pdf_path):

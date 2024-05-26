@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import sys
-from src.config import HSK_GRADES
+from xiwen.config import HSK_GRADES
 
 
 def _filter_hanzi(char: str) -> bool:

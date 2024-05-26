@@ -1,6 +1,6 @@
 import pandas as pd
 from tqdm import tqdm
-from src.config import (
+from xiwen.config import (
     ENCODING,
     ENCODING_HANZI,
     DATA_OUT,

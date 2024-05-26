@@ -1,8 +1,8 @@
 import pandas as pd
-from src.config import DATA_OUT, ENCODING, PINYIN_PATH
 from utils.data import process_data, analyse_data
 from utils.dialog import export_to_csv
 from utils.pinyin import map_pinyin, get_pinyin
+from xiwen.config import DATA_OUT, ENCODING, PINYIN_PATH
 
 
 # Load HSK Hanzi database (unigrams only)

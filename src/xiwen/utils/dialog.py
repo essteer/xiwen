@@ -2,7 +2,7 @@ import csv
 import os
 import pandas as pd
 from tkinter import filedialog
-from src.config import ENCODING, ENCODING_HANZI
+from xiwen.config import ENCODING, ENCODING_HANZI
 
 
 def get_file_path():
