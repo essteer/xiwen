@@ -1,18 +1,20 @@
+import os
+
 ENCODING = "utf-8"
 # Encoding used to force .csv files to adopt utf-8 from Pandas DataFrame
 ENCODING_HANZI = "utf_8_sig"
 HSK_GRADES = 7
 
-ASSETS_DIR = "./assets/"
+ASSETS_DIR = os.path.join(os.getcwd(), "assets")
 # Test case (simplified hanzi)
-BJZD = ASSETS_DIR + "beijingzhedie.txt"
+BJZD = os.path.join(ASSETS_DIR, "beijingzhedie.txt")
 # Test case (traditional hanzi)
-TTC = ASSETS_DIR, +"taoteching.txt"
+TTC = os.path.join(ASSETS_DIR, "taoteching.txt")
 
-RAW_DATA = "file_prep/assets/"
-HSK_PATH = RAW_DATA + "hsk30-chars-ext.csv"
-FREQ_PATH = RAW_DATA + "CharFreq-Modern-utf8.csv"
-PINYIN_PATH = RAW_DATA + "hanzi_pinyin_characters.tsv.txt"
+RAW_DATA = os.path.join(os.getcwd(), "file_prep", "assets")
+HSK_PATH = os.path.join(RAW_DATA, "hsk30-chars-ext.csv")
+FREQ_PATH = os.path.join(RAW_DATA, "CharFreq-Modern-utf8.csv")
+PINYIN_PATH = os.path.join(RAW_DATA, "hanzi_pinyin_characters.tsv.txt")
 
 WELCOME_MESSAGE = """
 Welcome to Xiwen 析文

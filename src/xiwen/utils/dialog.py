@@ -36,7 +36,7 @@ def is_valid_file(filename: str) -> bool:
         return False
 
 
-def export_to_csv(data: pd.DataFrame | list, file_path=None):
+def export_to_csv(data: pd.DataFrame | list):
     """
     Opens a Tkinter dialog to select a file save location
     If location selected, saves Pandas DataFrame or list to .csv

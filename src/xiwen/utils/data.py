@@ -38,9 +38,6 @@ def process_data(
 
     Parameters
     ----------
-    html : bool
-        flag True if html else False
-
     target : str
         if html=False: path to file on device
         if html=True: HTML extracted from URL
@@ -50,6 +47,9 @@ def process_data(
 
     hsk_trad : list
         all traditional hanzi equivalents to hsk_simp
+
+    html : bool
+        flag True if html else False
 
     Returns
     -------  NOTE: all lists below include duplicates
