@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import random
 from xiwen.config import ASSETS_DIR, BJZD, TTC, DEMO_MESSAGE
@@ -7,7 +8,7 @@ from utils.extract_html import extractor
 from utils.extract_loop import extract_hanzi
 
 # Load HSK Hanzi database (unigrams only)
-HSK_HANZI = pd.read_csv(ASSETS_DIR + "hsk30_hanzi.csv")
+HSK_HANZI = pd.read_csv(os.path.join(ASSETS_DIR, "hsk30_hanzi.csv"))
 # Replace HSK7-9 with 7 and convert grades to ints for iteration
 HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].replace("7-9", 7)
 HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].astype(int)

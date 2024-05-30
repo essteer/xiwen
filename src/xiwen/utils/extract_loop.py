@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from utils.data import process_data, analyse_data
 from utils.dialog import export_to_csv
@@ -6,7 +7,7 @@ from xiwen.config import ASSETS_DIR, ENCODING, PINYIN_PATH
 
 
 # Load HSK Hanzi database (unigrams only)
-HSK_HANZI = pd.read_csv(ASSETS_DIR + "hsk30_hanzi.csv")
+HSK_HANZI = pd.read_csv(os.path.join(ASSETS_DIR, "hsk30_hanzi.csv"))
 # Replace HSK7-9 with 7 and convert grades to ints for iteration
 HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].replace("7-9", 7)
 HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].astype(int)
