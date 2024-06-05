@@ -1,17 +1,26 @@
-# Xiwen 析文
+<h1 align="center">Xiwen 析文</h1>
 
-[![Python - Version](https://img.shields.io/badge/Python-3.9_|_3.10_|_3.11_|_3.12-3776AB.svg?style=flat&logo=Python&logoColor=white)](https://pypi.org/project/masquer/)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+<p align="center">
+  <a href="https://github.com/essteer/xiwen"><img src="https://img.shields.io/badge/Python-3.9_|_3.10_|_3.11_|_3.12-3776AB.svg?style=flat&logo=Python&logoColor=white"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json"></a>
+  <a href="https://snyk.io/test/github/essteer/xiwen"><img src="https://snyk.io/test/github/essteer/xiwen/badge.svg?name=Snyk&style=flat&logo=Snyk"></a>
+</p>
 
-Xiwen is a CLI tool that scans files and HTML for Chinese characters (hanzi), and:
+<p align="center">
+A tool to scan HTML for Chinese characters.
+</p>
 
-- identifies the character variant (simplified or traditional)
-- analyses the content by HSK grade
-- exports character sets for further use
+## Overview 
 
-The analysis describes the percentage of the content covered by each HSK grade (see below), and character lists can be exported for any combination of those levels, or more advanced hanzi not included in the grades.
+Use Xiwen to scan content for Chinese characters — hanzi — and:
 
-Data exports provide the hanzi by HSK grade in traditional and simplified Chinese, their pinyin, count within the text, and character frequency.
+- analyse the content by HSK grade
+- identify character variants
+- export character sets for further use
+
+The analysis describes the breakdown by HSK grade (see below) and character lists can be exported for any combination of those levels, or less common hanzi beyond the HSK grades.
+
+Data exports provide hanzi by HSK grade in traditional and simplified Chinese, their pinyin, count within the text, and character frequency.
 
 ## Who this is for
 
@@ -21,9 +30,9 @@ Instructors can use it to assess the suitability of reading materials for their 
 
 ## HSK
 
-HSK (Hanyu Shuiping Kaoshi 汉语水平考试) is a series of examinations designed to test Chinese language proficiency in simplified Chinese.
+HSK — Hanyu Shuiping Kaoshi 汉语水平考试 — is a series of examinations designed to test Chinese language proficiency in simplified Chinese.
 
-In its latest form the HSK consists of nine levels, and covers 3,000 simplified hanzi and 11,092 vocabulary items. The advanced levels (seven to nine) share 1,200 hanzi that are tested together.
+In its latest form the HSK consists of nine levels, and covers 3,000 simplified hanzi and 11,092 vocabulary items. The advanced levels — seven to nine — share 1,200 hanzi that are tested together.
 
 To approximate a traditional hanzi version of the HSK, Xiwen maps the HSK hanzi to traditional Chinese equivalents. In most cases this is a one-to-one conversion, but in several cases there are two or more traditional hanzi that reflect distinct meanings of the single simplified character.
 
@@ -77,17 +86,16 @@ $ pip install -r requirements.txt
 
 ## Operation
 
-Run `src/interface.py` from the virtual environment to launch, and follow the instructions as prompted:
+Run `xiwen/app.py` from the `src` directory to launch, and follow the instructions as prompted:
 
-- enter `D` for a demo
-- enter `S` to select a file on your device to process (.csv, .pdf, .tsv or .txt), or
-- enter `U` to scan a URL.
+- enter `d` for a demo
+- enter `u` to scan a URL.
 
-`src/prep.py` makes use of datasets in `data/input` to pair simplified and traditional character sets with their pinyin, HSK grades, and character frequencies as identified in the MTSU dataset.
+`file_prep/main.py` makes use of datasets in `file_prep/assets` to pair simplified and traditional character sets with their pinyin, HSK grades, and character frequencies as identified in the MTSU dataset.
 
-The datasets needed to run Xiwen are included in the `data` folder. They're set up and ready to go out of the box, but you can run your own character lists through `prep.py` if needed.
+The datasets Xiwen relies on are included in `xiwen/assets`. They're set up and ready to go out of the box, but you can run your own character lists through `file_prep/main.py` if needed to create custom lists.
 
-`src/interface.py` is the interactive component. It receives your input and makes calls to functions in `src/utils/data_funcs.py`, `src/utils/dialog_funcs.py`, and `src/utils/extract_loop.py`. Those files handle file dialogs and data input, then make calls to `src/utils/hanzi_funcs.py` to:
+`xiwen/app.py` is the interactive component. It receives user input and makes function calls to modules in `xiwen/utils`. Those files handle data input then make calls to `xiwen/utils/hanzi.py` to:
 
 - break down text into individual hanzi (`filter_text()`)
 - sort hanzi as HSK-level simplified or traditional hanzi, or outliers (`partition_hanzi()`)
