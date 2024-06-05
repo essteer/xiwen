@@ -12,7 +12,7 @@ def map_pinyin(filepath: str, enc: str) -> dict:
     return hanzi_pinyin_dict
 
 
-def special_cases(hanzi: str):
+def special_cases(hanzi: str) -> str | bool:
     """
     Polytonal characters
     Convention is to record these as main tone
