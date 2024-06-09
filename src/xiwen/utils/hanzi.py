@@ -53,8 +53,7 @@ def filter_text(text):
 def partition_hanzi(hsk_simp: list, hsk_trad: list, hanzi_list: list) -> tuple[list]:
     """
     Separates hanzi list into sublists based on whether
-    they are HSK simplified characters or traditional character equivalents,
-    neutral characters found in both the HSK simplified and traditional lists,
+    they are HSK simplified characters or traditional character equivalents
     or outliers (both simplified and traditional) not in the HSK lists
 
     Parameters
@@ -76,24 +75,19 @@ def partition_hanzi(hsk_simp: list, hsk_trad: list, hanzi_list: list) -> tuple[l
     trad : list
         traditional HSK equivalents in hanzi_list
 
-    neutral : list
-        characters common to simp and trad
-
     outliers : list
         characters not in above lists
     """
     simp = [zi for zi in hanzi_list if zi in hsk_simp]
     trad = [zi for zi in hanzi_list if zi in hsk_trad]
-    neutral = [zi for zi in hanzi_list if zi in simp and zi in trad]
     outliers = [zi for zi in hanzi_list if zi not in simp and zi not in trad]
 
-    return simp, trad, neutral, outliers
+    return simp, trad, outliers
 
 
-def identify(hsk_simp: list, hsk_trad: list, neutral: list) -> str:
+def identify(hsk_simp: list, hsk_trad: list) -> str:
     """
-    Identifies text as either simplified or traditional Chinese,
-        or unknown if the variant is uncertain
+    Identifies text as Simplified or Traditional based on character ratio
 
     Parameters
     ----------
@@ -103,9 +97,6 @@ def identify(hsk_simp: list, hsk_trad: list, neutral: list) -> str:
     hsk_trad : list
         traditional equivalents to hsk_simp
 
-    neutral : list
-        characters common to simp and trad
-
     Returns
     -------
     str
@@ -114,20 +105,20 @@ def identify(hsk_simp: list, hsk_trad: list, neutral: list) -> str:
     # Threshold beyond which to decide that text belongs to one variant
     epsilon = sys.float_info.epsilon
     threshold = 0.90
-    simp_set = set(hsk_simp) - set(neutral)
-    trad_set = set(hsk_trad) - set(neutral)
+    simp_set = set(hsk_simp) - set(hsk_trad)
+    trad_set = set(hsk_trad) - set(hsk_simp)
 
-    try:
-        ratio = len(simp_set) / (len(simp_set) + len(trad_set))
-        if ratio >= threshold - epsilon:
-            return "Simplified"
-        elif ratio <= 1 - threshold + epsilon:
-            return "Traditional"
-        else:
-            return "Unknown"
-
-    except ZeroDivisionError:
+    if len(simp_set) + len(trad_set) == 0:
         return "Unknown"
+
+    ratio = len(simp_set) / (len(simp_set) + len(trad_set))
+    if ratio >= threshold - epsilon:
+        return "Simplified"
+
+    elif ratio <= 1 - threshold + epsilon:
+        return "Traditional"
+
+    return "Unknown"
 
 
 def _counts(hanzi: list) -> dict:

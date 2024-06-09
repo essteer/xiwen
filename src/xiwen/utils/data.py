@@ -30,24 +30,19 @@ def process_data(html: str, hsk_simp: list, hsk_trad: list) -> tuple[list]:
     traditional : list
         full list of traditional hanzi found equivalent to HSK1 to HSK9 simplified hanzi
 
-    neutral : list
-        subset of hanzi common to both simplified and traditional
-
     outliers : list
         all hanzi found that don't belong to the above lists
     """
     # Extract hanzi from HTML (with duplicates)
     hanzi_list = filter_text(html)
     # Divide into groups (with duplicates)
-    simplified, traditional, neutral, outliers = partition_hanzi(
-        hsk_simp, hsk_trad, hanzi_list
-    )
+    simplified, traditional, outliers = partition_hanzi(hsk_simp, hsk_trad, hanzi_list)
 
-    return hanzi_list, simplified, traditional, neutral, outliers
+    return hanzi_list, simplified, traditional, outliers
 
 
 def analyse_data(
-    df: pd.DataFrame, hl: list, simplified: list, traditional: list, neutral: list
+    df: pd.DataFrame, hl: list, simplified: list, traditional: list
 ) -> tuple[str | pd.DataFrame]:
     """
     Receives output of process_data
@@ -69,9 +64,6 @@ def analyse_data(
     traditional : list
         traditional HSK hanzi in hl
 
-    neutral : list
-        hanzi common to simplified and traditional lists
-
     Returns
     -------
     variant : str
@@ -84,7 +76,7 @@ def analyse_data(
         df with counts added
     """
     # Query character variant
-    variant = identify(simplified, traditional, neutral)
+    variant = identify(simplified, traditional)
     # Create mapping for analysis
     variants = {
         "Simplified": simplified,

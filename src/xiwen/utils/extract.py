@@ -30,15 +30,14 @@ def extract_hanzi(html: str) -> None:
         HTML extracted from URL
     """
     # Get hanzi lists from file
-    hanzi_list, simp, trad, neut, outl = process_data(html, HSK_SIMP, HSK_TRAD)
+    hanzi_list, simp, trad, outl = process_data(html, HSK_SIMP, HSK_TRAD)
     # Get hanzi stats
-    variant, stats_df, hanzi_df = analyse_data(HSK_HANZI, hanzi_list, simp, trad, neut)
+    variant, stats_df, hanzi_df = analyse_data(HSK_HANZI, hanzi_list, simp, trad)
     # Print stats to CLI
     print(stats_df.to_markdown(index=False))
 
-    if variant == "unknown":
-        print("Character set undefined - simplified and traditional hanzi present")
-        print("Stats above for reference only")
+    if variant == "Unknown":
+        print("Character set undefined - stats for reference only")
     else:
         print(f"{variant.title()} character set detected")
 
