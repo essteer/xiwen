@@ -65,26 +65,38 @@ The table below lists the number of simplified hanzi per grade, and the number o
 
 ## Installation
 
+### GitHub repo
+
+[![](https://img.shields.io/badge/GitHub-xiwen-181717.svg?flat&logo=GitHub&logoColor=white)](https://github.com/essteer/xiwen)
+
+Clone the `xiwen` repo from GitHub for the full source code. The repo includes the CSV and text files used to generate the character lists and a test suite.
+
+```console
+$ git clone git@github.com:essteer/xiwen
+```
+
+Change into the `xiwen` directory then create and activate a virtual environment — the below example uses [Astral's](https://astral.sh/blog/uv) `uv`; substitute `pip` or use another package manager as needed — then install the `dev` dependencies:
+
 ![](https://img.shields.io/badge/Linux-FCC624.svg?style=flat&logo=Linux&logoColor=black)
 ![](https://img.shields.io/badge/macOS-000000.svg?style=flat&logo=Apple&logoColor=white)
 
 ```console
-$ git clone git@github.com:essteer/xiwen.git
-$ python -m venv venv
-$ source venv/bin/activate
-$ pip install -r requirements.txt
+$ uv venv
+$ source .venv/bin/activate
+$ uv pip install -r requirements.txt
 ```
 
 ![](https://img.shields.io/badge/Windows-0078D4.svg?style=flat&logo=Windows&logoColor=white)
 
 ```console
-$ git clone git@github.com:essteer/xiwen.git
-$ python -m venv venv
-$ venv\Scripts\activate
-$ pip install -r requirements.txt
+$ uv venv
+$ .venv\Scripts\activate
+$ uv pip install -r requirements.txt
 ```
 
 ## Operation
+
+[![](https://img.shields.io/badge/GitHub-xiwen-181717.svg?flat&logo=GitHub&logoColor=white)](https://github.com/essteer/xiwen)
 
 Run `xiwen/app.py` from the `src` directory to launch, and follow the instructions as prompted:
 
@@ -108,17 +120,12 @@ Character sets can then be exported to .csv.
 
 This repo makes use of datasets of HSK vocabulary and character frequency lists in the public domain as indicated below - credit goes to those involved in their creation and distribution.
 
-Hanyu Shuiping Kaoshi (HSK) 3.0 character list:
-"hsk30-chars.csv", [hsk30](https://github.com/ivankra/hsk30), ivankra, GitHub
+- Hanyu Shuiping Kaoshi (HSK) 3.0 character list: "hsk30-chars.csv", [hsk30](https://github.com/ivankra/hsk30), ivankra, GitHub
 
-Character frequency list:
-"CharFreq-Modern.csv", Da, Jun. 2004, [Chinese text computing](http://lingua.mtsu.edu/chinese-computing), Middle Tennessee State University
+- Character frequency list: "CharFreq-Modern.csv", Da, Jun. 2004, [Chinese text computing](http://lingua.mtsu.edu/chinese-computing), Middle Tennessee State University
 
-Multiple character mappings:
-"[Ambiguious character mappings](https://en.wikipedia.org/wiki/Ambiguities_in_Chinese_character_simplification)", Wikipedia
+- Multiple character mappings: "[Ambiguous character mappings](https://en.wikipedia.org/wiki/Ambiguities_in_Chinese_character_simplification)", Wikipedia
 
-Simplified character set demo:
-"[Folding Beijing](https://web.archive.org/web/20160822161228/http://jessica-hjf.blog.163.com/blog/static/278128102015240444791/)" 《北京折叠》, Hao Jingfang 郝景芳, 2012
+- Simplified character set demo: "[Folding Beijing](https://web.archive.org/web/20160822161228/http://jessica-hjf.blog.163.com/blog/static/278128102015240444791/)" 《北京折叠》, Hao Jingfang 郝景芳, 2012
 
-Traditional character set demo:
-"Tao Te Ching" 《道德經》, Lao Tzu 老子, 400BC
+- Traditional character set demo: "Tao Te Ching" 《道德經》, Lao Tzu 老子, 400BC
