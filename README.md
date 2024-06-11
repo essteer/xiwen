@@ -47,7 +47,7 @@ Or even:
 - "只": ["只", "衹", "隻"]
 - "台": ["台", "檯", "臺", "颱"]
 
-A list of these "polymaps" - not all of which relate to hanzi in the HSK - can be found in the Wikipedia article [Ambiguious character mappings](https://en.wikipedia.org/wiki/Ambiguities_in_Chinese_character_simplification).
+A list of these "polymaps" — not all of which relate to hanzi in the HSK — can be found in the Wikipedia article [Ambiguous character mappings](https://en.wikipedia.org/wiki/Ambiguities_in_Chinese_character_simplification).
 
 This approach isn't perfect: obscure definitions implied by a distinct traditional hanzi may be far less frequent than the common conversion of a simplified hanzi.
 
