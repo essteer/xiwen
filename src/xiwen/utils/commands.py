@@ -1,11 +1,7 @@
 import random
-from utils.html import get_html
-from utils.extract import extract_hanzi
-
-import sys
-
-sys.path.append("..")
-from config import DEMO1, DEMO2, DEMO_MESSAGE
+from .config import DEMO1, DEMO2, DEMO_MESSAGE
+from .extract import extract_hanzi
+from .html import get_html
 
 
 def cmd_demo() -> None:

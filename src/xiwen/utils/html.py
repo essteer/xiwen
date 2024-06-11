@@ -4,10 +4,7 @@ import requests
 import time
 from bs4 import BeautifulSoup
 from masquer import masq
-import sys
-
-sys.path.append("..")
-from config import LOGS_DIR
+from .config import LOGS_DIR
 
 os.makedirs(LOGS_DIR, exist_ok=True)
 

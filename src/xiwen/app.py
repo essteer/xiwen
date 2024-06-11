@@ -1,5 +1,5 @@
-from config import WELCOME_MESSAGE, MENU_OPTIONS
 from utils.commands import cmd_demo, cmd_url
+from utils.config import WELCOME_MESSAGE, MENU_OPTIONS
 
 
 def xiwen():

@@ -1,10 +1,7 @@
 import csv
 import os
 import pandas as pd
-import sys
-
-sys.path.append("..")
-from config import ENCODING, ENCODING_HANZI
+from .config import ENCODING, ENCODING_HANZI
 
 
 def export_to_csv(data: pd.DataFrame | list):

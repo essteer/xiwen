@@ -1,12 +1,9 @@
 import os
 import pandas as pd
-import sys
-from utils.data import process_data, analyse_data
-from utils.export import custom_export, export_to_csv
-from utils.pinyin import map_pinyin, get_pinyin
-
-sys.path.append("..")
-from config import ASSETS_DIR, CUSTOM_EXPORT, ENCODING, EXPORT_OPTIONS, PINYIN_PATH
+from .data import process_data, analyse_data
+from .export import custom_export, export_to_csv
+from .pinyin import map_pinyin, get_pinyin
+from .config import ASSETS_DIR, CUSTOM_EXPORT, ENCODING, EXPORT_OPTIONS, PINYIN_PATH
 
 
 # Load HSK Hanzi database (unigrams only)
@@ -18,11 +15,73 @@ HSK_SIMP = list(HSK_HANZI["Simplified"])
 HSK_TRAD = list(HSK_HANZI["Traditional"])
 
 
+def export_hanzi(
+    zi_df: pd.DataFrame,
+    st_df: pd.DataFrame,
+    zi_list: list[str],
+    out_list: list[str],
+    var: str,
+) -> bool:
+    """
+    Interactive loop for export options
+    """
+    options = ["A", "C", "F", "O", "S", "X"]
+    while True:
+        print(EXPORT_OPTIONS)
+        command = input().upper()
+
+        if command not in options:  # Repeat options
+            continue
+
+        elif command == "X":  # Exit to main screen
+            return True
+
+        elif command == "F":  # Export full HSK hanzi data
+            export_to_csv(zi_df)
+
+        elif command == "S":  # Export stats for this content
+            export_to_csv(st_df)
+
+        elif command == "A":  # Export all unique HSK hanzi in text
+            hanzi_set = list(set(zi_list))  # filter zi_df with zi_list
+            if var == "Simplified":
+                filtered_df = zi_df[zi_df["Simplified"].isin(hanzi_set)]
+            else:
+                # If traditional or unknown, export based on traditional
+                filtered_df = zi_df[zi_df["Traditional"].isin(hanzi_set)]
+            export_to_csv(filtered_df)
+
+        elif command == "O":  # Export outliers (non-HSK hanzi) in text
+            # Map characters to accented pinyin
+            pinyin_map = map_pinyin(PINYIN_PATH, ENCODING)
+            # Get list of unique outlier hanzi
+            outliers = list(set(out_list))
+            # Get pinyin for outlier hanzi
+            recognised_outliers, outliers_pinyin = get_pinyin(outliers, pinyin_map)
+            # Create DataFrame of outlier hanzi, unicode, and pinyin
+            outliers_df = pd.DataFrame(
+                {
+                    "Hanzi": recognised_outliers,
+                    "Unicode": [ord(hanzi) for hanzi in recognised_outliers],
+                    "Pinyin": outliers_pinyin,
+                }
+            )
+            # Sort DataFrame on Unicode value
+            outliers_df = outliers_df.sort_values(by="Unicode")
+            # Export outliers
+            export_to_csv(outliers_df)
+
+        elif command == "C":
+            print(CUSTOM_EXPORT)
+            # Pass to custom export options
+            unique_hanzi = list(set(zi_list))
+            custom_export(unique_hanzi, zi_df, var)
+
+
 def extract_hanzi(html: str) -> None:
     """
-    Menu loops to handle:
-        - viewing stats for a scanned file or URL
-        - exporting content to csv
+    Passes HTML to functions to extract and process hanzi
+    Passes results to interactive loop for export options
 
     Parameters
     ----------
@@ -42,80 +101,17 @@ def extract_hanzi(html: str) -> None:
         print(f"{variant.title()} character set detected")
 
     while True:
-        # Flag to break out of nested menus
-        exit_to_main = False
         print(
-            "Select an option:\n-> 'e' = see export options\n-> 'x' = exit to main screen\n"
+            "Select option:\n-> 'e' = see export options\n-> 'x' = exit to main screen\n"
         )
         command = input().upper()
 
-        if command not in ["E", "X"]:
-            continue  # Repeat options
+        if command == "X":
+            return  # Exit to main screen
 
-        elif command == "X":
-            break  # Exit to main screen
+        if command == "E":
+            # Flag to break out of nested menus
+            exit_to_main = export_hanzi(hanzi_df, stats_df, hanzi_list, outl, variant)
 
-        elif command == "E":
-            while True:
-                # Give export options
-                print(EXPORT_OPTIONS)
-                command = input().upper()
-
-                if command not in ["A", "C", "F", "O", "S", "X"]:
-                    continue  # Repeat options
-
-                elif command == "X":
-                    # Set flag to break out of parent loop to main screen
-                    exit_to_main = True
-                    break
-
-                elif command == "F":
-                    # Export all unique HSK hanzi
-                    export_to_csv(hanzi_df)
-
-                elif command == "A":
-                    # Export all unique HSK hanzi in text - filter hanzi_df with hanzi_list
-                    hanzi_set = list(set(hanzi_list))
-
-                    if variant == "Simplified":
-                        filtered_df = hanzi_df[hanzi_df["Simplified"].isin(hanzi_set)]
-                    else:
-                        # If traditional or unknown character variant, export based on traditional
-                        filtered_df = hanzi_df[hanzi_df["Traditional"].isin(hanzi_set)]
-
-                    export_to_csv(filtered_df)
-
-                elif command == "S":
-                    # Export stats - save stats_df
-                    export_to_csv(stats_df)
-
-                elif command == "O":
-                    # Get mapping of characters to accented pinyin
-                    pinyin_map = map_pinyin(PINYIN_PATH, ENCODING)
-                    # Get list of unique outlier hanzi
-                    outliers = list(set(outl))
-                    # Get pinyin for outlier hanzi
-                    recognised_outliers, outliers_pinyin = get_pinyin(
-                        outliers, pinyin_map
-                    )
-                    # Create DataFrame of outlier hanzi, unicode, and pinyin
-                    outliers_df = pd.DataFrame(
-                        {
-                            "Hanzi": recognised_outliers,
-                            "Unicode": [ord(hanzi) for hanzi in recognised_outliers],
-                            "Pinyin": outliers_pinyin,
-                        }
-                    )
-                    # Sort DataFrame on Unicode value
-                    outliers_df = outliers_df.sort_values(by="Unicode")
-                    # Export outliers
-                    export_to_csv(outliers_df)
-
-                elif command == "C":
-                    print(CUSTOM_EXPORT)
-                    # Pass to custom export options
-                    unique_hanzi = list(set(hanzi_list))
-                    custom_export(unique_hanzi, hanzi_df, variant)
-
-        if exit_to_main:
-            break  # exit extract_text() to main screen
+            if exit_to_main:
+                return  # Exit to main screen

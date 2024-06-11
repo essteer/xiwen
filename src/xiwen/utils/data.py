@@ -1,5 +1,6 @@
 import pandas as pd
-from utils.hanzi import filter_text, partition_hanzi, identify, get_stats
+from utils.hanzi import filter_text, partition_hanzi, identify
+from utils.stats import get_stats
 
 
 def process_data(html: str, hsk_simp: list, hsk_trad: list) -> tuple[list]:
