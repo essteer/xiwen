@@ -3,7 +3,7 @@ import pandas as pd
 from .data import process_data, analyse_data
 from .export import custom_export, export_to_csv
 from .pinyin import map_pinyin, get_pinyin
-from .config import ASSETS_DIR, CUSTOM_EXPORT, ENCODING, EXPORT_OPTIONS, PINYIN_PATH
+from .config import ASSETS_DIR, CUSTOM_EXPORT, EXPORT_OPTIONS, PINYIN_PATH
 
 
 # Load HSK Hanzi database (unigrams only)
@@ -53,7 +53,7 @@ def export_hanzi(
 
         elif command == "O":  # Export outliers (non-HSK hanzi) in text
             # Map characters to accented pinyin
-            pinyin_map = map_pinyin(PINYIN_PATH, ENCODING)
+            pinyin_map = map_pinyin(PINYIN_PATH)
             # Get list of unique outlier hanzi
             outliers = list(set(out_list))
             # Get pinyin for outlier hanzi

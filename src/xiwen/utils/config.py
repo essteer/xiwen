@@ -11,8 +11,6 @@ ENCODING = "utf-8"
 ENCODING_HANZI = "utf_8_sig"
 HSK_GRADES = 7
 
-LOGS_DIR = os.path.join(os.getcwd(), "logs")
-
 RAW_DATA = os.path.join(os.getcwd(), "file_prep", "assets")
 HSK_PATH = os.path.join(RAW_DATA, "hsk30-chars-ext.csv")
 FREQ_PATH = os.path.join(RAW_DATA, "CharFreq-Modern-utf8.csv")

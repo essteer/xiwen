@@ -1,21 +1,10 @@
-import logging
-import os
 import requests
 import time
 from bs4 import BeautifulSoup
 from masquer import masq
-from .config import LOGS_DIR
-
-os.makedirs(LOGS_DIR, exist_ok=True)
-
-logging.basicConfig(
-    filename=f"{LOGS_DIR}/error.log",
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s: %(message)s",
-)
 
 
-def get_html(url: str) -> str | None:
+def get_html(url: str) -> BeautifulSoup | None:
     """
     Extracts HTML from a user-provided URL
 
@@ -45,8 +34,7 @@ def get_html(url: str) -> str | None:
 
             return raw_html
 
-        except requests.exceptions.RequestException as e:
-            logging.error(f"{response.status_code} response; url: {url}; {e}")
+        except requests.exceptions.RequestException:
             time.sleep(2 ** (i + 1))
 
     return
