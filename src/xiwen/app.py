@@ -28,5 +28,5 @@ def xiwen():
             continue
 
 
-# Run program
-xiwen()
+if __name__ == "__main__":
+    xiwen()
