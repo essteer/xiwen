@@ -4,6 +4,7 @@ import unittest
 from src.xiwen.utils.config import ENCODING
 from src.xiwen.utils.hanzi import _filter_hanzi, filter_text, identify, partition_hanzi
 
+
 TEST_ASSETS = os.path.abspath(os.path.join("tests", "assets"))
 # Combine script directory with relative path to the file
 filepath = os.path.join("src", "xiwen", "assets", "hsk30_hanzi.csv")
