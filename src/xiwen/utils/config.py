@@ -25,13 +25,7 @@ breakdown of the hanzi in the text.
 Export hanzi for further use - including hanzi not in the HSK.
 """
 
-MENU_OPTIONS = """
-Select option:
--> 'd' = demo
--> 's' = scan file [.csv, .pdf, .tsv, .txt]
--> 'u' = scan URL
--> 'q' = quit
-"""
+MAIN_MENU_OPTIONS = "Enter URL (q: quit, blank: demo): "
 
 DEMO_MESSAGE = """
 -> '10+' under 'HSK Grade' refers to hanzi beyond the HSK7-9 band.

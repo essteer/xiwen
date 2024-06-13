@@ -1,6 +1,54 @@
 import numpy as np
+import os
 import pandas as pd
-from .config import HSK_GRADES
+import sys
+from .config import ASSETS_DIR, HSK_GRADES
+from .export import export_hanzi
+
+
+# Load HSK Hanzi database (unigrams only)
+HSK_HANZI = pd.read_csv(os.path.join(ASSETS_DIR, "hsk30_hanzi.csv"))
+# Replace HSK7-9 with 7 and convert grades to ints for iteration
+HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].replace("7-9", 7)
+HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].astype(int)
+HSK_SIMP = list(HSK_HANZI["Simplified"])
+HSK_TRAD = list(HSK_HANZI["Traditional"])
+
+
+def identify(hsk_simp: list, hsk_trad: list) -> str:
+    """
+    Identifies text as Simplified or Traditional based on character ratio
+
+    Parameters
+    ----------
+    hsk_simp : list
+        simplified characters in HSK1 to HSK7-9
+
+    hsk_trad : list
+        traditional equivalents to hsk_simp
+
+    Returns
+    -------
+    str
+        text character variant
+    """
+    # Threshold beyond which to decide that text belongs to one variant
+    epsilon = sys.float_info.epsilon
+    threshold = 0.90
+    simp_set = set(hsk_simp) - set(hsk_trad)
+    trad_set = set(hsk_trad) - set(hsk_simp)
+
+    if len(simp_set) + len(trad_set) == 0:
+        return "Unknown"
+
+    ratio = len(simp_set) / (len(simp_set) + len(trad_set))
+    if ratio >= threshold - epsilon:
+        return "Simplified"
+
+    elif ratio <= 1 - threshold + epsilon:
+        return "Traditional"
+
+    return "Unknown"
 
 
 def _counts(hanzi: list) -> dict:
@@ -82,18 +130,13 @@ def _granular_counts(df: pd.DataFrame, hanzi_all: list, variant: str) -> list:
     return grade_stats
 
 
-def _get_counts(
-    df: pd.DataFrame, hanzi_all: list, hanzi_sub: list | tuple[list], variant: str
-):
+def _get_counts(hanzi_all: list, hanzi_sub: list | tuple[list], variant: str):
     """
     Passes hanzi_sub to _counts to count occurrences of each Chinese character
     Passes updated df and hanzi_all to _granular_counts for grade-by-grade breakdown
 
     Parameters
     ----------
-    df : pd.DataFrame
-        all unique characters in HSK1 to HSK6
-
     hanzi_all : list
         all characters (with duplicates) found in text being analysed
 
@@ -119,7 +162,7 @@ def _get_counts(
         # Create DataFrame from counts dictionary
         counts_df = pd.DataFrame(list(counts.items()), columns=[variant, "Count"])
         # Merge on variant column
-        merged_df = pd.merge(df, counts_df, on=variant, how="left")
+        merged_df = pd.merge(HSK_HANZI, counts_df, on=variant, how="left")
 
     # hanzi_sub = tuple of (Simplified, Traditional) characters if variant unknown
     else:
@@ -139,7 +182,7 @@ def _get_counts(
         )
 
         # Merge variant counts separately
-        merged_df = pd.merge(df, simp_counts_df, on="Simplified", how="left")
+        merged_df = pd.merge(HSK_HANZI, simp_counts_df, on="Simplified", how="left")
         merged_df = pd.merge(merged_df, trad_counts_df, on="Traditional", how="left")
 
         # Create mask for rows with identical variants
@@ -163,7 +206,7 @@ def _get_counts(
     return counts, merged_df
 
 
-def _cumulative_counts(raw_counts: list[list[int]], grades: int) -> list[list[int]]:
+def _cumulative_counts(raw_counts: list[list[int]]) -> list[list[int]]:
     """
     Computes grade-level and cumulative statistics for hanzi occurrences
 
@@ -171,9 +214,6 @@ def _cumulative_counts(raw_counts: list[list[int]], grades: int) -> list[list[in
     ----------
     raw_counts : list
         hanzi counts by grade
-
-    grades : int
-        number of HSK grades being checked against
 
     Returns
     -------
@@ -186,7 +226,7 @@ def _cumulative_counts(raw_counts: list[list[int]], grades: int) -> list[list[in
         [raw_counts[1][0], raw_counts[1][1]],
     ]
     # Iterate through remaining levels to get iterative figures
-    for i in range(2, grades + 1):
+    for i in range(2, HSK_GRADES + 1):
         grade_unique = raw_counts[i][0]
         cumul_unique = grade_unique + cumulative_counts[i - 1][0]
 
@@ -199,7 +239,7 @@ def _cumulative_counts(raw_counts: list[list[int]], grades: int) -> list[list[in
 
 
 def _compute_stats(
-    raw_counts: list[list[int]], cumulative_counts: list[list[int]], grades: int
+    raw_counts: list[list[int]], cumulative_counts: list[list[int]]
 ) -> list[list]:
     """
     Computes grade-level and cumulative statistics for hanzi occurrences
@@ -222,7 +262,7 @@ def _compute_stats(
     """
     statistics = []
     # [grade, grade_unique, %, cum_unique, %, grade_count, %, cum_count, %]
-    for i in range(1, grades + 1):
+    for i in range(1, HSK_GRADES + 1):
         grade = str(i)
 
         grade_unique = raw_counts[i][0]
@@ -289,9 +329,7 @@ def _compute_stats(
     return statistics
 
 
-def get_stats(
-    df: pd.DataFrame, hanzi_all: list, hanzi_sub: list | tuple[list], variant: str
-):
+def get_stats(hanzi_all: list, hanzi_sub: list | tuple[list], variant: str):
     """
     Passes params to _get_counts() for grade_counts and merged_df with counts applied
     Passes grade_counts to _cumulative_counts() for cumulative_counts
@@ -300,9 +338,6 @@ def get_stats(
 
     Parameters
     ----------
-    df : pd.DataFrame
-        all unique characters in HSK1 to HSK6
-
     hanzi_all : list
         all characters (with duplicates) found in text being analysed
 
@@ -323,11 +358,11 @@ def get_stats(
         df with counts applied by _get_counts()
     """
     # Get count breakdown of hanzi content
-    grade_counts, hanzi_df = _get_counts(df, hanzi_all, hanzi_sub, variant)
+    grade_counts, hanzi_df = _get_counts(hanzi_all, hanzi_sub, variant)
     # Get cumulative counts ascending from HSK1 to HSK7-9
-    cumul_counts = _cumulative_counts(grade_counts, HSK_GRADES)
+    cumul_counts = _cumulative_counts(grade_counts)
     # Compute stats for grade counts and cumulative counts
-    stats = _compute_stats(grade_counts, cumul_counts, HSK_GRADES)
+    stats = _compute_stats(grade_counts, cumul_counts)
     # Create columns for output DataFrame
     cols = [
         "HSK\nGrade",
@@ -357,3 +392,79 @@ def get_stats(
     hanzi_df["HSK Grade"] = hanzi_df["HSK Grade"].replace("10+", "[10+]")
 
     return stats_df, hanzi_df
+
+
+def analyse_data(
+    hl: list, simplified: list, traditional: list
+) -> tuple[str | pd.DataFrame]:
+    """
+    Receives output of process_data
+    Gets character variant and statistical breakdowns
+        - number of unique characters and number of total characters
+          by grade, and cumulative figures for the entire content
+
+    Parameters
+    ----------
+    hl : list
+        all hanzi in the entire content
+
+    simplified : list
+        simplified HSK hanzi in hl
+
+    traditional : list
+        traditional HSK hanzi in hl
+
+    Returns
+    -------
+    variant : str
+        hanzi variant of the content
+
+    stats_dataframe : pd.DataFrame
+        stats for the content
+
+    hanzi_dataframe : pd.DataFrame
+        df with counts added
+    """
+    # Query character variant
+    variant = identify(simplified, traditional)
+    # Create mapping for analysis
+    variants = {
+        "Simplified": simplified,
+        "Traditional": traditional,
+        "Unknown": (simplified, traditional),
+    }
+    # Get statistical breakdown of hanzi content
+    stats_dataframe, hanzi_dataframe = get_stats(hl, variants[variant], variant)
+
+    return variant, stats_dataframe, hanzi_dataframe
+
+
+def analyse(hanzi_list, simp_list, trad_list, out_list):
+    # Get hanzi stats
+    variant, stats_df, hanzi_df = analyse_data(hanzi_list, simp_list, trad_list)
+
+    # Print stats to CLI
+    print(stats_df.to_markdown(index=False))
+
+    if variant == "Unknown":
+        print("Character set undefined - stats for reference only")
+    else:
+        print(f"{variant.title()} character set detected")
+
+    while True:
+        print(
+            "Select option:\n-> 'e' = see export options\n-> 'x' = exit to main screen\n"
+        )
+        command = input().upper()
+
+        if command == "X":
+            return  # Exit to main screen
+
+        if command == "E":
+            # Flag to break out of nested menus
+            exit_to_main = export_hanzi(
+                hanzi_df, stats_df, hanzi_list, out_list, variant
+            )
+
+            if exit_to_main:
+                return  # Exit to main screen

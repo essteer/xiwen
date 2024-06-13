@@ -1,7 +1,8 @@
 import csv
 import os
 import pandas as pd
-from .config import ENCODING, ENCODING_HANZI
+from .config import CUSTOM_EXPORT, ENCODING, ENCODING_HANZI, EXPORT_OPTIONS, PINYIN_PATH
+from .pinyin import map_pinyin, get_pinyin
 
 
 def export_to_csv(data: pd.DataFrame | list):
@@ -102,3 +103,66 @@ def custom_export(
 
         except AssertionError:
             print("Enter digits from 1 to 9 only")
+
+
+def export_hanzi(
+    zi_df: pd.DataFrame,
+    st_df: pd.DataFrame,
+    zi_list: list[str],
+    out_list: list[str],
+    var: str,
+) -> bool:
+    """
+    Interactive loop for export options
+    """
+    options = ["A", "C", "F", "O", "S", "X"]
+    while True:
+        print(EXPORT_OPTIONS)
+        command = input().upper()
+
+        if command not in options:  # Repeat options
+            continue
+
+        elif command == "X":  # Exit to main screen
+            return True
+
+        elif command == "F":  # Export full HSK hanzi data
+            export_to_csv(zi_df)
+
+        elif command == "S":  # Export stats for this content
+            export_to_csv(st_df)
+
+        elif command == "A":  # Export all unique HSK hanzi in text
+            hanzi_set = list(set(zi_list))  # filter zi_df with zi_list
+            if var == "Simplified":
+                filtered_df = zi_df[zi_df["Simplified"].isin(hanzi_set)]
+            else:
+                # If traditional or unknown, export based on traditional
+                filtered_df = zi_df[zi_df["Traditional"].isin(hanzi_set)]
+            export_to_csv(filtered_df)
+
+        elif command == "O":  # Export outliers (non-HSK hanzi) in text
+            # Map characters to accented pinyin
+            pinyin_map = map_pinyin(PINYIN_PATH)
+            # Get list of unique outlier hanzi
+            outliers = list(set(out_list))
+            # Get pinyin for outlier hanzi
+            recognised_outliers, outliers_pinyin = get_pinyin(outliers, pinyin_map)
+            # Create DataFrame of outlier hanzi, unicode, and pinyin
+            outliers_df = pd.DataFrame(
+                {
+                    "Hanzi": recognised_outliers,
+                    "Unicode": [ord(hanzi) for hanzi in recognised_outliers],
+                    "Pinyin": outliers_pinyin,
+                }
+            )
+            # Sort DataFrame on Unicode value
+            outliers_df = outliers_df.sort_values(by="Unicode")
+            # Export outliers
+            export_to_csv(outliers_df)
+
+        elif command == "C":
+            print(CUSTOM_EXPORT)
+            # Pass to custom export options
+            unique_hanzi = list(set(zi_list))
+            custom_export(unique_hanzi, zi_df, var)

@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from masquer import masq
 
 
-def get_html(url: str) -> BeautifulSoup | None:
+def get_html(url: str) -> BeautifulSoup:
     """
     Extracts HTML from a user-provided URL
 
@@ -15,9 +15,8 @@ def get_html(url: str) -> BeautifulSoup | None:
 
     Returns
     -------
-    html : str | None
-        HTML extracted from url, or
-        None if HTML extract fails
+    html : BeautifulSoup
+        HTML extracted from URL
     """
     # Make request and catch response errors and retry
     for i in range(3):
