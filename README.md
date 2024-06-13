@@ -98,21 +98,18 @@ $ uv pip install -r requirements.txt
 
 [![](https://img.shields.io/badge/GitHub-xiwen-181717.svg?flat&logo=GitHub&logoColor=white)](https://github.com/essteer/xiwen)
 
-Run `xiwen/app.py` from the `src` directory to launch, and follow the instructions as prompted:
+Run `xiwen/interface.py` from the `src` directory to launch the CLI program.
 
-- enter `d` for a demo
-- enter `u` to scan a URL.
+`resources/main.py` makes use of datasets in `resources/assets` to pair simplified and traditional character sets with their pinyin, HSK grades, and character frequencies as identified in the MTSU dataset.
 
-`file_prep/main.py` makes use of datasets in `file_prep/assets` to pair simplified and traditional character sets with their pinyin, HSK grades, and character frequencies as identified in the MTSU dataset.
+Xiwen relies on a Parquet file produced from those resources and located at `xiwen/assets`. This file can be replaced as needed — update the file name loaded in `xiwen/app.py` to make use of a custom file.
 
-The datasets Xiwen relies on are included in `xiwen/assets`. They're set up and ready to go out of the box, but you can run your own character lists through `file_prep/main.py` if needed to create custom lists.
-
-`xiwen/app.py` is the interactive component. It receives user input and makes function calls to modules in `xiwen/utils`. Those files handle data input then make calls to `xiwen/utils/hanzi.py` to:
+`xiwen/interface.py` is the interactive component of the CLI version of Xiwen. It receives user input and makes function calls to modules in `xiwen/utils`. Those files form the program's ETL pipeline including the following functions:
 
 - break down text into individual hanzi (`filter_text()`)
 - sort hanzi as HSK-level simplified or traditional hanzi, or outliers (`partition_hanzi()`)
-- determine the overall character variant of the text as simplified or traditional, or a mix (`identify()`)
-- compute the grade-based and cumulative numbers of unique hanzi and total hanzi in the text (`get_stats()`)
+- determine the overall character variant of the text as simplified or traditional, or a mix (`identify_variant()`)
+- compute the grade-based and cumulative numbers of unique hanzi and total hanzi in the text (`analyse()`)
 
 Character sets can then be exported to .csv.
 

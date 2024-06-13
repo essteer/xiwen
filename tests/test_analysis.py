@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import unittest
-from src.xiwen.utils.analysis import _counts, identify
+from src.xiwen.utils.analysis import identify_variant
 from src.xiwen.utils.config import ENCODING
 from src.xiwen.utils.extract import filter_text
 from src.xiwen.utils.transform import partition_hanzi
@@ -33,30 +33,7 @@ TEST_CASES = {
 }
 
 
-class TestCounts(unittest.TestCase):
-    def test_counts(self):
-        """Test counts match across character variants"""
-        hanzi = ["爱", "气", "爱", "气", "车", "爱", "气", "车", "愛", "氣", "車"]
-        test = {"爱": 3, "气": 3, "车": 2, "愛": 1, "氣": 1, "車": 1}
-        self.assertEqual(_counts(hanzi), test)
-
-
-# class TestGetCounts(unittest.TestCase):
-#     def test_get_counts(self):
-#         """Test counts DataFrame"""
-#         all = ["爱", "八", "爸", "杯", "子", "愛", "八", "爸", "杯", "子"]
-#         simp = ["爱", "八", "爸", "杯", "子"]
-#         trad = ["愛", "八", "爸", "杯", "子"]
-#         df_data = {
-#             "Simplified": ["爱", "八", "爸", "杯", "子"],
-#             "Traditional": ["愛", "八", "爸", "杯", "子"],
-#         }
-#         df = pd.DataFrame(df_data)
-#         results = _get_counts(df, all, (simp, trad), "Unknown")
-#         print(results)
-
-
-class TestIdentify(unittest.TestCase):
+class TestIdentify_variant(unittest.TestCase):
     def test_on_threshold(self):
         """Test variants on 90% threshold"""
         # 90% simp, 5% trad, 5% neutral
@@ -82,7 +59,7 @@ class TestIdentify(unittest.TestCase):
             "燚",
         ]
         trad05neut05 = ["漢", "燚"]
-        self.assertEqual(identify(simp90neut05, trad05neut05), "Simplified")
+        self.assertEqual(identify_variant(simp90neut05, trad05neut05), "Simplified")
         # 90% trad, 5% simp, 5% neutral
         simp05neut05 = ["汉", "燚"]
         trad90neut05 = [
@@ -106,15 +83,15 @@ class TestIdentify(unittest.TestCase):
             "個",
             "燚",
         ]
-        self.assertEqual(identify(simp05neut05, trad90neut05), "Traditional")
+        self.assertEqual(identify_variant(simp05neut05, trad90neut05), "Traditional")
         # 90% simp, 10% trad
         simp90 = ["爱", "气", "车", "电", "话", "点", "脑", "视", "东"]
         trad10 = ["漢"]
-        self.assertEqual(identify(simp90, trad10), "Simplified")
+        self.assertEqual(identify_variant(simp90, trad10), "Simplified")
         # 90% trad, 10% simp
         simp10 = ["汉"]
         trad90 = ["愛", "氣", "車", "電", "話", "點", "腦", "視", "東"]
-        self.assertEqual(identify(simp10, trad90), "Traditional")
+        self.assertEqual(identify_variant(simp10, trad90), "Traditional")
 
     def test_below_threshold(self):
         """Test variants under 90% threshold"""
@@ -211,7 +188,7 @@ class TestIdentify(unittest.TestCase):
             "雲",
             "讚",
         ]
-        self.assertEqual(identify(simp11, trad89), "Unknown")
+        self.assertEqual(identify_variant(simp11, trad89), "Unknown")
         # 89% simp, 11% trad
         simp89 = [
             "当",
@@ -305,14 +282,14 @@ class TestIdentify(unittest.TestCase):
             "马",
         ]
         trad11 = ["愛", "氣", "車", "電", "話", "點", "腦", "視", "東", "讀", "對"]
-        self.assertEqual(identify(simp89, trad11), "Unknown")
+        self.assertEqual(identify_variant(simp89, trad11), "Unknown")
 
     def test_balanced(self):
         """Test balanced and empty text"""
         # 0% trad, 0% simp
         simp00 = []
         trad00 = []
-        self.assertEqual(identify(simp00, trad00), "Unknown")
+        self.assertEqual(identify_variant(simp00, trad00), "Unknown")
         # 50% trad,50% simp
         simp50 = [
             "愛",
@@ -358,7 +335,7 @@ class TestIdentify(unittest.TestCase):
             "漢",
             "號",
         ]
-        self.assertEqual(identify(simp50, trad50), "Unknown")
+        self.assertEqual(identify_variant(simp50, trad50), "Unknown")
 
     def test_known_figures(self):
         """Test figures match for known quantities"""
@@ -376,4 +353,4 @@ class TestIdentify(unittest.TestCase):
             # Divide into groups (with duplicates)
             simp, trad, outliers = partition_hanzi(hanzi)
             # Check identified character variant
-            self.assertEqual(identify(simp, trad), TEST_CASES[test_case][0])
+            self.assertEqual(identify_variant(simp, trad), TEST_CASES[test_case][0])

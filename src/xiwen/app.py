@@ -1,37 +1,38 @@
-import random
-from utils.config import DEMO_MESSAGE, DEMO1, DEMO2, MAIN_MENU_OPTIONS, WELCOME_MESSAGE
+import os
+import pandas as pd
+from utils.analysis import analyse
+from utils.config import ASSETS_DIR
 from utils.extract import get_hanzi
 from utils.transform import partition_hanzi
-from utils.analysis import analyse
+
+# Load HSK Hanzi database (unigrams only)
+HSK_HANZI = pd.read_parquet(os.path.join(ASSETS_DIR, "hsk30_hanzi.parquet"))
+# Replace HSK7-9 with 7 and convert grades to ints for iteration
+HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].replace("7-9", 7)
+HSK_HANZI["HSK Grade"] = HSK_HANZI["HSK Grade"].astype(int)
+HSK_SIMP = list(HSK_HANZI["Simplified"])
+HSK_TRAD = list(HSK_HANZI["Traditional"])
 
 
-def xiwen():
+def coordinator(target: str, terminal: bool = False):
     """
-    Main menu loop
-    Prompts user for URL to scan
+    Handles calls throughout pipeline
+
+    Parameters
+    ----------
+    target : str
+        URL to extract HTML from
     """
-    print(WELCOME_MESSAGE)
-    while True:
-        # Main menu - get URL from user
-        target = input(MAIN_MENU_OPTIONS)
+    # Run URL
+    hanzi_list = get_hanzi(target)
 
-        if target.upper() == "Q":  # Quit
-            break
+    if hanzi_list:
+        # Divide into groups (with duplicates)
+        simp, trad, outl = partition_hanzi(hanzi_list, HSK_SIMP, HSK_TRAD)
 
-        if target == "":  # Demo simplified or traditional characters
-            target = random.choice([DEMO1, DEMO2])
-            # Explainer
-            print(DEMO_MESSAGE)
+        if simp or trad or outl:
+            # Get info about character set
+            variant, stats_df, hanzi_df = analyse(hanzi_list, simp, trad, HSK_HANZI)
 
-        # Run URL
-        hanzi_list = get_hanzi(target)
-        if hanzi_list:
-            # Divide into groups (with duplicates)
-            simplified, traditional, outliers = partition_hanzi(hanzi_list)
-
-            if simplified or traditional or outliers:
-                analyse(hanzi_list, simplified, traditional, outliers)
-
-
-if __name__ == "__main__":
-    xiwen()
+            if terminal and variant:
+                return hanzi_df, stats_df, hanzi_list, outl, variant

@@ -15,18 +15,6 @@ def map_pinyin(filepath: str) -> dict:
     return hanzi_pinyin_dict
 
 
-def special_cases(hanzi: str) -> str | bool:
-    """
-    Polytonal characters
-    Convention is to record these as main tone
-    """
-    exceptions = {"一": "yī", "不": "bù"}
-    try:
-        return exceptions[hanzi]
-    except KeyError:
-        return False
-
-
 def get_pinyin(hanzi: list[str], hanzi_pinyin_dict: dict[str:str]) -> tuple[list[str]]:
     """
     Takes traditional characters from n-grams
@@ -58,6 +46,6 @@ def get_pinyin(hanzi: list[str], hanzi_pinyin_dict: dict[str:str]) -> tuple[list
             matched_hanzi.append(zi)
 
         except KeyError:
-            print(f"{zi} not found in pinyin dict")
+            continue
 
     return matched_hanzi, pinyin_list

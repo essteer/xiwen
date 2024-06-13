@@ -7,8 +7,7 @@ from .pinyin import map_pinyin, get_pinyin
 
 def export_to_csv(data: pd.DataFrame | list):
     """
-    Opens a Tkinter dialog to select a file save location
-    If location selected, saves Pandas DataFrame or list to .csv
+    Saves dataframes to CSV
 
     Parameters
     ----------
@@ -60,7 +59,7 @@ def custom_export(
         character variant of text
     """
     while True:
-        selection = input("Enter HSK Grades or X to exit: ")
+        selection = input("Enter HSK Grades (x to exit): ")
 
         if selection.upper() == "X":
             break
@@ -91,7 +90,7 @@ def custom_export(
 
             # Confirm selection before export
             while True:
-                print("Proceed to export? Enter y/n: ")
+                print("Proceed y/n?: ")
                 command = input().upper()
                 if command not in ["Y", "N"]:
                     continue

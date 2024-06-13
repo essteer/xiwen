@@ -11,7 +11,7 @@ ENCODING = "utf-8"
 ENCODING_HANZI = "utf_8_sig"
 HSK_GRADES = 7
 
-RAW_DATA = os.path.join(os.getcwd(), "file_prep", "assets")
+RAW_DATA = os.path.join(os.getcwd(), "src", "file_prep", "assets")
 HSK_PATH = os.path.join(RAW_DATA, "hsk30-chars-ext.csv")
 FREQ_PATH = os.path.join(RAW_DATA, "CharFreq-Modern-utf8.csv")
 PINYIN_PATH = os.path.join(RAW_DATA, "hanzi_pinyin_characters.tsv.txt")
@@ -38,12 +38,12 @@ DEMO_MESSAGE = """
 """
 
 EXPORT_OPTIONS = """
-"Select an option to export to .csv:
--> 'a' = export all detected HSK hanzi (excludes outliers)
--> 'c' = export custom HSK hanzi selection
--> 'f' = export full HSK hanzi list
--> 'o' = export detected outliers (non-HSK hanzi)
--> 's' = export stats
+CSV export options:
+-> 'a' = all detected HSK hanzi (excludes outliers)
+-> 'c' = custom HSK hanzi selection
+-> 'f' = full HSK hanzi list
+-> 'o' = outliers (non-HSK hanzi)
+-> 's' = stats
 -> 'x' = exit to main screen
 """
 
@@ -52,3 +52,15 @@ Custom export:
 Enter the HSK grade(s) to export in any order
 -> e.g. to export HSK2 and HSK5 enter '25' or '52'
 """
+
+STATS_COLUMNS = [
+    "HSK\nGrade",
+    "No.\nHanzi\n(Unique)",
+    "% of\nTotal\nUnique",
+    "Cumul.\nUnique",
+    "% of\nCumul.\nUnique",
+    "No.\nHanzi\n(Count)",
+    "% of\nTotal",
+    "Cumul.\nCount",
+    "% of\nCumul\nCount",
+]
