@@ -26,7 +26,7 @@ six==1.16.0
     # via python-dateutil
 soupsieve==2.5
     # via beautifulsoup4
-tqdm==4.66.2
+tqdm==4.66.3
     # via xiwen (pyproject.toml)
 tzdata==2024.1
     # via pandas
