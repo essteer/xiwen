@@ -1,17 +1,26 @@
-# Xiwen 析文
+<h1 align="center">Xiwen 析文</h1>
 
-[![Python - Version](https://img.shields.io/badge/Python-3.9_|_3.10_|_3.11_|_3.12-3776AB.svg?style=flat&logo=Python&logoColor=white)](https://pypi.org/project/masquer/)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+<p align="center">
+  <a href="https://github.com/essteer/xiwen"><img src="https://img.shields.io/badge/Python-3.9_|_3.10_|_3.11_|_3.12-3776AB.svg?style=flat&logo=Python&logoColor=white"></a>
+  <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json"></a>
+  <a href="https://snyk.io/test/github/essteer/xiwen"><img src="https://snyk.io/test/github/essteer/xiwen/badge.svg?name=Snyk&style=flat&logo=Snyk"></a>
+</p>
 
-Xiwen is a CLI tool that scans files and HTML for Chinese characters (hanzi), and:
+<p align="center">
+A tool to scan HTML for Chinese characters.
+</p>
 
-- identifies the character variant (simplified or traditional)
-- analyses the content by HSK grade
-- exports character sets for further use
+## Overview 
 
-The analysis describes the percentage of the content covered by each HSK grade (see below), and character lists can be exported for any combination of those levels, or more advanced hanzi not included in the grades.
+Use Xiwen to scan content for Chinese characters — hanzi — and:
 
-Data exports provide the hanzi by HSK grade in traditional and simplified Chinese, their pinyin, count within the text, and character frequency.
+- analyse the content by HSK grade
+- identify character variants
+- export character sets for further use
+
+The analysis describes the breakdown by HSK grade (see below) and character lists can be exported for any combination of those levels, or less common hanzi beyond the HSK grades.
+
+Data exports provide hanzi by HSK grade in traditional and simplified Chinese, their pinyin, count within the text, and character frequency.
 
 ## Who this is for
 
@@ -21,9 +30,9 @@ Instructors can use it to assess the suitability of reading materials for their 
 
 ## HSK
 
-HSK (Hanyu Shuiping Kaoshi 汉语水平考试) is a series of examinations designed to test Chinese language proficiency in simplified Chinese.
+HSK — Hanyu Shuiping Kaoshi 汉语水平考试 — is a series of examinations designed to test Chinese language proficiency in simplified Chinese.
 
-In its latest form the HSK consists of nine levels, and covers 3,000 simplified hanzi and 11,092 vocabulary items. The advanced levels (seven to nine) share 1,200 hanzi that are tested together.
+In its latest form the HSK consists of nine levels, and covers 3,000 simplified hanzi and 11,092 vocabulary items. The advanced levels — seven to nine — share 1,200 hanzi that are tested together.
 
 To approximate a traditional hanzi version of the HSK, Xiwen maps the HSK hanzi to traditional Chinese equivalents. In most cases this is a one-to-one conversion, but in several cases there are two or more traditional hanzi that reflect distinct meanings of the single simplified character.
 
@@ -38,7 +47,7 @@ Or even:
 - "只": ["只", "衹", "隻"]
 - "台": ["台", "檯", "臺", "颱"]
 
-A list of these "polymaps" - not all of which relate to hanzi in the HSK - can be found in the Wikipedia article [Ambiguious character mappings](https://en.wikipedia.org/wiki/Ambiguities_in_Chinese_character_simplification).
+A list of these "polymaps" — not all of which relate to hanzi in the HSK — can be found in the Wikipedia article [Ambiguous character mappings](https://en.wikipedia.org/wiki/Ambiguities_in_Chinese_character_simplification).
 
 This approach isn't perfect: obscure definitions implied by a distinct traditional hanzi may be far less frequent than the common conversion of a simplified hanzi.
 
@@ -56,43 +65,51 @@ The table below lists the number of simplified hanzi per grade, and the number o
 
 ## Installation
 
+### GitHub repo
+
+[![](https://img.shields.io/badge/GitHub-xiwen-181717.svg?flat&logo=GitHub&logoColor=white)](https://github.com/essteer/xiwen)
+
+Clone the `xiwen` repo from GitHub for the full source code. The repo includes the CSV and text files used to generate the character lists and a test suite.
+
+```console
+$ git clone git@github.com:essteer/xiwen
+```
+
+Change into the `xiwen` directory then create and activate a virtual environment — the below example uses [Astral's](https://astral.sh/blog/uv) `uv`; substitute `pip` or use another package manager as needed — then install the `dev` dependencies:
+
 ![](https://img.shields.io/badge/Linux-FCC624.svg?style=flat&logo=Linux&logoColor=black)
 ![](https://img.shields.io/badge/macOS-000000.svg?style=flat&logo=Apple&logoColor=white)
 
 ```console
-$ git clone git@github.com:essteer/xiwen.git
-$ python -m venv venv
-$ source venv/bin/activate
-$ pip install -r requirements.txt
+$ uv venv
+$ source .venv/bin/activate
+$ uv pip install -r requirements.txt
 ```
 
 ![](https://img.shields.io/badge/Windows-0078D4.svg?style=flat&logo=Windows&logoColor=white)
 
 ```console
-$ git clone git@github.com:essteer/xiwen.git
-$ python -m venv venv
-$ venv\Scripts\activate
-$ pip install -r requirements.txt
+$ uv venv
+$ .venv\Scripts\activate
+$ uv pip install -r requirements.txt
 ```
 
 ## Operation
 
-Run `src/interface.py` from the virtual environment to launch, and follow the instructions as prompted:
+[![](https://img.shields.io/badge/GitHub-xiwen-181717.svg?flat&logo=GitHub&logoColor=white)](https://github.com/essteer/xiwen)
 
-- enter `D` for a demo
-- enter `S` to select a file on your device to process (.csv, .pdf, .tsv or .txt), or
-- enter `U` to scan a URL.
+Run `xiwen/interface.py` from the `src` directory to launch the CLI program.
 
-`src/prep.py` makes use of datasets in `data/input` to pair simplified and traditional character sets with their pinyin, HSK grades, and character frequencies as identified in the MTSU dataset.
+`resources/main.py` makes use of datasets in `resources/assets` to pair simplified and traditional character sets with their pinyin, HSK grades, and character frequencies as identified in the MTSU dataset.
 
-The datasets needed to run Xiwen are included in the `data` folder. They're set up and ready to go out of the box, but you can run your own character lists through `prep.py` if needed.
+Xiwen relies on a Parquet file produced from those resources and located at `xiwen/assets`. This file can be replaced as needed — update the file name loaded in `xiwen/app.py` to make use of a custom file.
 
-`src/interface.py` is the interactive component. It receives your input and makes calls to functions in `src/utils/data_funcs.py`, `src/utils/dialog_funcs.py`, and `src/utils/extract_loop.py`. Those files handle file dialogs and data input, then make calls to `src/utils/hanzi_funcs.py` to:
+`xiwen/interface.py` is the interactive component of the CLI version of Xiwen. It receives user input and makes function calls to modules in `xiwen/utils`. Those files form the program's ETL pipeline including the following functions:
 
 - break down text into individual hanzi (`filter_text()`)
 - sort hanzi as HSK-level simplified or traditional hanzi, or outliers (`partition_hanzi()`)
-- determine the overall character variant of the text as simplified or traditional, or a mix (`identify()`)
-- compute the grade-based and cumulative numbers of unique hanzi and total hanzi in the text (`get_stats()`)
+- determine the overall character variant of the text as simplified or traditional, or a mix (`identify_variant()`)
+- compute the grade-based and cumulative numbers of unique hanzi and total hanzi in the text (`analyse()`)
 
 Character sets can then be exported to .csv.
 
@@ -100,17 +117,12 @@ Character sets can then be exported to .csv.
 
 This repo makes use of datasets of HSK vocabulary and character frequency lists in the public domain as indicated below - credit goes to those involved in their creation and distribution.
 
-Hanyu Shuiping Kaoshi (HSK) 3.0 character list:
-"hsk30-chars.csv", [hsk30](https://github.com/ivankra/hsk30), ivankra, GitHub
+- Hanyu Shuiping Kaoshi (HSK) 3.0 character list: "hsk30-chars.csv", [hsk30](https://github.com/ivankra/hsk30), ivankra, GitHub
 
-Character frequency list:
-"CharFreq-Modern.csv", Da, Jun. 2004, [Chinese text computing](http://lingua.mtsu.edu/chinese-computing), Middle Tennessee State University
+- Character frequency list: "CharFreq-Modern.csv", Da, Jun. 2004, [Chinese text computing](http://lingua.mtsu.edu/chinese-computing), Middle Tennessee State University
 
-Multiple character mappings:
-"[Ambiguious character mappings](https://en.wikipedia.org/wiki/Ambiguities_in_Chinese_character_simplification)", Wikipedia
+- Multiple character mappings: "[Ambiguous character mappings](https://en.wikipedia.org/wiki/Ambiguities_in_Chinese_character_simplification)", Wikipedia
 
-Simplified character set demo:
-"[Folding Beijing](https://web.archive.org/web/20160822161228/http://jessica-hjf.blog.163.com/blog/static/278128102015240444791/)" 《北京折叠》, Hao Jingfang 郝景芳, 2012
+- Simplified character set demo: "[Folding Beijing](https://web.archive.org/web/20160822161228/http://jessica-hjf.blog.163.com/blog/static/278128102015240444791/)" 《北京折叠》, Hao Jingfang 郝景芳, 2012
 
-Traditional character set demo:
-"Tao Te Ching" 《道德經》, Lao Tzu 老子, 400BC
+- Traditional character set demo: "Tao Te Ching" 《道德經》, Lao Tzu 老子, 400BC

@@ -1,6 +1,6 @@
 import pandas as pd
 from tqdm import tqdm
-from xiwen.config import (
+from xiwen.utils.config import (
     ASSETS_DIR,
     ENCODING,
     ENCODING_HANZI,
@@ -17,7 +17,7 @@ vocab_dict = {}
 simp_chars, trad_chars = set(), set()
 
 # Get mapping of characters to accented pinyin
-pinyin_map = map_pinyin(PINYIN_PATH, ENCODING)
+pinyin_map = map_pinyin(PINYIN_PATH)
 
 ##########################################################################
 # Extract HSK dataset to DataFrame

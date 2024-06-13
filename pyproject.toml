@@ -8,16 +8,13 @@ dependencies = [
     "masquer>=1.1.0",
     "numpy>=1.26.2",
     "pandas>=2.2.1",
-    "pre-commit==3.7.0",
-    "pypdf>=3.17.1",
-    "requests>=2.31.0",
-    "ruff>=0.4.5",
+    "requests>=2.32.3",
     "tqdm>=4.66.1",
 ]
 requires-python = ">=3.9"
 license = { file = "LICENSE" }
 readme = "README.md"
-keywords = ["CLI", "Chinese", "text"]
+keywords = ["Chinese", "web scraping"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Operating System :: OS Independent",
@@ -29,6 +26,12 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit==3.7.0",
+    "ruff>=0.4.5",
 ]
 
 [project.urls]
