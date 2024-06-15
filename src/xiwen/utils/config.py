@@ -1,7 +1,9 @@
 import os
 import polars as pl
 
-ASSETS_DIR = os.path.join(os.getcwd(), "src", "xiwen", "assets")
+
+ASSETS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets")
+# ASSETS_DIR = os.path.join(os.getcwd(), "src", "xiwen", "assets")
 # Test case (simplified hanzi)
 DEMO1 = "https://www.xuan-zang.com/bjzd"
 # Test case (traditional hanzi)
@@ -13,10 +15,12 @@ ENCODING_HANZI = "utf_8_sig"
 
 HSK_GRADES = 7
 
-RAW_DATA = os.path.join(os.getcwd(), "src", "resources", "assets")
+RAW_DATA = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "..", "resources", "assets"
+)
 HSK_PATH = os.path.join(RAW_DATA, "hsk30-chars-ext.csv")
 FREQ_PATH = os.path.join(RAW_DATA, "CharFreq-Modern-utf8.csv")
-PINYIN_PATH = os.path.join(RAW_DATA, "hanzi_pinyin_characters.tsv.txt")
+PINYIN_PATH = os.path.join(ASSETS_DIR, "hanzi_pinyin_characters.tsv.txt")
 
 WELCOME_MESSAGE = """
 Welcome to Xiwen 析文

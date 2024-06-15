@@ -1,10 +1,6 @@
-import os
 import unittest
 from src.xiwen.utils.pinyin import get_pinyin, map_pinyin
 
-PINYIN_PATH = os.path.join(
-    os.getcwd(), "src", "resources", "assets", "hanzi_pinyin_characters.tsv.txt"
-)
 
 SIMP_HANZI_TO_PINYIN = {
     "爱": "ài",
@@ -257,7 +253,7 @@ class TestGetPinyin(unittest.TestCase):
 class TestMapPinyin(unittest.TestCase):
     def test_map_pinyin(self):
         """Test hanzi pinyin map loads correctly"""
-        hanzi_to_pinyin_dict = map_pinyin(PINYIN_PATH)
+        hanzi_to_pinyin_dict = map_pinyin()
         self.assertEqual(len(hanzi_to_pinyin_dict), 41209)
 
 

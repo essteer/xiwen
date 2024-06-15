@@ -1,6 +1,6 @@
 import os
 import polars as pl
-from .config import CUSTOM_EXPORT, EXPORT_OPTIONS, PINYIN_PATH
+from .config import ASSETS_DIR, CUSTOM_EXPORT, EXPORT_OPTIONS
 from .pinyin import map_pinyin, get_pinyin
 
 
@@ -14,13 +14,13 @@ def export_to_csv(data: pl.DataFrame | list) -> None:
         data to be saved
     """
     filename = input("Enter file name: ")
-    save_dir = os.path.join(os.getcwd(), "src", "saved")
+    save_dir = ASSETS_DIR
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
     filename = filename.split(".")[0]
     filename = filename + ".csv"
-    filename = os.path.join(save_dir, filename)
+    filename = os.path.join(ASSETS_DIR, filename)
 
     data.write_csv(filename)
     print(f"Exported to {filename}")
@@ -133,7 +133,7 @@ def export_hanzi(
 
         elif command == "O":  # Export outliers (non-HSK hanzi) in text
             # Map characters to accented pinyin
-            pinyin_map = map_pinyin(PINYIN_PATH)
+            pinyin_map = map_pinyin()
             # Get list of unique outlier hanzi
             outliers = list(set(outliers_list))
             # Get pinyin for outlier hanzi

@@ -5,7 +5,7 @@ from utils.config import DEMO_MESSAGE, DEMO1, DEMO2, MAIN_MENU_OPTIONS, WELCOME_
 from utils.export import export_hanzi
 
 
-def xiwen():
+def xw():
     """
     Main menu loop for CLI program
     Prompts user for URL to scan
@@ -50,4 +50,4 @@ def xiwen():
 
 
 if __name__ == "__main__":
-    xiwen()
+    xw()

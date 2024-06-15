@@ -1,13 +1,13 @@
-from .config import ENCODING
+from .config import ENCODING, PINYIN_PATH
 
 
-def map_pinyin(filepath: str) -> dict:
+def map_pinyin() -> dict:
     """
     Returns a dictionary mapping Chinese characters to pinyin
     """
     hanzi_pinyin_dict = dict()
 
-    with open(filepath, "r", encoding=ENCODING) as f:
+    with open(PINYIN_PATH, "r", encoding=ENCODING) as f:
         for line in f:
             key, value = line.strip().split()
             hanzi_pinyin_dict[key] = value
