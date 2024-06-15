@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/essteer/xiwen/actions/workflows/test.yaml"><img src="https://github.com/essteer/xiwen/actions/workflows/test.yaml/badge.svg"></a>
-  <a href="https://github.com/essteer/xiwen"><img src="https://img.shields.io/badge/Python-3.9_|_3.10_|_3.11_|_3.12-3776AB.svg?style=flat&logo=Python&logoColor=white"></a>
+  <a href="https://github.com/essteer/xiwen"><img src="https://img.shields.io/badge/Python-3.10_|_3.11_|_3.12-3776AB.svg?style=flat&logo=Python&logoColor=white"></a>
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json"></a>
   <a href="https://snyk.io/test/github/essteer/xiwen"><img src="https://snyk.io/test/github/essteer/xiwen/badge.svg?name=Snyk&style=flat&logo=Snyk"></a>
 </p>
