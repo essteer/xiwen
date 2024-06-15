@@ -1,15 +1,14 @@
 [project]
 name = "Xiwen"
 dynamic = ["version"]
-description = "CLI tool for Chinese character analysis and text processing"
+description = "A tool to scan HTML for Chinese characters"
 authors = [{ name = "Elliott Steer", email = "essteer@pm.me" }]
 dependencies = [
-    "beautifulsoup4>=4.12.2",
-    "masquer>=1.1.0",
-    "numpy>=1.26.2",
-    "pandas>=2.2.1",
+    "beautifulsoup4>=4.12.3",
+    "masquer>=1.1.1",
+    "polars==0.20.31",
     "requests>=2.32.3",
-    "tqdm>=4.66.1",
+    "tqdm==4.66.2",
 ]
 requires-python = ">=3.9"
 license = { file = "LICENSE" }

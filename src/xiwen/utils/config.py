@@ -1,4 +1,5 @@
 import os
+import polars as pl
 
 ASSETS_DIR = os.path.join(os.getcwd(), "src", "xiwen", "assets")
 # Test case (simplified hanzi)
@@ -9,9 +10,10 @@ DEMO2 = "https://www.xuan-zang.com/ttc"
 ENCODING = "utf-8"
 # Encoding used to force .csv files to adopt utf-8 from Pandas DataFrame
 ENCODING_HANZI = "utf_8_sig"
+
 HSK_GRADES = 7
 
-RAW_DATA = os.path.join(os.getcwd(), "src", "file_prep", "assets")
+RAW_DATA = os.path.join(os.getcwd(), "src", "resources", "assets")
 HSK_PATH = os.path.join(RAW_DATA, "hsk30-chars-ext.csv")
 FREQ_PATH = os.path.join(RAW_DATA, "CharFreq-Modern-utf8.csv")
 PINYIN_PATH = os.path.join(RAW_DATA, "hanzi_pinyin_characters.tsv.txt")
@@ -22,7 +24,7 @@ Xiwen scans text for traditional 繁體 and simplified 简体
 Chinese characters (hanzi) to compare against HSK grades 1 to 9.
 Load a file or choose a URL, and Xiwen will output a grade-by-grade
 breakdown of the hanzi in the text.
-Export hanzi for further use - including hanzi not in the HSK.
+Export hanzi for further use — including hanzi not in the HSK.
 """
 
 MAIN_MENU_OPTIONS = "Enter URL (q: quit, blank: demo): "
@@ -38,7 +40,7 @@ DEMO_MESSAGE = """
 """
 
 EXPORT_OPTIONS = """
-CSV export options:
+CSV export options
 -> 'a' = all detected HSK hanzi (excludes outliers)
 -> 'c' = custom HSK hanzi selection
 -> 'f' = full HSK hanzi list
@@ -53,14 +55,26 @@ Enter the HSK grade(s) to export in any order
 -> e.g. to export HSK2 and HSK5 enter '25' or '52'
 """
 
-STATS_COLUMNS = [
-    "HSK\nGrade",
-    "No.\nHanzi\n(Unique)",
-    "% of\nTotal\nUnique",
-    "Cumul.\nUnique",
-    "% of\nCumul.\nUnique",
-    "No.\nHanzi\n(Count)",
-    "% of\nTotal",
-    "Cumul.\nCount",
-    "% of\nCumul\nCount",
-]
+HSK30_HANZI_SCHEMA = {
+    "Simplified": pl.Utf8,
+    "Unicode (Simp.)": pl.Int32,
+    "Traditional": pl.Utf8,
+    "Unicode (Trad.)": pl.Int32,
+    "Pinyin": pl.Utf8,
+    "HSK Grade": pl.Int8,
+    "JD Rank": pl.Int16,
+    "JD Frequency": pl.Int32,
+    "JD Percentile": pl.Float64,
+}
+
+STATS_COLUMNS = {
+    "HSK\nGrade": pl.Int8,
+    "No. Hanzi\n(Unique)": pl.Int32,
+    "% of\nTotal\nUnique": pl.Float64,
+    "Cumul.\nUnique": pl.Int32,
+    "% of\nCumul.\nUnique": pl.Float64,
+    "No. Hanzi\n(Count)": pl.Int32,
+    "% of\nTotal": pl.Float64,
+    "Cumul.\nCount": pl.Int32,
+    "% of\nCumul.\nCount": pl.Float64,
+}

@@ -12,7 +12,7 @@ A tool to scan HTML for Chinese characters.
 
 ## Overview 
 
-Use Xiwen to scan content for Chinese characters — hanzi — and:
+Use Xiwen to scan websites for Chinese characters — hanzi — and:
 
 - analyse the content by HSK grade
 - identify character variants
