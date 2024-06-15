@@ -1,5 +1,5 @@
 import os
-import pandas as pd
+import polars as pl
 import unittest
 from src.xiwen.utils.analysis import identify_variant
 from src.xiwen.utils.config import ENCODING
@@ -9,9 +9,9 @@ from src.xiwen.utils.transform import partition_hanzi
 
 TEST_ASSETS = os.path.abspath(os.path.join("tests", "assets"))
 # Combine script directory with relative path to the file
-filepath = os.path.join("src", "xiwen", "assets", "hsk30_hanzi.csv")
+filepath = os.path.join("src", "xiwen", "assets", "hsk30_hanzi.parquet")
 # Load HSK Hanzi database (unigrams only)
-HSK_HANZI = pd.read_csv(filepath)
+HSK_HANZI = pl.read_parquet(filepath)
 HSK_SIMP = list(HSK_HANZI["Simplified"])
 HSK_TRAD = list(HSK_HANZI["Traditional"])
 
@@ -354,3 +354,7 @@ class TestIdentify_variant(unittest.TestCase):
             simp, trad, outliers = partition_hanzi(hanzi)
             # Check identified character variant
             self.assertEqual(identify_variant(simp, trad), TEST_CASES[test_case][0])
+
+
+if __name__ == "__main__":
+    unittest.main()
