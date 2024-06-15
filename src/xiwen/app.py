@@ -2,8 +2,6 @@ from utils.analysis import analyse
 from utils.extract import get_hanzi
 from utils.transform import partition_hanzi
 
-import time
-
 
 def coordinator(target: str, terminal: bool = False):
     """
@@ -17,8 +15,6 @@ def coordinator(target: str, terminal: bool = False):
     # Run URL
     hanzi_list = get_hanzi(target)
 
-    start = time.time()
-
     if hanzi_list:
         # Divide into groups (with duplicates)
         simp, trad, outl = partition_hanzi(hanzi_list)
@@ -28,7 +24,4 @@ def coordinator(target: str, terminal: bool = False):
             variant, stats_df, hanzi_df = analyse(hanzi_list, simp, trad)
 
             if terminal and variant:
-                end = time.time()
-                print(f"Time taken: {end - start}")
-
                 return hanzi_df, stats_df, hanzi_list, outl, variant
