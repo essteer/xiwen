@@ -3,7 +3,7 @@ import unittest
 from src.xiwen.utils.pinyin import get_pinyin, map_pinyin
 
 PINYIN_PATH = os.path.join(
-    os.getcwd(), "src", "file_prep", "assets", "hanzi_pinyin_characters.tsv.txt"
+    os.getcwd(), "src", "resources", "assets", "hanzi_pinyin_characters.tsv.txt"
 )
 
 SIMP_HANZI_TO_PINYIN = {

@@ -28,8 +28,8 @@ TEST_CASES = {
 class TestPartitionHanzi(unittest.TestCase):
     def test_partition(self):
         """Test characters are separated appropriately"""
-        simp = ["爱", "气", "车", "电", "话", "点", "脑", "视", "东"]
-        trad = ["愛", "氣", "車", "電", "話", "點", "腦", "視", "東"]
+        simp = ["爱", "气", "车", "电", "话", "点", "脑", "视", "东", "不", "了"]
+        trad = ["愛", "氣", "車", "電", "話", "點", "腦", "視", "東", "不", "了"]
         test = [
             "爱",
             "气",
@@ -49,10 +49,12 @@ class TestPartitionHanzi(unittest.TestCase):
             "腦",
             "視",
             "東",
+            "不",
+            "了",
         ]
         self.assertEqual(partition_hanzi(test), (simp, trad, []))
-        self.assertEqual(partition_hanzi(simp), (simp, [], []))
-        self.assertEqual(partition_hanzi(trad), ([], trad, []))
+        self.assertEqual(partition_hanzi(simp), (simp, ["不", "了"], []))
+        self.assertEqual(partition_hanzi(trad), (["不", "了"], trad, []))
         test = [
             "爱",
             "气",
@@ -72,6 +74,8 @@ class TestPartitionHanzi(unittest.TestCase):
             "腦",
             "視",
             "東",
+            "不",
+            "了",
             "朕",
         ]
         self.assertEqual(partition_hanzi(test), (simp, trad, ["朕"]))

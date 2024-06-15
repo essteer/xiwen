@@ -8,7 +8,6 @@ dependencies = [
     "masquer>=1.1.1",
     "polars==0.20.31",
     "requests>=2.32.3",
-    "tqdm==4.66.2",
 ]
 requires-python = ">=3.9"
 license = { file = "LICENSE" }
@@ -21,7 +20,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -31,6 +29,7 @@ classifiers = [
 dev = [
     "pre-commit==3.7.0",
     "ruff>=0.4.5",
+    "tqdm==4.66.2",
 ]
 
 [project.urls]

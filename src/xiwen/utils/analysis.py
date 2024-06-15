@@ -1,4 +1,5 @@
 import polars as pl
+import sys
 from .config import HSK_GRADES, STATS_COLUMNS
 from .counters import cumulative_counts, get_counts, granular_counts
 
@@ -20,6 +21,8 @@ def identify_variant(hsk_simp: list, hsk_trad: list) -> str:
     str
         text character variant
     """
+    # Use epsilon to mitigate float rounding errors
+    epsilon = sys.float_info.epsilon
     # Threshold beyond which to decide that text belongs to one variant
     threshold = 0.90
     simp_set = set(hsk_simp) - set(hsk_trad)
@@ -29,9 +32,11 @@ def identify_variant(hsk_simp: list, hsk_trad: list) -> str:
         return "Unknown"
 
     ratio = len(simp_set) / (len(simp_set) + len(trad_set))
-    if ratio >= threshold:
+    if ratio >= threshold - epsilon:
         return "Simplified"
-    return "Traditional"
+    elif ratio <= 1 - threshold + epsilon:
+        return "Traditional"
+    return "Unknown"
 
 
 def compute_stats(
@@ -143,7 +148,6 @@ def analyse(
         "Unknown": trad_list,
     }
     # Get counts of each hanzi
-    # hanzi_df = get_counts(variants[variant], variant, HSK_HANZI)
     hanzi_df = get_counts(variants[variant], variant)
     # Get counts of hanzi by grade
     grade_counts = granular_counts(hanzi_df, hanzi_list, variant)
