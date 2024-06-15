@@ -1,4 +1,4 @@
-from .hanzi import get_hanzi_processor_instance
+from .hanzi import get_HSKHanzi_instance
 
 
 def partition_hanzi(hanzi_list: list) -> tuple[list]:
@@ -23,8 +23,8 @@ def partition_hanzi(hanzi_list: list) -> tuple[list]:
     outliers : list
         characters not in above lists
     """
-    hsk_simp = get_hanzi_processor_instance().HSK_SIMP
-    hsk_trad = get_hanzi_processor_instance().HSK_TRAD
+    hsk_simp = get_HSKHanzi_instance().HSK_SIMP
+    hsk_trad = get_HSKHanzi_instance().HSK_TRAD
 
     simp = [zi for zi in hanzi_list if zi in hsk_simp]
     trad = [zi for zi in hanzi_list if zi in hsk_trad]

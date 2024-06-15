@@ -143,7 +143,6 @@ def analyse(
         "Unknown": trad_list,
     }
     # Get counts of each hanzi
-    # hanzi_df = get_counts(variants[variant], variant, HSK_HANZI)
     hanzi_df = get_counts(variants[variant], variant)
     # Get counts of hanzi by grade
     grade_counts = granular_counts(hanzi_df, hanzi_list, variant)

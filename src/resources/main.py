@@ -1,4 +1,4 @@
-import pandas as pd
+import polars as pl
 from tqdm import tqdm
 from xiwen.utils.config import (
     ASSETS_DIR,
@@ -24,7 +24,7 @@ pinyin_map = map_pinyin(PINYIN_PATH)
 ##########################################################################
 
 # Read hsk30-chars-ext.csv
-df = pd.read_csv(HSK_PATH)
+df = pl.read_csv(HSK_PATH)
 # Extract character columns and HSK grades
 df = df[["Hanzi", "Traditional", "Level"]]
 # Rename columns
@@ -33,8 +33,8 @@ df = df.rename(
 )
 # Get pinyin based on traditional characters
 trad_hanzi = df["Traditional"].tolist()
-# pinyin_df = pd.DataFrame("Pinyin": get_pinyin(trad_hanzi, pinyin_map))
-df["Pinyin"] = pd.DataFrame({"Pinyin": get_pinyin(trad_hanzi, pinyin_map)})
+# pinyin_df = pl.DataFrame("Pinyin": get_pinyin(trad_hanzi, pinyin_map))
+df["Pinyin"] = pl.DataFrame({"Pinyin": get_pinyin(trad_hanzi, pinyin_map)})
 
 ##########################################################################
 # Add unicode for simplified and traditional hanzi
@@ -67,7 +67,7 @@ with open(FREQ_PATH, "r", encoding=ENCODING) as f:
 
 # DataFrame of Jun Da character frequencies
 cols = ["Simplified", "JD Rank", "JD Frequency", "JD Percentile"]
-junda_df = pd.DataFrame(junda_freqs, columns=cols)
+junda_df = pl.DataFrame(junda_freqs, columns=cols)
 
 ##########################################################################
 # Map frequencies to HSK set
