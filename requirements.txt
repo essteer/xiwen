@@ -8,27 +8,15 @@ charset-normalizer==3.3.2
     # via requests
 idna==3.7
     # via requests
-masquer==1.1.0
+masquer==1.1.1
     # via xiwen (pyproject.toml)
-numpy==1.26.4
-    # via
-    #   xiwen (pyproject.toml)
-    #   pandas
-pandas==2.2.2
+polars==0.20.31
     # via xiwen (pyproject.toml)
-python-dateutil==2.9.0.post0
-    # via pandas
-pytz==2024.1
-    # via pandas
 requests==2.32.3
     # via xiwen (pyproject.toml)
-six==1.16.0
-    # via python-dateutil
 soupsieve==2.5
     # via beautifulsoup4
 tqdm==4.66.2
     # via xiwen (pyproject.toml)
-tzdata==2024.1
-    # via pandas
 urllib3==2.2.1
     # via requests
