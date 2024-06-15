@@ -2,7 +2,7 @@ import os
 import polars as pl
 import unittest
 from polars.testing import assert_frame_equal
-from src.xiwen.utils.config import HSK_GRADES
+from src.xiwen.utils.config import ENCODING, HSK_GRADES
 from src.xiwen.utils.counters import (
     cumulative_counts,
     get_counts,
@@ -135,7 +135,9 @@ class TestCumulativeCounts(unittest.TestCase):
         """Test counts match for simplified character set"""
         variant = "Simplified"
         for test_case in TEST_CASES.keys():
-            with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
+            with open(
+                os.path.join(TEST_ASSETS, test_case, encoding=ENCODING), "r"
+            ) as f:
                 text = f.read()
             # Extract hanzi from text (with duplicates)
             hanzi_list = filter_text(text)
@@ -157,7 +159,9 @@ class TestCumulativeCounts(unittest.TestCase):
         """Test counts match for traditional character set"""
         variant = "Traditional"
         for test_case in TEST_CASES.keys():
-            with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
+            with open(
+                os.path.join(TEST_ASSETS, test_case, encoding=ENCODING), "r"
+            ) as f:
                 text = f.read()
             # Extract hanzi from text (with duplicates)
             hanzi_list = filter_text(text)
@@ -183,7 +187,9 @@ class TestGetCounts(unittest.TestCase):
         # Get DataFrame of full HSK character liss
         hsk_hanzi = get_HSKHanzi_instance().HSK_HANZI
         for test_case in TEST_CASES.keys():
-            with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
+            with open(
+                os.path.join(TEST_ASSETS, test_case, encoding=ENCODING), "r"
+            ) as f:
                 text = f.read()
             # Extract hanzi from text (with duplicates)
             hanzi_list = filter_text(text)
@@ -206,7 +212,9 @@ class TestGetCounts(unittest.TestCase):
         # Get DataFrame of full HSK character liss
         hsk_hanzi = get_HSKHanzi_instance().HSK_HANZI
         for test_case in TEST_CASES.keys():
-            with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
+            with open(
+                os.path.join(TEST_ASSETS, test_case, encoding=ENCODING), "r"
+            ) as f:
                 text = f.read()
             # Extract hanzi from text (with duplicates)
             hanzi_list = filter_text(text)
@@ -229,7 +237,9 @@ class TestGranularCounts(unittest.TestCase):
         """Test correct breakdown for simplified character set"""
         variant = "Simplified"
         for test_case in TEST_CASES.keys():
-            with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
+            with open(
+                os.path.join(TEST_ASSETS, test_case, encoding=ENCODING), "r"
+            ) as f:
                 text = f.read()
             # Extract hanzi from text (with duplicates)
             hanzi_list = filter_text(text)
@@ -244,7 +254,9 @@ class TestGranularCounts(unittest.TestCase):
         """Test correct breakdown for traditional character set"""
         variant = "Traditional"
         for test_case in TEST_CASES.keys():
-            with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
+            with open(
+                os.path.join(TEST_ASSETS, test_case, encoding=ENCODING), "r"
+            ) as f:
                 text = f.read()
             # Extract hanzi from text (with duplicates)
             hanzi_list = filter_text(text)
@@ -259,7 +271,9 @@ class TestGranularCounts(unittest.TestCase):
         """Test correct breakdown for unknown character set"""
         variant = "Unknown"
         for test_case in TEST_CASES.keys():
-            with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
+            with open(
+                os.path.join(TEST_ASSETS, test_case, encoding=ENCODING), "r"
+            ) as f:
                 text = f.read()
             # Extract hanzi from text (with duplicates)
             hanzi_list = filter_text(text)
