@@ -39,23 +39,26 @@ def filter_hanzi(char: str) -> bool:
 
 def filter_text(html: str) -> list[str]:
     """
-    Passes text to _filter_hanzi
-    Returns list of hanzi in text
+    Passes text to filter_hanzi
+    Returns all hanzi in text (duplicates included)
 
     Parameters
     ----------
     html : str
         HTML extracted from URL
+
+    Returns
+    -------
+    result : list[str]
+        full list of hanzi found
     """
     return [zi for zi in html if filter_hanzi(zi)]
 
 
-def get_hanzi(target: str) -> None:
+def get_hanzi(target: str) -> list[str]:
     """
     Passes URL to retrieve HTML
-    Searches for and extracts Chinese characters from HTML according to
-      whether they are simplified or traditional characters within HSK1
-      to HSK6 or other characters of either variant
+    Extracts all Chinese characters from HTML
 
     Parameters
     ----------
@@ -63,22 +66,13 @@ def get_hanzi(target: str) -> None:
         URL to extract HTML from
 
     Returns
-    -------  NOTE: all lists below include duplicates
+    -------
     hanzi_list : list
         full list of hanzi found
-
-    simplified : list
-        full list of simplified hanzi found belonging to HSK1 to HSK9
-
-    traditional : list
-        full list of traditional hanzi found equivalent to HSK1 to HSK9 simplified hanzi
-
-    outliers : list
-        all hanzi found that don't belong to the above lists
     """
     html = get_html(target)
     if not html:
-        return
+        return []
 
     # Extract hanzi from HTML (with duplicates)
     hanzi = filter_text(str(html))

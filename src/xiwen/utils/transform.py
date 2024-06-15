@@ -1,4 +1,7 @@
-def partition_hanzi(hanzi_list: list, hsk_simp: list, hsk_trad: list) -> tuple[list]:
+from .hanzi import get_hanzi_processor_instance
+
+
+def partition_hanzi(hanzi_list: list) -> tuple[list]:
     """
     Separates hanzi list into sublists based on whether
     they are HSK simplified characters or traditional character equivalents
@@ -8,12 +11,6 @@ def partition_hanzi(hanzi_list: list, hsk_simp: list, hsk_trad: list) -> tuple[l
     ----------
     hanzi_list : list
         characters to partition
-
-    hsk_simp : list
-        all simplified characters in HSK
-
-    hsk_trad : list
-        traditional character equivalents to HSK characters
 
     Returns
     -------
@@ -26,6 +23,9 @@ def partition_hanzi(hanzi_list: list, hsk_simp: list, hsk_trad: list) -> tuple[l
     outliers : list
         characters not in above lists
     """
+    hsk_simp = get_hanzi_processor_instance().HSK_SIMP
+    hsk_trad = get_hanzi_processor_instance().HSK_TRAD
+
     simp = [zi for zi in hanzi_list if zi in hsk_simp]
     trad = [zi for zi in hanzi_list if zi in hsk_trad]
     outliers = [zi for zi in hanzi_list if zi not in simp and zi not in trad]

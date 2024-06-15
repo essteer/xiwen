@@ -5,7 +5,7 @@ def map_pinyin(filepath: str) -> dict:
     """
     Returns a dictionary mapping Chinese characters to pinyin
     """
-    hanzi_pinyin_dict = {}
+    hanzi_pinyin_dict = dict()
 
     with open(filepath, "r", encoding=ENCODING) as f:
         for line in f:
@@ -41,11 +41,8 @@ def get_pinyin(hanzi: list[str], hanzi_pinyin_dict: dict[str:str]) -> tuple[list
     matched_hanzi = []
 
     for zi in hanzi:
-        try:
+        if zi in hanzi_pinyin_dict:
             pinyin_list.append(hanzi_pinyin_dict[zi])
             matched_hanzi.append(zi)
-
-        except KeyError:
-            continue
 
     return matched_hanzi, pinyin_list

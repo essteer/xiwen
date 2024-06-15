@@ -1,3 +1,4 @@
+import polars as pl
 import random
 from app import coordinator
 from utils.config import DEMO_MESSAGE, DEMO1, DEMO2, MAIN_MENU_OPTIONS, WELCOME_MESSAGE
@@ -19,22 +20,27 @@ def xiwen():
 
         if target == "":  # Demo simplified or traditional characters
             target = random.choice([DEMO1, DEMO2])
-            # Explainer
-            print(DEMO_MESSAGE)
+            print(DEMO_MESSAGE)  # Explainer
 
         if target:
             # Run program
             hanzi_df, stats_df, hanzi_list, outl, variant = coordinator(target, True)
 
-            # Print stats to CLI
-            print(stats_df.to_markdown(index=False))
+            with pl.Config(
+                tbl_formatting="ASCII_MARKDOWN",
+                tbl_hide_column_data_types=True,
+                tbl_hide_dataframe_shape=True,
+                set_tbl_cols=9,
+                set_tbl_cell_numeric_alignment="RIGHT",
+            ):
+                print(stats_df)
+
             if variant == "Unknown":
-                print("Character set undefined - stats for reference only")
+                print("Unknown character set - stats for reference only")
             else:
-                print(f"{variant.title()} character set detected")
+                print(f"{variant.title()} character set")
 
             while True:
-                # CSV export loop
                 # Flag to break out of nested menus
                 exit_to_main = export_hanzi(
                     hanzi_df, stats_df, hanzi_list, outl, variant
