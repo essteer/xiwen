@@ -1,8 +1,8 @@
 import polars as pl
 import random
-from app import coordinator
-from utils.config import DEMO_MESSAGE, DEMO1, DEMO2, MAIN_MENU_OPTIONS, WELCOME_MESSAGE
-from utils.export import export_hanzi
+from .app import coordinator
+from .utils.config import DEMO_MESSAGE, DEMO1, DEMO2, MAIN_MENU_OPTIONS, WELCOME_MESSAGE
+from .utils.export import export_hanzi
 
 
 def xw():
