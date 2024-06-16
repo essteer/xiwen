@@ -111,7 +111,7 @@ def compute_stats(
 
 def analyse(
     hanzi_list: list, simp_list: list, trad_list: list
-) -> tuple[str | pl.DataFrame]:
+) -> tuple[str, pl.DataFrame]:
     """
     Gets character variant and statistical breakdowns
       - number of unique characters and number of total characters

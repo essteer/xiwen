@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/essteer/xiwen/actions/workflows/test.yaml"><img src="https://github.com/essteer/xiwen/actions/workflows/test.yaml/badge.svg"></a>
-  <a href="https://github.com/essteer/xiwen"><img src="https://img.shields.io/badge/Python-3.10_|_3.11_|_3.12-3776AB.svg?style=flat&logo=Python&logoColor=white"></a>
+  <a href="https://github.com/essteer/xiwen"><img src="https://img.shields.io/badge/Python-3.9_|_3.10_|_3.11_|_3.12-3776AB.svg?style=flat&logo=Python&logoColor=white"></a>
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json"></a>
   <a href="https://snyk.io/test/github/essteer/xiwen"><img src="https://snyk.io/test/github/essteer/xiwen/badge.svg?name=Snyk&style=flat&logo=Snyk"></a>
 </p>
@@ -56,13 +56,13 @@ The table below lists the number of simplified hanzi per grade, and the number o
 
 | HSK Grade | Simp. Hanzi | Running Total | Trad. Hanzi Equivalents | Running Total |
 | :-------: | :---------: | :-----------: | :---------------------: | :-----------: |
-|    [1]    |     300     |      300      |           313           |      313      |
-|    [2]    |     300     |      600      |           314           |      627      |
-|    [3]    |     300     |      900      |           312           |      939      |
-|    [4]    |     300     |     1200      |           316           |     1255      |
-|    [5]    |     300     |     1500      |           310           |     1565      |
-|    [6]    |     300     |     1800      |           310           |     1875      |
-|   [7-9]   |    1200     |     3000      |          1214           |     3089      |
+|    1    |     300     |      300      |           313           |      313      |
+|    2    |     300     |      600      |           314           |      627      |
+|    3    |     300     |      900      |           312           |      939      |
+|    4    |     300     |     1200      |           316           |     1255      |
+|    5    |     300     |     1500      |           310           |     1565      |
+|    6    |     300     |     1800      |           310           |     1875      |
+|   7-9   |    1200     |     3000      |          1214           |     3089      |
 
 ## Installation
 
@@ -70,7 +70,7 @@ The table below lists the number of simplified hanzi per grade, and the number o
 
 [![](https://img.shields.io/badge/GitHub-xiwen-181717.svg?flat&logo=GitHub&logoColor=white)](https://github.com/essteer/xiwen)
 
-Clone the `xiwen` repo from GitHub for the full code, files used to generate the character lists and a test suite.
+Clone `xiwen` from GitHub for the full code, files used to generate the character lists and a test suite.
 
 ```console
 $ git clone git@github.com:essteer/xiwen

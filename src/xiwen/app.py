@@ -1,6 +1,6 @@
-from utils.analysis import analyse
-from utils.extract import get_hanzi
-from utils.transform import partition_hanzi
+from .utils.analysis import analyse
+from .utils.extract import get_hanzi
+from .utils.transform import partition_hanzi
 
 
 def coordinator(target: str, terminal: bool = False):
