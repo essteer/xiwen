@@ -3,24 +3,14 @@ import polars as pl
 
 
 ASSETS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets")
-# ASSETS_DIR = os.path.join(os.getcwd(), "src", "xiwen", "assets")
+PINYIN_PATH = os.path.join(ASSETS_DIR, "hanzi_pinyin_characters.tsv.txt")
+
 # Test case (simplified hanzi)
 DEMO1 = "https://www.xuan-zang.com/bjzd"
 # Test case (traditional hanzi)
 DEMO2 = "https://www.xuan-zang.com/ttc"
-
 ENCODING = "utf-8"
-# Encoding used to force .csv files to adopt utf-8 from Pandas DataFrame
-ENCODING_HANZI = "utf_8_sig"
-
 HSK_GRADES = 7
-
-RAW_DATA = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "..", "..", "resources", "assets"
-)
-HSK_PATH = os.path.join(RAW_DATA, "hsk30-chars-ext.csv")
-FREQ_PATH = os.path.join(RAW_DATA, "CharFreq-Modern-utf8.csv")
-PINYIN_PATH = os.path.join(ASSETS_DIR, "hanzi_pinyin_characters.tsv.txt")
 
 WELCOME_MESSAGE = """
 Welcome to Xiwen 析文
