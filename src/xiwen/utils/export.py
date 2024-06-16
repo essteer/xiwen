@@ -93,6 +93,42 @@ def custom_export(
             print("Enter digits from 1 to 9 only")
 
 
+def format_stats(stats: pl.DataFrame) -> pl.DataFrame:
+    """
+    Formats columns for stats dataframe
+    Then passes dataframe to export function
+
+    Parameters
+    ----------
+    stats : pl.DataFrame
+        dataframe with stats for target content
+
+    Returns
+    -------
+    stats : pl.DataFrame
+        stats dataframe with formatted column names
+    """
+    for col in stats.columns:
+        new_col = col.replace("\n", " ")
+        stats = stats.rename({col: new_col})
+
+    columns_to_format = [
+        "% of Total Unique",
+        "% of Cumul. Unique",
+        "% of Total",
+        "% of Cumul. Count",
+    ]
+    # Round floats
+    for col in columns_to_format:
+        stats = stats.with_columns(
+            pl.col(col)
+            .map_elements(lambda x: round(x, 2), return_dtype=pl.Float64)
+            .alias(col)
+        )
+
+    return stats
+
+
 def export_hanzi(
     hanzi_df: pl.DataFrame,
     stats_df: pl.DataFrame,
@@ -118,7 +154,8 @@ def export_hanzi(
             export_to_csv(hanzi_df)
 
         elif command == "S":  # Export stats for this content
-            export_to_csv(stats_df)
+            formatted_stats = format_stats(stats_df)
+            export_to_csv(formatted_stats)
 
         elif command == "A":  # Export all unique HSK hanzi in text
             hanzi_set = list(set(hanzi_list))  # filter hanzi_df with hanzi_list
