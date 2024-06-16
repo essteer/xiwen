@@ -1,4 +1,4 @@
-from .utils.analysis import analyse
+from .utils.analyse import analyse
 from .utils.extract import get_hanzi
 from .utils.transform import partition_hanzi
 

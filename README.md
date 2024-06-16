@@ -97,22 +97,37 @@ $ uv pip install -r requirements.txt
 
 ## Operation
 
+### GitHub repo
+
 [![](https://img.shields.io/badge/GitHub-xiwen-181717.svg?flat&logo=GitHub&logoColor=white)](https://github.com/essteer/xiwen)
 
-Run `xiwen/interface.py` from the `src` directory to launch the CLI program.
+To run `xiwen` as a CLI tool, navigate to the project root directory and run:
 
-`resources/main.py` makes use of datasets in `resources/assets` to pair simplified and traditional character sets with their pinyin, HSK grades, and character frequencies as identified in the MTSU dataset.
+![](https://img.shields.io/badge/Linux-FCC624.svg?style=flat&logo=Linux&logoColor=black)
+![](https://img.shields.io/badge/macOS-000000.svg?style=flat&logo=Apple&logoColor=white)
 
-Xiwen relies on a Parquet file produced from those resources and located at `xiwen/assets`. This file can be replaced as needed — update the file name loaded in `xiwen/app.py` to make use of a custom file.
+```console
+$ source .venv/bin/activate
+$ python3 -m main
+```
 
-`xiwen/interface.py` is the interactive component of the CLI version of Xiwen. It receives user input and makes function calls to modules in `xiwen/utils`. Those files form the program's ETL pipeline including the following functions:
+![](https://img.shields.io/badge/Windows-0078D4.svg?style=flat&logo=Windows&logoColor=white)
 
-- break down text into individual hanzi (`filter_text()`)
-- sort hanzi as HSK-level simplified or traditional hanzi, or outliers (`partition_hanzi()`)
-- determine the overall character variant of the text as simplified or traditional, or a mix (`identify_variant()`)
-- compute the grade-based and cumulative numbers of unique hanzi and total hanzi in the text (`analyse()`)
+```console
+$ .venv\Scripts\activate
+$ python -m main
+```
 
-Character sets can then be exported to .csv.
+The `src/resources/` directory contains `main.py`, which was used to create the dataset needed to run this program under `src/xiwen/assets/` by pairing simplified and traditional character sets with their pinyin, HSK grades, and character frequencies as identified in the MTSU dataset. The source data is kept under `src/resources/assets/`.
+
+The functional program is contained in `src/xiwen/`. `interface.py` is the interactive component for the CLI tool. It receives user input and makes function calls to modules in `utils/`. Those files form the program's ETL pipeline including the following functions:
+
+- break down text into individual hanzi (`extract.py`)
+- sort hanzi as HSK-level simplified or traditional hanzi, or outliers (`transform.py`)
+- determine the overall character variant of the text as simplified or traditional, or a mix (`analyse.py`)
+- compute the grade-based and cumulative numbers of unique hanzi and total hanzi in the text (`analyse.py`)
+
+Character sets can then be exported to CSV.
 
 ## Sources
 

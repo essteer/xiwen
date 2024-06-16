@@ -4,7 +4,7 @@ import sys
 import unittest
 from polars.testing import assert_frame_equal
 from src.xiwen.utils.config import HSK_GRADES
-from src.xiwen.utils.counters import (
+from src.xiwen.utils.count import (
     cumulative_counts,
     get_counts,
     granular_counts,

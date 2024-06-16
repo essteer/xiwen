@@ -1,7 +1,6 @@
 import polars as pl
-import sys
 from .config import HSK_GRADES, STATS_COLUMNS
-from .counters import cumulative_counts, get_counts, granular_counts
+from .count import cumulative_counts, get_counts, granular_counts
 
 
 def identify_variant(hsk_simp: list, hsk_trad: list) -> str:
@@ -22,7 +21,7 @@ def identify_variant(hsk_simp: list, hsk_trad: list) -> str:
         text character variant
     """
     # Use epsilon to mitigate float rounding errors
-    epsilon = sys.float_info.epsilon
+    epsilon = 0.0000000001
     # Threshold beyond which to decide that text belongs to one variant
     threshold = 0.90
     simp_set = set(hsk_simp) - set(hsk_trad)
