@@ -4,7 +4,7 @@ from .config import ASSETS_DIR, CUSTOM_EXPORT, EXPORT_OPTIONS
 from .pinyin import map_pinyin, get_pinyin
 
 
-def export_to_csv(data: pl.DataFrame | list) -> None:
+def export_to_csv(data: pl.DataFrame) -> None:
     """
     Saves dataframes to CSV
 
