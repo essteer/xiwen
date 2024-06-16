@@ -24,7 +24,7 @@ Export hanzi for further use — including hanzi not in the HSK.
 MAIN_MENU_OPTIONS = "Enter URL (q: quit, blank: demo): "
 
 DEMO_MESSAGE = """
--> '10+' under 'HSK Grade' refers to hanzi beyond the HSK7-9 band.
+-> '10' under 'HSK Grade' refers to hanzi beyond the HSK7-9 band.
 -> 'Unique' cols capture no. unique hanzi found per grade.
 -> 'Count' cols capture total no. hanzi found per grade.
     '今天天氣很好' = 5 unique hanzi, 6 total hanzi.

@@ -1,7 +1,7 @@
 import os
 import polars as pl
 import unittest
-from src.xiwen.utils.analysis import identify_variant
+from src.xiwen.utils.analyse import identify_variant
 from src.xiwen.utils.config import ENCODING
 from src.xiwen.utils.extract import filter_text
 from src.xiwen.utils.transform import partition_hanzi
