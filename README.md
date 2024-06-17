@@ -2,7 +2,12 @@
 
 <p align="center">
   <a href="https://github.com/essteer/xiwen/actions/workflows/test.yaml"><img src="https://github.com/essteer/xiwen/actions/workflows/test.yaml/badge.svg"></a>
+  <a href="https://pypi.org/project/xiwen/"><img src="https://img.shields.io/badge/PyPI-v0.2.1-3775A9.svg?style=flat&logo=PyPI&logoColor=white"></a>
   <a href="https://github.com/essteer/xiwen"><img src="https://img.shields.io/badge/Python-3.9_|_3.10_|_3.11_|_3.12-3776AB.svg?style=flat&logo=Python&logoColor=white"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/pypa/hatch"><img src="https://img.shields.io/badge/%F0%9F%A5%9A-Hatch-4051b5.svg"></a>
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json"></a>
   <a href="https://snyk.io/test/github/essteer/xiwen"><img src="https://snyk.io/test/github/essteer/xiwen/badge.svg?name=Snyk&style=flat&logo=Snyk"></a>
 </p>
@@ -13,7 +18,7 @@ A tool to scan HTML for Chinese characters.
 
 ## Overview 
 
-Use Xiwen to scan websites for Chinese characters — hanzi — and:
+Use `xiwen` to scan websites for Chinese characters — hanzi — and:
 
 - analyse the content by HSK grade
 - identify character variants
@@ -25,7 +30,7 @@ Data exports provide hanzi by HSK grade in traditional and simplified Chinese, t
 
 ## Who this is for
 
-Mandarin learners can use Xiwen to determine the expected difficulty of an article or book relative to their current reading level, and create character lists for further study.
+Mandarin learners can use `xiwen` to determine the expected difficulty of an article or book relative to their current reading level, and create character lists for further study.
 
 Instructors can use it to assess the suitability of reading materials for their students, and produce vocabulary lists.
 
@@ -35,7 +40,7 @@ HSK — Hanyu Shuiping Kaoshi 汉语水平考试 — is a series of examinations
 
 In its latest form the HSK consists of nine levels, and covers 3,000 simplified hanzi and 11,092 vocabulary items. The advanced levels — seven to nine — share 1,200 hanzi that are tested together.
 
-To approximate a traditional hanzi version of the HSK, Xiwen maps the HSK hanzi to traditional Chinese equivalents. In most cases this is a one-to-one conversion, but in several cases there are two or more traditional hanzi that reflect distinct meanings of the single simplified character.
+To approximate a traditional hanzi version of the HSK, `xiwen` maps the HSK hanzi to traditional Chinese equivalents. In most cases this is a one-to-one conversion, but in several cases there are two or more traditional hanzi that reflect distinct meanings of the single simplified character.
 
 For example:
 
@@ -65,6 +70,18 @@ The table below lists the number of simplified hanzi per grade, and the number o
 |   7-9   |    1200     |     3000      |          1214           |     3089      |
 
 ## Installation
+
+### PyPI package
+
+[![](https://img.shields.io/badge/PyPI-xiwen-3775A9.svg?style=flat&logo=PyPI&logoColor=white)](https://pypi.org/project/xiwen/)
+
+Install the `xiwen` package from PyPI to retrieve just the tool with no extras.
+
+Activate your existing project's virtual environment, then download `xiwen` using a package manager. The below example uses [Astral's](https://astral.sh/blog/uv) `uv`; substitute `pip` by dropping "`uv`" or use another package manager as needed: 
+
+```console
+$ uv pip install xiwen
+```
 
 ### GitHub repo
 
@@ -96,6 +113,19 @@ $ uv pip install -r requirements.txt
 ```
 
 ## Operation
+
+### PyPI package
+
+[![](https://img.shields.io/badge/PyPI-xiwen-3775A9.svg?style=flat&logo=PyPI&logoColor=white)](https://pypi.org/project/xiwen/)
+
+Run Python, then import and run `xiwen` via the `xw` method:
+
+```python
+from xiwen import xw
+xw()
+```
+
+Follow the on-screen instructions as prompted: provide a URL to scan, then select export options
 
 ### GitHub repo
 
