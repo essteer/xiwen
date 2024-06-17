@@ -1,5 +1,9 @@
+[build-system]
+requires = ["hatchling>=1.24.2"]
+build-backend = "hatchling.build"
+
 [project]
-name = "Xiwen"
+name = "xiwen"
 dynamic = ["version"]
 description = "A tool to scan HTML for Chinese characters"
 authors = [{ name = "Elliott Steer", email = "essteer@pm.me" }]
@@ -12,9 +16,9 @@ dependencies = [
 requires-python = ">=3.9"
 license = { file = "LICENSE" }
 readme = "README.md"
-keywords = ["Chinese", "web scraping"]
+keywords = ["Chinese", "CLI", "tool"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Operating System :: OS Independent",
     "Natural Language :: English",
     "Intended Audience :: Developers",
@@ -27,12 +31,33 @@ classifiers = [
 
 [project.optional-dependencies]
 dev = [
+    "hatch==1.11.1", 
+    "hatchling==1.24.2", 
     "pre-commit==3.7.0",
     "ruff>=0.4.5",
-    "tqdm==4.66.2",
 ]
 
 [project.urls]
 documentation = "https://github.com/essteer/xiwen/blob/main/README.md"
 repository = "https://github.com/essteer/xiwen"
 issues = "https://github.com/essteer/xiwen/issues"
+
+[tool.hatch.version]
+path = "src/xiwen/__about__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/xiwen/**/*.py",
+    "src/xiwen/assets/hanzi_pinyin_characters.tsv.txt",
+    "src/xiwen/assets/hsk30_hanzi.parquet"
+]
+exclude = [
+    "/.github",
+    "/tests",
+    ".pre-commit-config.yaml",
+    "main.py",
+    "/src/resources",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/xiwen"]
