@@ -1,6 +1,5 @@
 import os
 import polars as pl
-from tqdm import tqdm
 import sys
 
 sys.path.append("..")
@@ -73,7 +72,7 @@ def load_junda_dataset() -> pl.DataFrame:
     # Read CharFreq-Modern-utf8.csv
     with open(FREQ_PATH, "r", encoding=ENCODING) as f:
         lines = f.readlines()
-        for line in tqdm(lines[6:], desc="Processing"):
+        for line in lines[6:]:
             data = line.strip().split(",")
             junda_freqs.append([data[1], int(data[0]), int(data[2]), float(data[3])])
 
