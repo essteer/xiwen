@@ -13,7 +13,7 @@ def save_file(data: pl.DataFrame) -> None:
     data : pl.DataFrame
         data to be saved
     """
-    print("Example: ~/docs/xiwen.csv")
+    print("Example: home/user/docs/xiwen.csv")
     filepath = input("Enter CSV (default) or Parquet file path (x to exit): ").strip()
 
     if not filepath or filepath.upper() == "X":
@@ -21,32 +21,29 @@ def save_file(data: pl.DataFrame) -> None:
         return
 
     try:
-        if "/" in filepath:
-            directories = filepath.rsplit("/", 1)[0]
-        else:
-            directories = filepath.rsplit("\\", 1)[0]
-
+        # Get directory path and filename
+        directory_path, filename = os.path.split(filepath)
         # Create dirs if they don't exist
-        if not os.path.exists(directories):
-            os.makedirs(directories)
+        if not os.path.exists(directory_path):
+            os.makedirs(directory_path)
 
-        if "." not in filepath:
-            filepath += ".csv"
+        if "." not in filename:
+            filename += ".csv"
 
-        extension = filepath.split(".")[-1].lower()
+        extension = filename.split(".")[-1].lower()
 
         if extension == "csv":
-            data.write_csv(filepath)
+            data.write_csv(os.path.join(directory_path, filename))
         elif extension == "parquet":
-            data.write_parquet(filepath)
+            data.write_parquet(os.path.join(directory_path, filename))
         else:
             print(f"Unsupported file extension: .{extension}")
             return
 
-        print(f"Saved to {filepath}")
+        print(f"Saved to {os.path.join(directory_path, filename)}")
 
     except Exception as e:
-        print(f"Error saving to {filepath}: {e}")
+        print(f"Error saving to {os.path.join(directory_path, filename)}: {e}")
 
 
 def custom_export(
