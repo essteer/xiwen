@@ -1,29 +1,52 @@
 import os
 import polars as pl
-from .config import ASSETS_DIR, CUSTOM_EXPORT, EXPORT_OPTIONS
+from .config import CUSTOM_EXPORT, EXPORT_OPTIONS
 from .pinyin import map_pinyin, get_pinyin
 
 
-def export_to_csv(data: pl.DataFrame) -> None:
+def save_file(data: pl.DataFrame) -> None:
     """
-    Saves dataframes to CSV
+    Saves dataframes to CSV or Parquet
 
     Parameters
     ----------
-    data : pl.DataFrame | list
+    data : pl.DataFrame
         data to be saved
     """
-    filename = input("Enter file name: ")
-    save_dir = ASSETS_DIR
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
+    print("Example: ~/docs/xiwen.csv")
+    filepath = input("Enter CSV (default) or Parquet file path (x to exit): ").strip()
 
-    filename = filename.split(".")[0]
-    filename = filename + ".csv"
-    filename = os.path.join(ASSETS_DIR, filename)
+    if not filepath or filepath.upper() == "X":
+        print("No file path provided.")
+        return
 
-    data.write_csv(filename)
-    print(f"Exported to {filename}")
+    try:
+        if "/" in filepath:
+            directories = filepath.rsplit("/", 1)[0]
+        else:
+            directories = filepath.rsplit("\\", 1)[0]
+
+        # Create dirs if they don't exist
+        if not os.path.exists(directories):
+            os.makedirs(directories)
+
+        if "." not in filepath:
+            filepath += ".csv"
+
+        extension = filepath.split(".")[-1].lower()
+
+        if extension == "csv":
+            data.write_csv(filepath)
+        elif extension == "parquet":
+            data.write_parquet(filepath)
+        else:
+            print(f"Unsupported file extension: .{extension}")
+            return
+
+        print(f"Saved to {filepath}")
+
+    except Exception as e:
+        print(f"Error saving to {filepath}: {e}")
 
 
 def custom_export(
@@ -84,7 +107,7 @@ def custom_export(
                 print("Proceed y/n?: ")
                 command = input().upper()
                 if command == "Y":
-                    export_to_csv(filtered_grades_df)
+                    save_file(filtered_grades_df)
                     break
                 if command == "N":
                     break
@@ -151,11 +174,11 @@ def export_hanzi(
             return True
 
         elif command == "F":  # Export full HSK hanzi data
-            export_to_csv(hanzi_df)
+            save_file(hanzi_df)
 
         elif command == "S":  # Export stats for this content
             formatted_stats = format_stats(stats_df)
-            export_to_csv(formatted_stats)
+            save_file(formatted_stats)
 
         elif command == "A":  # Export all unique HSK hanzi in text
             hanzi_set = list(set(hanzi_list))  # filter hanzi_df with hanzi_list
@@ -166,7 +189,7 @@ def export_hanzi(
                 # If traditional or unknown, filter based on traditional
                 filtered_df = hanzi_df.filter(pl.col("Traditional").is_in(hanzi_set))
 
-            export_to_csv(filtered_df)
+            save_file(filtered_df)
 
         elif command == "O":  # Export outliers (non-HSK hanzi) in text
             # Map characters to accented pinyin
@@ -186,7 +209,7 @@ def export_hanzi(
             # Sort DataFrame on Unicode value
             outliers_df = outliers_df.sort(by="Unicode")
             # Export outliers
-            export_to_csv(outliers_df)
+            save_file(outliers_df)
 
         elif command == "C":
             print(CUSTOM_EXPORT)
