@@ -12,7 +12,7 @@ from src.xiwen.utils.count import (
 )
 from src.xiwen.utils.extract import filter_text
 from src.xiwen.utils.hsk_hanzi import get_HSKHanzi_instance
-from src.xiwen.utils.transform import partition_hanzi
+from src.xiwen.utils.transform import filter_dataframe_by_hanzi_variant, partition_hanzi
 
 
 TEST_ASSETS = os.path.abspath(os.path.join("tests", "assets"))
@@ -146,8 +146,10 @@ class TestCumulativeCounts(unittest.TestCase):
             simp, _, _ = partition_hanzi(hanzi_list)
             # Get counts of each hanzi
             hanzi_df = get_counts(simp, variant)
+            # Filter on identified variant
+            filtered_hanzi_df = filter_dataframe_by_hanzi_variant(hanzi_df, variant)
             # Get counts by grade (test case)
-            counts = granular_counts(hanzi_df, hanzi_list, variant)
+            counts = granular_counts(filtered_hanzi_df, hanzi_list)
 
             cumulative_num_unique = 0
             cumulative_num_grade = 0
@@ -171,8 +173,10 @@ class TestCumulativeCounts(unittest.TestCase):
             simp, _, _ = partition_hanzi(hanzi_list)
             # Get counts of each hanzi
             hanzi_df = get_counts(simp, variant)
+            # Filter on identified variant
+            filtered_hanzi_df = filter_dataframe_by_hanzi_variant(hanzi_df, variant)
             # Get counts by grade (test case)
-            counts = granular_counts(hanzi_df, hanzi_list, variant)
+            counts = granular_counts(filtered_hanzi_df, hanzi_list)
 
             cumulative_num_unique = 0
             cumulative_num_grade = 0
@@ -252,8 +256,10 @@ class TestGranularCounts(unittest.TestCase):
             simp, _, _ = partition_hanzi(hanzi_list)
             # Get counts of each hanzi
             hanzi_df = get_counts(simp, variant)
+            # Filter on identified variant
+            filtered_hanzi_df = filter_dataframe_by_hanzi_variant(hanzi_df, variant)
             # Get counts by grade (test case)
-            counts = granular_counts(hanzi_df, hanzi_list, variant)
+            counts = granular_counts(filtered_hanzi_df, hanzi_list)
             self.assertEqual(TEST_CASES[test_case][variant], counts)
 
     @unittest.skipIf(
@@ -270,8 +276,10 @@ class TestGranularCounts(unittest.TestCase):
             _, trad, _ = partition_hanzi(hanzi_list)
             # Get counts of each hanzi
             hanzi_df = get_counts(trad, variant)
+            # Filter on identified variant
+            filtered_hanzi_df = filter_dataframe_by_hanzi_variant(hanzi_df, variant)
             # Get counts by grade (test case)
-            counts = granular_counts(hanzi_df, hanzi_list, variant)
+            counts = granular_counts(filtered_hanzi_df, hanzi_list)
             self.assertEqual(TEST_CASES[test_case][variant], counts)
 
     @unittest.skipIf(
@@ -288,8 +296,10 @@ class TestGranularCounts(unittest.TestCase):
             _, trad, _ = partition_hanzi(hanzi_list)
             # Get counts of each hanzi
             hanzi_df = get_counts(trad, variant)
+            # Filter on identified variant
+            filtered_hanzi_df = filter_dataframe_by_hanzi_variant(hanzi_df, variant)
             # Get counts by grade (test case)
-            counts = granular_counts(hanzi_df, hanzi_list, variant)
+            counts = granular_counts(filtered_hanzi_df, hanzi_list)
             # Figures should match traditional counts
             self.assertEqual(TEST_CASES[test_case][variant], counts)
 
