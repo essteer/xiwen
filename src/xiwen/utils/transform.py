@@ -1,4 +1,4 @@
-from .hanzi import get_HSKHanzi_instance
+from .hsk_hanzi import get_HSKHanzi_instance
 
 
 def partition_hanzi(hanzi_list: list) -> tuple[list]:

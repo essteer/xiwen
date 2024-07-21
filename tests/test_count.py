@@ -11,7 +11,7 @@ from src.xiwen.utils.count import (
     unit_counts,
 )
 from src.xiwen.utils.extract import filter_text
-from src.xiwen.utils.hanzi import get_HSKHanzi_instance
+from src.xiwen.utils.hsk_hanzi import get_HSKHanzi_instance
 from src.xiwen.utils.transform import partition_hanzi
 
 

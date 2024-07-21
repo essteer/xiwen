@@ -3,7 +3,7 @@ import polars as pl
 import unittest
 from polars.testing import assert_frame_equal
 from src.xiwen.utils.config import ASSETS_DIR, HSK30_HANZI_SCHEMA
-from src.xiwen.utils.hanzi import get_HSKHanzi_instance, HSKHanzi
+from src.xiwen.utils.hsk_hanzi import get_HSKHanzi_instance, HSKHanzi
 
 
 class TestHSKHanzi(unittest.TestCase):

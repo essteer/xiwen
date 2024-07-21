@@ -1,6 +1,6 @@
 import polars as pl
 from .config import HSK_GRADES
-from .hanzi import get_HSKHanzi_instance
+from .hsk_hanzi import get_HSKHanzi_instance
 
 
 def unit_counts(hanzi: list) -> dict:
