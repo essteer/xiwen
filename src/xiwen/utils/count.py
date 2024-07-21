@@ -1,6 +1,6 @@
 import polars as pl
 from .config import HSK_GRADES
-from .hanzi import get_HSKHanzi_instance
+from .hsk_hanzi import get_HSKHanzi_instance
 
 
 def unit_counts(hanzi: list) -> dict:
@@ -17,14 +17,14 @@ def unit_counts(hanzi: list) -> dict:
     counts : dict
         counts of each character
     """
-    counts = {}
+    counts = dict()
     for zi in hanzi:
         counts[zi] = counts.get(zi, 0) + 1
 
     return counts
 
 
-def granular_counts(df: pl.DataFrame, hanzi_all: list, variant: str) -> dict:
+def granular_counts(df: pl.DataFrame, hanzi_all: list) -> dict:
     """
     Breaks down counts by HSK grades
 
@@ -36,36 +36,11 @@ def granular_counts(df: pl.DataFrame, hanzi_all: list, variant: str) -> dict:
     hanzi_all : list
         all hanzi (with duplicates) found in text being analysed
 
-    variant : str
-        variant of the character set (Simplified|Traditional|Unknown)
-
     Returns
     -------
     grade_stats : dict
         counts for hanzi per HSK grade
     """
-    if variant in ("Simplified", "Traditional"):
-        """
-        Drop duplicate entries - cases where:
-        - if Simplified: 1 simplified hanzi maps to >= 2 traditional hanzi
-            example: "为": ["為", "爲"]
-        - if Traditional: 1 traditional hanzi maps to >= 2 simplified hanzi
-            example: "蘋": ["苹", "𬞟"]
-        Keep only the first instance in either case to avoid double-counting
-        """
-        df = df.unique(subset=[variant], keep="first", maintain_order=True)
-
-    else:
-        """
-        If the variant is unknown:
-        - assume the broadest range of hanzi (Traditional)
-        - drop duplicate Simplified hanzi only when the counts are identical
-        """
-        df = df.unique(
-            subset=["Simplified", "Count"], keep="first", maintain_order=True
-        )
-
-    # Dict to store stats
     grade_stats = dict()
 
     # Get stats for full text including non-HSK characters (outliers)
@@ -133,14 +108,13 @@ def cumulative_counts(raw_counts: dict[int : list[int]]) -> list[list[int]]:
     cumulative_counts : list
         cumulative hanzi counts by grade
     """
-    # Cumulative figures =
     cumulative_counts = [
         # Total counts are at key 0
         [raw_counts[0][0], raw_counts[0][1]],
         # HSK1 figures only for HSK1
         [raw_counts[1][0], raw_counts[1][1]],
     ]
-    # Iterate through remaining levels to get iterative figures
+    # Iterate through remaining levels to get cumulative counts
     for i in range(2, HSK_GRADES + 1):
         grade_unique = raw_counts[i][0]
         cumul_unique = grade_unique + cumulative_counts[i - 1][0]

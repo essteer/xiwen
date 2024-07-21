@@ -15,11 +15,10 @@ def get_html(url: str) -> BeautifulSoup:
 
     Returns
     -------
-    html : BeautifulSoup
-        HTML extracted from URL
+    HTML extracted from URL
     """
-    # Make request and catch response errors and retry
-    for i in range(3):
+    number_of_retries = 3
+    for i in range(number_of_retries):
         try:
             # Get randomised user-agent and referer data
             header = masq(ua=True, rf=True)
@@ -29,11 +28,7 @@ def get_html(url: str) -> BeautifulSoup:
             # Catch errors
             response.raise_for_status()
             # Extract and parse HTML
-            raw_html = BeautifulSoup(response.text, "html.parser")
-
-            return raw_html
+            return BeautifulSoup(response.text, "html.parser")
 
         except requests.exceptions.RequestException:
             time.sleep(2 ** (i + 1))
-
-    return

@@ -1,7 +1,7 @@
 from .html import get_html
 
 
-def filter_hanzi(char: str) -> bool:
+def filter_hanzi_by_unicode(char: str) -> bool:
     """
     Checks whether a character is a (possible)
     Chinese character against three Unicode sets:
@@ -21,13 +21,12 @@ def filter_hanzi(char: str) -> bool:
         False otherwise
     """
     symbols = ["–", "—", "‘", "’", "“", "”", "…", "⊼", "⁆", "∕", "。"]
-    # Unrecognised hanzi with no matching pinyin
-    exceptions = ["㤙"]
+    unrecognised_hanzi_with_no_pinyin = ["㤙"]
 
     if ord(char) in range(8206, 8287):
         return False
 
-    if char in symbols or char in exceptions:
+    if char in symbols or char in unrecognised_hanzi_with_no_pinyin:
         return False
 
     common = char >= "\u4e00" and char <= "\u9fff"
@@ -37,7 +36,7 @@ def filter_hanzi(char: str) -> bool:
     return True if common or ext_a or ext_b else False
 
 
-def filter_text(html: str) -> list[str]:
+def filter_hanzi_from_html(html: str) -> list[str]:
     """
     Passes text to filter_hanzi
     Returns all hanzi in text (duplicates included)
@@ -52,7 +51,7 @@ def filter_text(html: str) -> list[str]:
     result : list[str]
         full list of hanzi found
     """
-    return [zi for zi in html if filter_hanzi(zi)]
+    return [zi for zi in html if filter_hanzi_by_unicode(zi)]
 
 
 def get_hanzi(target: str) -> list[str]:
@@ -67,14 +66,10 @@ def get_hanzi(target: str) -> list[str]:
 
     Returns
     -------
-    hanzi_list : list
-        full list of hanzi found
+    list of all hanzi found in HTML
     """
     html = get_html(target)
     if not html:
         return []
 
-    # Extract hanzi from HTML (with duplicates)
-    hanzi = filter_text(str(html))
-
-    return hanzi
+    return filter_hanzi_from_html(str(html))

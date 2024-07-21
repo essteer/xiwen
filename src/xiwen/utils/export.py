@@ -1,7 +1,7 @@
 import os
 import polars as pl
-from .config import CUSTOM_EXPORT, EXPORT_OPTIONS
 from .pinyin import map_pinyin, get_pinyin
+from .terminal_display import get_TerminalDisplay_instance
 
 
 def save_file(data: pl.DataFrame) -> None:
@@ -21,9 +21,7 @@ def save_file(data: pl.DataFrame) -> None:
         return
 
     try:
-        # Get directory path and filename
         directory_path, filename = os.path.split(filepath)
-        # Create dirs if they don't exist
         if not os.path.exists(directory_path):
             os.makedirs(directory_path)
 
@@ -98,8 +96,6 @@ def custom_export(
             ):
                 print(filtered_grades_df)
 
-            print("Selection displayed above.")
-            # Confirm selection before export
             while True:
                 print("Proceed y/n?: ")
                 command = input().upper()
@@ -159,9 +155,10 @@ def export_hanzi(
     """
     Interactive loop for export options
     """
+    terminal_display = get_TerminalDisplay_instance()
     options = ["A", "C", "F", "O", "S", "X"]
     while True:
-        print(EXPORT_OPTIONS)
+        print(terminal_display.get_export_options())
         command = input("Enter selection: ").upper()
 
         if command not in options:  # Repeat options
@@ -203,13 +200,10 @@ def export_hanzi(
                     "Pinyin": outliers_pinyin,
                 }
             )
-            # Sort DataFrame on Unicode value
-            outliers_df = outliers_df.sort(by="Unicode")
-            # Export outliers
-            save_file(outliers_df)
+            outliers_df_sorted_by_unicode_value = outliers_df.sort(by="Unicode")
+            save_file(outliers_df_sorted_by_unicode_value)
 
         elif command == "C":
-            print(CUSTOM_EXPORT)
-            # Pass to custom export options
+            print(terminal_display.get_export_options_for_custom_grades())
             unique_hanzi = list(set(hanzi_list))
             custom_export(unique_hanzi, hanzi_df, variant)

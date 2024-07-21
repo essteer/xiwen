@@ -1,6 +1,7 @@
 import polars as pl
 from .config import HSK_GRADES, STATS_COLUMNS
 from .count import cumulative_counts, get_counts, granular_counts
+from .transform import filter_dataframe_by_hanzi_variant
 
 
 def identify_variant(hsk_simp: list, hsk_trad: list) -> str:
@@ -148,8 +149,10 @@ def analyse(
     }
     # Get counts of each hanzi
     hanzi_df = get_counts(variants[variant], variant)
+    # Filter on identified variant
+    filtered_hanzi_df = filter_dataframe_by_hanzi_variant(hanzi_df, variant)
     # Get counts of hanzi by grade
-    grade_counts = granular_counts(hanzi_df, hanzi_list, variant)
+    grade_counts = granular_counts(filtered_hanzi_df, hanzi_list)
     # Get cumulative counts ascending from HSK1 to HSK7-9
     cumul_counts = cumulative_counts(grade_counts)
     # Compute stats for grade counts and cumulative counts
