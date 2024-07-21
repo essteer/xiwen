@@ -10,7 +10,7 @@ from src.xiwen.utils.count import (
     granular_counts,
     unit_counts,
 )
-from src.xiwen.utils.extract import filter_text
+from src.xiwen.utils.extract import filter_hanzi_from_html
 from src.xiwen.utils.hsk_hanzi import get_HSKHanzi_instance
 from src.xiwen.utils.transform import filter_dataframe_by_hanzi_variant, partition_hanzi
 
@@ -142,7 +142,7 @@ class TestCumulativeCounts(unittest.TestCase):
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()
             # Extract hanzi from text (with duplicates)
-            hanzi_list = filter_text(text)
+            hanzi_list = filter_hanzi_from_html(text)
             simp, _, _ = partition_hanzi(hanzi_list)
             # Get counts of each hanzi
             hanzi_df = get_counts(simp, variant)
@@ -169,7 +169,7 @@ class TestCumulativeCounts(unittest.TestCase):
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()
             # Extract hanzi from text (with duplicates)
-            hanzi_list = filter_text(text)
+            hanzi_list = filter_hanzi_from_html(text)
             simp, _, _ = partition_hanzi(hanzi_list)
             # Get counts of each hanzi
             hanzi_df = get_counts(simp, variant)
@@ -200,7 +200,7 @@ class TestGetCounts(unittest.TestCase):
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()
             # Extract hanzi from text (with duplicates)
-            hanzi_list = filter_text(text)
+            hanzi_list = filter_hanzi_from_html(text)
             simp, _, _ = partition_hanzi(hanzi_list)
             counts = unit_counts(simp)
             # Create DataFrame from counts dictionary
@@ -226,7 +226,7 @@ class TestGetCounts(unittest.TestCase):
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()
             # Extract hanzi from text (with duplicates)
-            hanzi_list = filter_text(text)
+            hanzi_list = filter_hanzi_from_html(text)
             simp, _, _ = partition_hanzi(hanzi_list)
             counts = unit_counts(simp)
             # Create DataFrame from counts dictionary
@@ -252,7 +252,7 @@ class TestGranularCounts(unittest.TestCase):
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()
             # Extract hanzi from text (with duplicates)
-            hanzi_list = filter_text(text)
+            hanzi_list = filter_hanzi_from_html(text)
             simp, _, _ = partition_hanzi(hanzi_list)
             # Get counts of each hanzi
             hanzi_df = get_counts(simp, variant)
@@ -272,7 +272,7 @@ class TestGranularCounts(unittest.TestCase):
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()
             # Extract hanzi from text (with duplicates)
-            hanzi_list = filter_text(text)
+            hanzi_list = filter_hanzi_from_html(text)
             _, trad, _ = partition_hanzi(hanzi_list)
             # Get counts of each hanzi
             hanzi_df = get_counts(trad, variant)
@@ -292,7 +292,7 @@ class TestGranularCounts(unittest.TestCase):
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()
             # Extract hanzi from text (with duplicates)
-            hanzi_list = filter_text(text)
+            hanzi_list = filter_hanzi_from_html(text)
             _, trad, _ = partition_hanzi(hanzi_list)
             # Get counts of each hanzi
             hanzi_df = get_counts(trad, variant)

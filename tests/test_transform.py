@@ -1,7 +1,7 @@
 import os
 import unittest
 from src.xiwen.utils.config import ENCODING
-from src.xiwen.utils.extract import filter_text
+from src.xiwen.utils.extract import filter_hanzi_from_html
 from src.xiwen.utils.transform import partition_hanzi
 
 
@@ -88,7 +88,7 @@ class TestPartitionHanzi(unittest.TestCase):
             ) as f:
                 text = f.read()
             # Extract hanzi from text (with duplicates)
-            hanzi = filter_text(text)
+            hanzi = filter_hanzi_from_html(text)
             # Divide into groups (with duplicates)
             simp, trad, outliers = partition_hanzi(hanzi)
             self.assertEqual(len(simp), TEST_CASES[test_case][3])
