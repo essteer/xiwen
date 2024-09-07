@@ -1,6 +1,10 @@
 import polars as pl
 from .config import HSK_GRADES, STATS_COLUMNS
-from .count import cumulative_counts, get_counts, granular_counts
+from .count import (
+    get_cumulative_counts_per_hsk_grade,
+    get_counts_per_hanzi,
+    get_counts_per_hanzi_per_hsk_grade,
+)
 from .transform import filter_dataframe_by_hanzi_variant
 
 
@@ -21,10 +25,8 @@ def identify_variant(simplified: list, traditional: list) -> str:
     _ : str
         text character variant
     """
-    # Use epsilon to mitigate float rounding errors
-    epsilon = 0.0000000001
-    # Threshold beyond which to decide that text belongs to one variant
-    threshold = 0.90
+    epsilon = 0.0000000001  # mitigate float rounding errors
+    threshold = 0.90  # to decide which variant text belongs to
     simplified_set = set(simplified) - set(traditional)
     traditional_set = set(traditional) - set(simplified)
 
@@ -40,7 +42,7 @@ def identify_variant(simplified: list, traditional: list) -> str:
 
 
 def compute_stats(
-    raw_counts: list[list[int]], cumulative_counts: list[list[int]]
+    raw_counts: list[list[int]], get_cumulative_counts_per_hsk_grade: list[list[int]]
 ) -> list[list]:
     """
     Computes grade-level and cumulative statistics for hanzi occurrences
@@ -50,7 +52,7 @@ def compute_stats(
     raw_counts : list
         hanzi counts by grade
 
-    cumulative_counts : list
+    get_cumulative_counts_per_hsk_grade : list
         cumulative hanzi counts by grade
 
     Returns
@@ -65,43 +67,79 @@ def compute_stats(
         {
             "HSK\nGrade": [i for i in grades],
             "No. Hanzi\n(Unique)": [raw_counts[i][0] for i in grade_range]
-            + [raw_counts[0][0] - cumulative_counts[7][0]],
+            + [raw_counts[0][0] - get_cumulative_counts_per_hsk_grade[7][0]],
             "% of\nTotal\nUnique": [
                 round((raw_counts[i][0] / raw_counts[0][0]), 4) * 100
                 for i in grade_range
             ]
             + [
                 round(
-                    (raw_counts[0][0] - cumulative_counts[7][0]) / raw_counts[0][0], 4
+                    (raw_counts[0][0] - get_cumulative_counts_per_hsk_grade[7][0])
+                    / raw_counts[0][0],
+                    4,
                 )
                 * 100
             ],
-            "Cumul.\nUnique": [cumulative_counts[i][0] for i in grade_range]
+            "Cumul.\nUnique": [
+                get_cumulative_counts_per_hsk_grade[i][0] for i in grade_range
+            ]
             + [raw_counts[0][0]],
             "% of\nCumul.\nUnique": [
-                round((cumulative_counts[i][0] / cumulative_counts[0][0]), 4) * 100
+                round(
+                    (
+                        get_cumulative_counts_per_hsk_grade[i][0]
+                        / get_cumulative_counts_per_hsk_grade[0][0]
+                    ),
+                    4,
+                )
+                * 100
                 for i in grade_range
             ]
-            + [round((cumulative_counts[0][0]) / cumulative_counts[0][0], 4) * 100],
+            + [
+                round(
+                    (get_cumulative_counts_per_hsk_grade[0][0])
+                    / get_cumulative_counts_per_hsk_grade[0][0],
+                    4,
+                )
+                * 100
+            ],
             "No. Hanzi\n(Count)": [raw_counts[i][1] for i in grade_range]
-            + [raw_counts[0][1] - cumulative_counts[7][1]],
+            + [raw_counts[0][1] - get_cumulative_counts_per_hsk_grade[7][1]],
             "% of\nTotal": [
                 round((raw_counts[i][1] / raw_counts[0][1]), 4) * 100
                 for i in grade_range
             ]
             + [
                 round(
-                    (raw_counts[0][1] - cumulative_counts[7][1]) / raw_counts[0][1], 4
+                    (raw_counts[0][1] - get_cumulative_counts_per_hsk_grade[7][1])
+                    / raw_counts[0][1],
+                    4,
                 )
                 * 100
             ],
-            "Cumul.\nCount": [cumulative_counts[i][1] for i in grade_range]
-            + [cumulative_counts[0][1]],
+            "Cumul.\nCount": [
+                get_cumulative_counts_per_hsk_grade[i][1] for i in grade_range
+            ]
+            + [get_cumulative_counts_per_hsk_grade[0][1]],
             "% of\nCumul.\nCount": [
-                round((cumulative_counts[i][1] / cumulative_counts[0][1]), 4) * 100
+                round(
+                    (
+                        get_cumulative_counts_per_hsk_grade[i][1]
+                        / get_cumulative_counts_per_hsk_grade[0][1]
+                    ),
+                    4,
+                )
+                * 100
                 for i in grade_range
             ]
-            + [round((cumulative_counts[0][1]) / cumulative_counts[0][1], 4) * 100],
+            + [
+                round(
+                    (get_cumulative_counts_per_hsk_grade[0][1])
+                    / get_cumulative_counts_per_hsk_grade[0][1],
+                    4,
+                )
+                * 100
+            ],
         },
         schema=STATS_COLUMNS,
     )
@@ -145,15 +183,10 @@ def analyse_hanzi(
         "Traditional": traditional,
         "Unknown": traditional,
     }
-    # Get counts of each hanzi
-    hanzi_df = get_counts(variants[variant], variant)
-    # Filter on identified variant
+    hanzi_df = get_counts_per_hanzi(variants[variant], variant)
     filtered_hanzi_df = filter_dataframe_by_hanzi_variant(hanzi_df, variant)
-    # Get counts of hanzi by grade
-    grade_counts = granular_counts(filtered_hanzi_df, hanzi_list)
-    # Get cumulative counts ascending from HSK1 to HSK7-9
-    cumul_counts = cumulative_counts(grade_counts)
-    # Compute stats for grade counts and cumulative counts
+    grade_counts = get_counts_per_hanzi_per_hsk_grade(filtered_hanzi_df, hanzi_list)
+    cumul_counts = get_cumulative_counts_per_hsk_grade(grade_counts)
     stats_df = compute_stats(grade_counts, cumul_counts)
 
     return hanzi_df, stats_df, variant
