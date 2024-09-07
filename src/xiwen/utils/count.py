@@ -41,20 +41,16 @@ def get_counts_per_hanzi(hanzi_subset: list, variant: str) -> pl.DataFrame:
     merged_df : pl.DataFrame
         DataFrame of HSK_HANZI with counts applied
     """
-    # Get DataFrame of full HSK character liss
     hsk_hanzi = get_HSKHanzi_instance().HSK_HANZI
-    # Count occurrences of each character in hanzi_subset
     counts = unit_counts_per_hanzi(hanzi_subset)
 
-    # Merge on variant column
     if variant == "Unknown":
         variant = "Traditional"
-    # Create DataFrame from counts dictionary
+
     counts_df = pl.DataFrame(
         list(counts.items()), schema={variant: pl.String, "Count": pl.Int32}
     )
     merged_df = hsk_hanzi.join(counts_df, on=variant, coalesce=True, how="left")
-    # Fill null values and convert counts to integers
     merged_df = merged_df.fill_null(0).with_columns(pl.col("Count").cast(pl.Int32))
 
     return merged_df
