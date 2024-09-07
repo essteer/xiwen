@@ -109,7 +109,7 @@ def compute_stats(
     return statistics
 
 
-def analyse(
+def analyse_hanzi(
     hanzi_list: list, simp_list: list, trad_list: list
 ) -> tuple[str, pl.DataFrame]:
     """
