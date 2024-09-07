@@ -11,7 +11,7 @@ from src.xiwen.utils.count import (
     unit_counts_per_hanzi,
 )
 from src.xiwen.utils.extract import filter_hanzi_from_html
-from src.xiwen.utils.hsk_hanzi import get_HSKHanzi_instance
+from src.xiwen.utils.hsk_hanzi import HSKHanzi
 from src.xiwen.utils.transform import filter_dataframe_by_hanzi_variant, partition_hanzi
 
 
@@ -200,8 +200,7 @@ class TestGetCounts(unittest.TestCase):
     def test_simplified_set(self):
         """Test counts correct for simplified characters"""
         variant = "Simplified"
-        # Get DataFrame of full HSK character liss
-        hsk_hanzi = get_HSKHanzi_instance().HSK_HANZI
+        hsk_hanzi = HSKHanzi().get_all_HSK_hanzi()
         for test_case in TEST_CASES.keys():
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()
@@ -226,8 +225,7 @@ class TestGetCounts(unittest.TestCase):
     def test_traditional_set(self):
         """Test counts correct for traditional characters"""
         variant = "Traditional"
-        # Get DataFrame of full HSK character liss
-        hsk_hanzi = get_HSKHanzi_instance().HSK_HANZI
+        hsk_hanzi = HSKHanzi().get_all_HSK_hanzi()
         for test_case in TEST_CASES.keys():
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()

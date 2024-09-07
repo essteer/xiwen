@@ -1,6 +1,6 @@
 import polars as pl
 from .config import HSK_GRADES
-from .hsk_hanzi import get_HSKHanzi_instance
+from .hsk_hanzi import HSKHanzi
 
 
 def unit_counts_per_hanzi(hanzi: list) -> dict:
@@ -39,9 +39,9 @@ def get_counts_per_hanzi(hanzi_subset: list, variant: str) -> pl.DataFrame:
     Returns
     -------
     merged_df : pl.DataFrame
-        DataFrame of HSK_HANZI with counts applied
+        DataFrame of hsk_hanzi with counts applied
     """
-    hsk_hanzi = get_HSKHanzi_instance().HSK_HANZI
+    hsk_hanzi = HSKHanzi().get_all_HSK_hanzi()
     counts = unit_counts_per_hanzi(hanzi_subset)
 
     if variant == "Unknown":
