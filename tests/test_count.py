@@ -8,7 +8,7 @@ from src.xiwen.utils.count import (
     get_counts_per_hanzi,
     get_counts_per_hanzi_per_hsk_grade,
     get_cumulative_counts_per_hsk_grade,
-    unit_counts,
+    unit_counts_per_hanzi,
 )
 from src.xiwen.utils.extract import filter_hanzi_from_html
 from src.xiwen.utils.hsk_hanzi import get_HSKHanzi_instance
@@ -125,10 +125,10 @@ class TestUnitCounts(unittest.TestCase):
         """Test counts match across character variants"""
         hanzi = []
         test = dict()
-        self.assertEqual(unit_counts(hanzi), test)
+        self.assertEqual(unit_counts_per_hanzi(hanzi), test)
         hanzi = ["爱", "气", "爱", "气", "车", "爱", "气", "车", "愛", "氣", "車"]
         test = {"爱": 3, "气": 3, "车": 2, "愛": 1, "氣": 1, "車": 1}
-        self.assertEqual(unit_counts(hanzi), test)
+        self.assertEqual(unit_counts_per_hanzi(hanzi), test)
 
 
 class TestCumulativeCounts(unittest.TestCase):
@@ -216,7 +216,7 @@ class TestGetCounts(unittest.TestCase):
             # Extract hanzi from text (with duplicates)
             hanzi_list = filter_hanzi_from_html(text)
             simp, _, _ = partition_hanzi(hanzi_list)
-            counts = unit_counts(simp)
+            counts = unit_counts_per_hanzi(simp)
             # Create DataFrame from counts dictionary
             counts_df = pl.DataFrame(
                 list(counts.items()), schema={variant: pl.String, "Count": pl.Int32}
@@ -244,7 +244,7 @@ class TestGetCounts(unittest.TestCase):
             # Extract hanzi from text (with duplicates)
             hanzi_list = filter_hanzi_from_html(text)
             simp, _, _ = partition_hanzi(hanzi_list)
-            counts = unit_counts(simp)
+            counts = unit_counts_per_hanzi(simp)
             # Create DataFrame from counts dictionary
             counts_df = pl.DataFrame(
                 list(counts.items()), schema={variant: pl.String, "Count": pl.Int32}

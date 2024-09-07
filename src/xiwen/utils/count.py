@@ -3,7 +3,7 @@ from .config import HSK_GRADES
 from .hsk_hanzi import get_HSKHanzi_instance
 
 
-def unit_counts(hanzi: list) -> dict:
+def unit_counts_per_hanzi(hanzi: list) -> dict:
     """
     Counts occurrences of each character in list
 
@@ -44,7 +44,7 @@ def get_counts_per_hanzi(hanzi_subset: list, variant: str) -> pl.DataFrame:
     # Get DataFrame of full HSK character liss
     hsk_hanzi = get_HSKHanzi_instance().HSK_HANZI
     # Count occurrences of each character in hanzi_subset
-    counts = unit_counts(hanzi_subset)
+    counts = unit_counts_per_hanzi(hanzi_subset)
 
     # Merge on variant column
     if variant == "Unknown":
@@ -70,7 +70,7 @@ def get_counts_per_hanzi_per_hsk_grade(df: pl.DataFrame, hanzi_all: list) -> dic
         all unique hanzi in HSK1 to HSK7-9 with counts column
 
     hanzi_all : list
-        all hanzi (with duplicates) found in text being analysed
+        all hanzi (with duplicates including non-HSK) found in text being analysed
 
     Returns
     -------
@@ -78,12 +78,9 @@ def get_counts_per_hanzi_per_hsk_grade(df: pl.DataFrame, hanzi_all: list) -> dic
         counts for hanzi per HSK grade
     """
     grade_stats = dict()
-
-    # Get stats for full text including non-HSK characters (outliers)
     num_unique_hanzi = len(set(hanzi_all))
     num_total_hanzi = len(hanzi_all)
-    # Reserve key "0" for full figures
-    grade_stats[0] = num_unique_hanzi, num_total_hanzi
+    grade_stats[0] = num_unique_hanzi, num_total_hanzi  # Reserve key "0" for totals
 
     for i in range(1, 8):
         grade_df = df.filter(pl.col("HSK Grade") == i)
@@ -107,23 +104,20 @@ def get_cumulative_counts_per_hsk_grade(
 
     Returns
     -------
-    get_cumulative_counts_per_hsk_grade : list
+    cumulative_counts : list
         cumulative hanzi counts by grade
     """
-    get_cumulative_counts_per_hsk_grade = [
-        # Total counts are at key 0
-        [raw_counts[0][0], raw_counts[0][1]],
-        # HSK1 figures only for HSK1
-        [raw_counts[1][0], raw_counts[1][1]],
+    cumulative_counts = [
+        [raw_counts[0][0], raw_counts[0][1]],  # Total counts are at key 0
+        [raw_counts[1][0], raw_counts[1][1]],  # HSK1 figures only for HSK1
     ]
-    # Iterate through remaining levels to get cumulative counts
     for i in range(2, HSK_GRADES + 1):
         grade_unique = raw_counts[i][0]
-        cumul_unique = grade_unique + get_cumulative_counts_per_hsk_grade[i - 1][0]
+        cumul_unique = grade_unique + cumulative_counts[i - 1][0]
 
         grade_hanzi = raw_counts[i][1]
-        cumul_hanzi = grade_hanzi + get_cumulative_counts_per_hsk_grade[i - 1][1]
+        cumul_hanzi = grade_hanzi + cumulative_counts[i - 1][1]
 
-        get_cumulative_counts_per_hsk_grade.append([cumul_unique, cumul_hanzi])
+        cumulative_counts.append([cumul_unique, cumul_hanzi])
 
-    return get_cumulative_counts_per_hsk_grade
+    return cumulative_counts
