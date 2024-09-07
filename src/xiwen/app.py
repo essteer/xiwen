@@ -22,5 +22,4 @@ def coordinator(target_url: str):
                 hanzi_list, simplified, traditional
             )
 
-            if variant:
-                return hanzi_df, stats_df, hanzi_list, outliers, variant
+            return hanzi_df, stats_df, hanzi_list, outliers, variant
