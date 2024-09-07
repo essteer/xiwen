@@ -4,34 +4,34 @@ from .count import cumulative_counts, get_counts, granular_counts
 from .transform import filter_dataframe_by_hanzi_variant
 
 
-def identify_variant(hsk_simp: list, hsk_trad: list) -> str:
+def identify_variant(simplified: list, traditional: list) -> str:
     """
     Identifies text as Simplified or Traditional based on character ratio
 
     Parameters
     ----------
-    hsk_simp : list
+    simplified : list
         simplified characters in HSK1 to HSK7-9 found in content
 
-    hsk_trad : list
-        traditional equivalents to hsk_simp found in content
+    traditional : list
+        traditional equivalents to simplified found in content
 
     Returns
     -------
-    str
+    _ : str
         text character variant
     """
     # Use epsilon to mitigate float rounding errors
     epsilon = 0.0000000001
     # Threshold beyond which to decide that text belongs to one variant
     threshold = 0.90
-    simp_set = set(hsk_simp) - set(hsk_trad)
-    trad_set = set(hsk_trad) - set(hsk_simp)
+    simplified_set = set(simplified) - set(traditional)
+    traditional_set = set(traditional) - set(simplified)
 
-    if not simp_set and not trad_set:
+    if not simplified_set and not traditional_set:
         return "Unknown"
 
-    ratio = len(simp_set) / (len(simp_set) + len(trad_set))
+    ratio = len(simplified_set) / (len(simplified_set) + len(traditional_set))
     if ratio >= threshold - epsilon:
         return "Simplified"
     elif ratio <= 1 - threshold + epsilon:
@@ -110,7 +110,7 @@ def compute_stats(
 
 
 def analyse_hanzi(
-    hanzi_list: list, simp_list: list, trad_list: list
+    hanzi_list: list, simplified: list, traditional: list
 ) -> tuple[str, pl.DataFrame]:
     """
     Gets character variant and statistical breakdowns
@@ -130,22 +130,20 @@ def analyse_hanzi(
 
     Returns
     -------
-    variant : str
-        hanzi variant of the content
+    hanzi_df : pl.DataFrame
+        df of hanzi_list with counts added
 
     stats_df : pl.DataFrame
         stats for the content
 
-    hanzi_df : pl.DataFrame
-        df of hanzi_list with counts added
+    variant : str
+        hanzi variant of the content
     """
-    # Query character variant
-    variant = identify_variant(simp_list, trad_list)
-    # Create mapping for analysis
+    variant = identify_variant(simplified, traditional)
     variants = {
-        "Simplified": simp_list,
-        "Traditional": trad_list,
-        "Unknown": trad_list,
+        "Simplified": simplified,
+        "Traditional": traditional,
+        "Unknown": traditional,
     }
     # Get counts of each hanzi
     hanzi_df = get_counts(variants[variant], variant)
@@ -158,4 +156,4 @@ def analyse_hanzi(
     # Compute stats for grade counts and cumulative counts
     stats_df = compute_stats(grade_counts, cumul_counts)
 
-    return variant, stats_df, hanzi_df
+    return hanzi_df, stats_df, variant

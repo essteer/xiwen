@@ -14,19 +14,17 @@ def xw():
     terminal_display = get_TerminalDisplay_instance()
     print(terminal_display.get_welcome_message())
     while True:
-        # Main menu - get URL from user
-        target = input(terminal_display.get_main_menu_options())
+        target_url = input(terminal_display.get_main_menu_options())
 
-        if target.upper() == "Q":  # Quit
+        if target_url.upper() == "Q":  # Quit
             break
 
-        if target == "":
-            target = random.choice([DEMO1, DEMO2])
+        if target_url == "":
+            target_url = random.choice([DEMO1, DEMO2])
             print(terminal_display.get_demo_message())
 
-        if target:
-            # Run program
-            hanzi_df, stats_df, hanzi_list, outl, variant = coordinator(target, True)
+        if target_url:
+            hanzi_df, stats_df, hanzi_list, outliers, variant = coordinator(target_url)
 
             with pl.Config(
                 tbl_formatting="ASCII_MARKDOWN",
@@ -44,7 +42,7 @@ def xw():
 
             while True:
                 exit_to_main_menu_loop = export_hanzi(
-                    hanzi_df, stats_df, hanzi_list, outl, variant
+                    hanzi_df, stats_df, hanzi_list, outliers, variant
                 )
                 if exit_to_main_menu_loop:
                     break
