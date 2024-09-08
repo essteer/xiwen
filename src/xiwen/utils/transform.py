@@ -1,5 +1,5 @@
 import polars as pl
-from .hsk_hanzi import get_HSKHanzi_instance
+from .hsk_hanzi import HSKHanzi
 
 
 def filter_dataframe_by_hanzi_variant(df: pl.DataFrame, variant: str):
@@ -54,20 +54,22 @@ def partition_hanzi(hanzi_list: list) -> tuple[list]:
 
     Returns
     -------
-    simp : list
+    simplified : list
         simplified HSK characters in hanzi_list
 
-    trad : list
+    traditional : list
         traditional HSK equivalents in hanzi_list
 
     outliers : list
         characters not in above lists
     """
-    hsk_simp = get_HSKHanzi_instance().HSK_SIMP
-    hsk_trad = get_HSKHanzi_instance().HSK_TRAD
+    hsk_simplified = HSKHanzi("Simplified").get_HSK_hanzi_sublist()
+    hsk_traditional = HSKHanzi("Traditional").get_HSK_hanzi_sublist()
 
-    simp = [zi for zi in hanzi_list if zi in hsk_simp]
-    trad = [zi for zi in hanzi_list if zi in hsk_trad]
-    outliers = [zi for zi in hanzi_list if zi not in simp and zi not in trad]
+    simplified = [zi for zi in hanzi_list if zi in hsk_simplified]
+    traditional = [zi for zi in hanzi_list if zi in hsk_traditional]
+    outliers = [
+        zi for zi in hanzi_list if zi not in simplified and zi not in traditional
+    ]
 
-    return simp, trad, outliers
+    return simplified, traditional, outliers

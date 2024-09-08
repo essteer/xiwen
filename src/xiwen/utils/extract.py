@@ -54,7 +54,7 @@ def filter_hanzi_from_html(html: str) -> list[str]:
     return [zi for zi in html if filter_hanzi_by_unicode(zi)]
 
 
-def get_hanzi(target: str) -> list[str]:
+def get_hanzi_from_url(target: str) -> list[str]:
     """
     Passes URL to retrieve HTML
     Extracts all Chinese characters from HTML

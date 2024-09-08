@@ -5,13 +5,13 @@ import unittest
 from polars.testing import assert_frame_equal
 from src.xiwen.utils.config import HSK_GRADES
 from src.xiwen.utils.count import (
-    cumulative_counts,
-    get_counts,
-    granular_counts,
-    unit_counts,
+    get_counts_per_hanzi,
+    get_counts_per_hanzi_per_hsk_grade,
+    get_cumulative_counts_per_hsk_grade,
+    unit_counts_per_hanzi,
 )
 from src.xiwen.utils.extract import filter_hanzi_from_html
-from src.xiwen.utils.hsk_hanzi import get_HSKHanzi_instance
+from src.xiwen.utils.hsk_hanzi import HSKHanzi
 from src.xiwen.utils.transform import filter_dataframe_by_hanzi_variant, partition_hanzi
 
 
@@ -125,10 +125,10 @@ class TestUnitCounts(unittest.TestCase):
         """Test counts match across character variants"""
         hanzi = []
         test = dict()
-        self.assertEqual(unit_counts(hanzi), test)
+        self.assertEqual(unit_counts_per_hanzi(hanzi), test)
         hanzi = ["爱", "气", "爱", "气", "车", "爱", "气", "车", "愛", "氣", "車"]
         test = {"爱": 3, "气": 3, "车": 2, "愛": 1, "氣": 1, "車": 1}
-        self.assertEqual(unit_counts(hanzi), test)
+        self.assertEqual(unit_counts_per_hanzi(hanzi), test)
 
 
 class TestCumulativeCounts(unittest.TestCase):
@@ -141,23 +141,26 @@ class TestCumulativeCounts(unittest.TestCase):
         for test_case in TEST_CASES.keys():
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()
-            # Extract hanzi from text (with duplicates)
             hanzi_list = filter_hanzi_from_html(text)
-            simp, _, _ = partition_hanzi(hanzi_list)
-            # Get counts of each hanzi
-            hanzi_df = get_counts(simp, variant)
-            # Filter on identified variant
+            simplified, _, _ = partition_hanzi(hanzi_list)
+            hanzi_df = get_counts_per_hanzi(simplified, variant)
             filtered_hanzi_df = filter_dataframe_by_hanzi_variant(hanzi_df, variant)
-            # Get counts by grade (test case)
-            counts = granular_counts(filtered_hanzi_df, hanzi_list)
+            counts = get_counts_per_hanzi_per_hsk_grade(filtered_hanzi_df, hanzi_list)
 
             cumulative_num_unique = 0
             cumulative_num_grade = 0
             for i in range(1, HSK_GRADES + 1):
                 cumulative_num_unique += counts[i][0]
                 cumulative_num_grade += counts[i][1]
-                self.assertEqual(cumulative_counts(counts)[i][0], cumulative_num_unique)
-                self.assertEqual(cumulative_counts(counts)[i][1], cumulative_num_grade)
+                self.assertEqual(
+                    get_cumulative_counts_per_hsk_grade(counts)[i][1],
+                    cumulative_num_grade,
+                )
+
+                self.assertEqual(
+                    get_cumulative_counts_per_hsk_grade(counts)[i][0],
+                    cumulative_num_unique,
+                )
 
     @unittest.skipIf(
         sys.platform.startswith("win"), "Skip on Windows: test case decode issue"
@@ -168,23 +171,26 @@ class TestCumulativeCounts(unittest.TestCase):
         for test_case in TEST_CASES.keys():
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()
-            # Extract hanzi from text (with duplicates)
             hanzi_list = filter_hanzi_from_html(text)
-            simp, _, _ = partition_hanzi(hanzi_list)
-            # Get counts of each hanzi
-            hanzi_df = get_counts(simp, variant)
-            # Filter on identified variant
+            simplified, _, _ = partition_hanzi(hanzi_list)
+            hanzi_df = get_counts_per_hanzi(simplified, variant)
             filtered_hanzi_df = filter_dataframe_by_hanzi_variant(hanzi_df, variant)
-            # Get counts by grade (test case)
-            counts = granular_counts(filtered_hanzi_df, hanzi_list)
+            counts = get_counts_per_hanzi_per_hsk_grade(filtered_hanzi_df, hanzi_list)
 
             cumulative_num_unique = 0
             cumulative_num_grade = 0
             for i in range(1, HSK_GRADES + 1):
                 cumulative_num_unique += counts[i][0]
                 cumulative_num_grade += counts[i][1]
-                self.assertEqual(cumulative_counts(counts)[i][0], cumulative_num_unique)
-                self.assertEqual(cumulative_counts(counts)[i][1], cumulative_num_grade)
+                self.assertEqual(
+                    get_cumulative_counts_per_hsk_grade(counts)[i][1],
+                    cumulative_num_grade,
+                )
+
+                self.assertEqual(
+                    get_cumulative_counts_per_hsk_grade(counts)[i][0],
+                    cumulative_num_unique,
+                )
 
 
 class TestGetCounts(unittest.TestCase):
@@ -194,25 +200,24 @@ class TestGetCounts(unittest.TestCase):
     def test_simplified_set(self):
         """Test counts correct for simplified characters"""
         variant = "Simplified"
-        # Get DataFrame of full HSK character liss
-        hsk_hanzi = get_HSKHanzi_instance().HSK_HANZI
+        hsk_hanzi = HSKHanzi().get_all_HSK_hanzi()
         for test_case in TEST_CASES.keys():
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()
-            # Extract hanzi from text (with duplicates)
             hanzi_list = filter_hanzi_from_html(text)
-            simp, _, _ = partition_hanzi(hanzi_list)
-            counts = unit_counts(simp)
-            # Create DataFrame from counts dictionary
+            simplified, _, _ = partition_hanzi(hanzi_list)
+            counts = unit_counts_per_hanzi(simplified)
             counts_df = pl.DataFrame(
                 list(counts.items()), schema={variant: pl.String, "Count": pl.Int32}
             )
             merged_df = hsk_hanzi.join(counts_df, on=variant, coalesce=True, how="left")
-            # Fill null values and convert counts to integers
             merged_df = merged_df.fill_null(0).with_columns(
                 pl.col("Count").cast(pl.Int32)
             )
-            self.assertIsNone(assert_frame_equal(get_counts(simp, variant), merged_df))
+
+            self.assertIsNone(
+                assert_frame_equal(get_counts_per_hanzi(simplified, variant), merged_df)
+            )
 
     @unittest.skipIf(
         sys.platform.startswith("win"), "Skip on Windows: test case decode issue"
@@ -220,25 +225,24 @@ class TestGetCounts(unittest.TestCase):
     def test_traditional_set(self):
         """Test counts correct for traditional characters"""
         variant = "Traditional"
-        # Get DataFrame of full HSK character liss
-        hsk_hanzi = get_HSKHanzi_instance().HSK_HANZI
+        hsk_hanzi = HSKHanzi().get_all_HSK_hanzi()
         for test_case in TEST_CASES.keys():
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()
-            # Extract hanzi from text (with duplicates)
             hanzi_list = filter_hanzi_from_html(text)
-            simp, _, _ = partition_hanzi(hanzi_list)
-            counts = unit_counts(simp)
-            # Create DataFrame from counts dictionary
+            simplified, _, _ = partition_hanzi(hanzi_list)
+            counts = unit_counts_per_hanzi(simplified)
             counts_df = pl.DataFrame(
                 list(counts.items()), schema={variant: pl.String, "Count": pl.Int32}
             )
             merged_df = hsk_hanzi.join(counts_df, on=variant, coalesce=True, how="left")
-            # Fill null values and convert counts to integers
             merged_df = merged_df.fill_null(0).with_columns(
                 pl.col("Count").cast(pl.Int32)
             )
-            self.assertIsNone(assert_frame_equal(get_counts(simp, variant), merged_df))
+
+            self.assertIsNone(
+                assert_frame_equal(get_counts_per_hanzi(simplified, variant), merged_df)
+            )
 
 
 class TestGranularCounts(unittest.TestCase):
@@ -251,15 +255,12 @@ class TestGranularCounts(unittest.TestCase):
         for test_case in TEST_CASES.keys():
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()
-            # Extract hanzi from text (with duplicates)
             hanzi_list = filter_hanzi_from_html(text)
-            simp, _, _ = partition_hanzi(hanzi_list)
-            # Get counts of each hanzi
-            hanzi_df = get_counts(simp, variant)
-            # Filter on identified variant
+            simplified, _, _ = partition_hanzi(hanzi_list)
+            hanzi_df = get_counts_per_hanzi(simplified, variant)
             filtered_hanzi_df = filter_dataframe_by_hanzi_variant(hanzi_df, variant)
-            # Get counts by grade (test case)
-            counts = granular_counts(filtered_hanzi_df, hanzi_list)
+            counts = get_counts_per_hanzi_per_hsk_grade(filtered_hanzi_df, hanzi_list)
+
             self.assertEqual(TEST_CASES[test_case][variant], counts)
 
     @unittest.skipIf(
@@ -271,15 +272,12 @@ class TestGranularCounts(unittest.TestCase):
         for test_case in TEST_CASES.keys():
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()
-            # Extract hanzi from text (with duplicates)
             hanzi_list = filter_hanzi_from_html(text)
-            _, trad, _ = partition_hanzi(hanzi_list)
-            # Get counts of each hanzi
-            hanzi_df = get_counts(trad, variant)
-            # Filter on identified variant
+            _, traditional, _ = partition_hanzi(hanzi_list)
+            hanzi_df = get_counts_per_hanzi(traditional, variant)
             filtered_hanzi_df = filter_dataframe_by_hanzi_variant(hanzi_df, variant)
-            # Get counts by grade (test case)
-            counts = granular_counts(filtered_hanzi_df, hanzi_list)
+            counts = get_counts_per_hanzi_per_hsk_grade(filtered_hanzi_df, hanzi_list)
+
             self.assertEqual(TEST_CASES[test_case][variant], counts)
 
     @unittest.skipIf(
@@ -291,16 +289,12 @@ class TestGranularCounts(unittest.TestCase):
         for test_case in TEST_CASES.keys():
             with open(os.path.join(TEST_ASSETS, test_case), "r") as f:
                 text = f.read()
-            # Extract hanzi from text (with duplicates)
             hanzi_list = filter_hanzi_from_html(text)
-            _, trad, _ = partition_hanzi(hanzi_list)
-            # Get counts of each hanzi
-            hanzi_df = get_counts(trad, variant)
-            # Filter on identified variant
+            _, traditional, _ = partition_hanzi(hanzi_list)
+            hanzi_df = get_counts_per_hanzi(traditional, variant)
             filtered_hanzi_df = filter_dataframe_by_hanzi_variant(hanzi_df, variant)
-            # Get counts by grade (test case)
-            counts = granular_counts(filtered_hanzi_df, hanzi_list)
-            # Figures should match traditional counts
+            counts = get_counts_per_hanzi_per_hsk_grade(filtered_hanzi_df, hanzi_list)
+
             self.assertEqual(TEST_CASES[test_case][variant], counts)
 
 

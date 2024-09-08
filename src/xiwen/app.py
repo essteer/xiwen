@@ -1,27 +1,25 @@
-from .utils.analyse import analyse
-from .utils.extract import get_hanzi
+from .utils.analyse import analyse_hanzi
+from .utils.extract import get_hanzi_from_url
 from .utils.transform import partition_hanzi
 
 
-def coordinator(target: str, terminal: bool = False):
+def coordinator(target_url: str):
     """
     Handles calls throughout pipeline
 
     Parameters
     ----------
-    target : str
+    target_url : str
         URL to extract HTML from
     """
-    # Run URL
-    hanzi_list = get_hanzi(target)
+    hanzi_list = get_hanzi_from_url(target_url)
 
     if hanzi_list:
-        # Divide into groups (with duplicates)
-        simp, trad, outl = partition_hanzi(hanzi_list)
+        simplified, traditional, outliers = partition_hanzi(hanzi_list)
 
-        if simp or trad or outl:
-            # Get info about character set
-            variant, stats_df, hanzi_df = analyse(hanzi_list, simp, trad)
+        if simplified or traditional:
+            hanzi_df, stats_df, variant = analyse_hanzi(
+                hanzi_list, simplified, traditional
+            )
 
-            if terminal and variant:
-                return hanzi_df, stats_df, hanzi_list, outl, variant
+            return hanzi_df, stats_df, hanzi_list, outliers, variant
