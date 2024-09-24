@@ -8,12 +8,12 @@ dynamic = ["version"]
 description = "A tool to scan HTML for Chinese characters"
 authors = [{ name = "Elliott Steer", email = "essteer@pm.me" }]
 dependencies = [
-    "beautifulsoup4>=4.12.3",
-    "masquer>=1.1.1",
+    "beautifulsoup4==4.12.3",
+    "masquer==1.1.1",
     "polars==0.20.31",
-    "requests>=2.32.3",
+    "requests==2.32.3",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = { file = "LICENSE" }
 readme = "README.md"
 keywords = ["Chinese", "CLI", "tool"]
@@ -27,14 +27,6 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-]
-
-[project.optional-dependencies]
-dev = [
-    "hatch==1.11.1", 
-    "hatchling==1.24.2", 
-    "pre-commit==3.7.0",
-    "ruff>=0.4.5",
 ]
 
 [project.urls]
@@ -61,3 +53,11 @@ exclude = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/xiwen"]
+
+[uv.tool]
+dev-dependencies = [
+    "hatch==1.11.1", 
+    "hatchling==1.24.2", 
+    "pre-commit==3.7.0",
+    "ruff==0.4.5",
+]
